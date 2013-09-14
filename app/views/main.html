@@ -1,0 +1,16 @@
+<div class="hero-unit">
+    <div id="game-container">
+        <table class="gameboard">
+            <tr ng-repeat="row in environment">
+                <td ng-repeat="column in row">
+                    <i class="{{ column.classVal }}"></i>
+                </td>
+            </tr>
+        </table>
+        <div class="entityboard">
+            <div class="entity" ng-repeat="entity in entities">
+                <i class="{{ entity.classVal }}"></i>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,56 @@
+$iconSpritePath: "../images/glyphicons-halflings.png";
+$iconWhiteSpritePath: "../images/glyphicons-halflings-white.png";
+
+@import "bootstrap-sass/lib/bootstrap";
+@import "beastie";
+
+/* Put your CSS here */
+html, body {
+  margin: 20px;
+}
+
+body {
+    background: #fafafa;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #333;
+}
+
+#game-container {
+    position: relative;
+    font-size: 16px;
+
+    .gameboard {
+        margin: 0;
+        padding: 0;
+        border-spacing: collapse;
+        td {
+            margin: 0;
+            padding: 0;
+        }
+    }
+
+    .entityboard {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        top: 0;
+        right: 0;
+        .entity {
+            position: absolute;
+            top: 1em;
+            left: 1em;
+            width: 1em;
+            height: 1em;
+            background: red;
+        }
+    }
+
+    i {
+        margin: 0;
+        display: block;
+        width: 1em;
+        height: 1em;
+        line-height: 1em;
+        background: transparent;
+    }
+}
