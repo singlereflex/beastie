@@ -37,11 +37,21 @@ body {
         right: 0;
         .entity {
             position: absolute;
-            top: 1em;
-            left: 1em;
             width: 1em;
             height: 1em;
-            background: red;
+            transition: top 0.01s ease, left 0.5s ease;
+        }
+        .entity.player {
+            color: #003399;
+            -webkit-animation: blink 1s infinite ease alternate;
+        }
+        .entity.monster {
+            color: red;
+            -webkit-animation: blink 0.05s infinite ease alternate;
+        }
+        .entity.egg {
+            color: red;
+            -webkit-animation: blink 2s infinite linear alternate;
         }
     }
 
@@ -53,4 +63,8 @@ body {
         line-height: 1em;
         background: transparent;
     }
+}
+
+@-webkit-keyframes blink {
+    0% { opacity: 0 } 100% { opacity: 1 }
 }

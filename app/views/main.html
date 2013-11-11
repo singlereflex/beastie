@@ -8,7 +8,10 @@
             </tr>
         </table>
         <div class="entityboard">
-            <div class="entity" ng-repeat="entity in entities">
+            <div class="entity {{ entity.kind }}" ng-style="{
+                    'left': entity.x + 'em',
+                    'top': entity.y + 'em'
+                }" ng-repeat="entity in entities">
                 <i class="{{ entity.classVal }}"></i>
             </div>
         </div>
