@@ -9,14 +9,14 @@ angular.module('beastieApp')
         },
         {
             name: 'block',
-            id: 'environment_block',
+            id: 'environment-block',
             heavy: true,
             walkable: false
         },
         {
             name: 'wall',
-            id: 'environment_wall_',
-            dir: ['N','S','W','E'],
+            id: 'environment-wall-',
+            dir: ['n','s','w','e'],
             heavy: false,
             walkable: function(dir){
                 return dir < 4;
