@@ -41,7 +41,7 @@ angular.module('beastieApp')
         $scope.entities = [
             {
                 kind: 'player',
-                classVal: $scope.iconPrefix + 'entities_player',
+                classVal: $scope.iconPrefix + 'entities-player',
                 keyboard: true,
                 x: Math.floor(Math.random()*gridsize),
                 y: Math.floor(Math.random()*gridsize)
@@ -51,7 +51,7 @@ angular.module('beastieApp')
         for (var i = 0; i < 10; i++) {
             $scope.entities.push({
                 kind: 'monster',
-                classVal: $scope.iconPrefix + 'entities_monster',
+                classVal: $scope.iconPrefix + 'entities-monster',
                 keyboard: false,
                 x: Math.floor(Math.random()*gridsize),
                 y: Math.floor(Math.random()*gridsize)
@@ -61,7 +61,7 @@ angular.module('beastieApp')
         for (var i = 0; i < 5; i++) {
             $scope.entities.push({
                 kind: 'mother',
-                classVal: $scope.iconPrefix + 'entities_mother',
+                classVal: $scope.iconPrefix + 'entities-mother',
                 keyboard: false,
                 x: Math.floor(Math.random()*gridsize),
                 y: Math.floor(Math.random()*gridsize)
@@ -71,7 +71,7 @@ angular.module('beastieApp')
         for (var i = 0; i < 20; i++) {
             $scope.entities.push({
                 kind: 'egg',
-                classVal: $scope.iconPrefix + 'entities_egg',
+                classVal: $scope.iconPrefix + 'entities-egg',
                 keyboard: false,
                 x: Math.floor(Math.random()*gridsize),
                 y: Math.floor(Math.random()*gridsize)

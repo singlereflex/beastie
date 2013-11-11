@@ -3,15 +3,15 @@
 angular.module('beastieApp')
     .constant('beastieEnt', {
         player: {
-            id: "entities_player"
+            id: "entities-player"
         },
         egg: {
-            id: "entities_egg"
+            id: "entities-egg"
         },
         monster: {
-            id: "entities_monster"
+            id: "entities-monster"
         },
         mother: {
-            id: "entities_mother"
+            id: "entities-mother"
         }
     });
