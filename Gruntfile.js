@@ -384,9 +384,9 @@ module.exports = function (grunt) {
 
         grunt.task.run([
             'clean:server',
+            'webfont',
             'concurrent:server',
             'autoprefixer',
-            'webfont',
             'connect:livereload',
             'open',
             'watch'
@@ -395,19 +395,19 @@ module.exports = function (grunt) {
 
     grunt.registerTask('test', [
         'clean:server',
+        'webfont',
         'concurrent:test',
         'autoprefixer',
-        'webfont',
         'connect:test',
         'karma'
     ]);
 
     grunt.registerTask('build', [
         'clean:dist',
+        'webfont',
         'useminPrepare',
         'concurrent:dist',
         'autoprefixer',
-        'webfont',
         'concat',
         'copy:dist',
         'cdnify',
