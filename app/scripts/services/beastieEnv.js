@@ -4,7 +4,8 @@ angular.module('beastieApp')
     .constant('beastieEnv', [
         {
             name: 'empty',
-            id: false,
+            id: 'environment-empty',
+            heavy: false,
             walkable: true
         },
         {

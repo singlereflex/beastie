@@ -2,7 +2,8 @@
 
 angular.module('beastieApp')
     .controller('MainCtrl', ['$scope', 'beastieEnv', function ($scope, beastieEnv) {
-        var gridsize = 51;
+        var gridsize = 50;
+        $scope.cellsize = 16;
         var backgrid = new Array(gridsize);
         $scope.iconPrefix = 'icon-';
 
@@ -79,29 +80,32 @@ angular.module('beastieApp')
         }
 
         var frame = 0;
+        var gamespeed = 26;
 
-        function animloop(){
+        (function animloop(){
             frame++;
-            for(var i in $scope.entities){
-                if ($scope.entities[i].kind === "monster") {
-                   var newX = $scope.entities[i].x + (Math.floor(Math.random() * 3) - 1);
-                   var newY = $scope.entities[i].y + (Math.floor(Math.random() * 3) - 1);
 
-                   newX = Math.max(0, newX);
-                   newX = Math.min(gridsize, newX);
-
-                   newY = Math.max(0, newY);
-                   newY = Math.min(gridsize, newY);
-
-                   $scope.entities[i].x = Math.floor(newX);
-                   $scope.entities[i].y = Math.floor(newY);
-               }
-            }
-            $scope.$digest();
             requestAnimFrame(animloop);
-            // setTimeout(animloop, 500);
-        };
-        requestAnimFrame(animloop);
-        // setTimeout(animloop, 500);
+            if (!(frame % gamespeed)) {
+                for (var i = 0; i < $scope.entities.length; i++) {
+                    var value = $scope.entities[i];
+                    if (value.kind === "monster") {
+
+                        var newX = value.x + (Math.floor(Math.random() * 3) - 1);
+                        var newY = value.y + (Math.floor(Math.random() * 3) - 1);
+
+                        newX = Math.max(0, newX);
+                        newX = Math.min(gridsize, newX);
+
+                        newY = Math.max(0, newY);
+                        newY = Math.min(gridsize, newY);
+
+                        value.x = Math.floor(newX);
+                        value.y = Math.floor(newY);
+                    }
+                }
+                $scope.$apply();
+            }
+        })();
 
     }]);

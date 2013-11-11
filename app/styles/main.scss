@@ -18,17 +18,10 @@ body {
 #game-container {
     position: relative;
     font-size: 16px;
-
-    .gameboard {
-        margin: 0;
-        padding: 0;
-        border-spacing: collapse;
-        td {
-            margin: 0;
-            padding: 0;
-        }
+    line-height: 16px;
+    div {
+        height: 16px;
     }
-
     .entityboard {
         position: absolute;
         bottom: 0;
@@ -37,9 +30,9 @@ body {
         right: 0;
         .entity {
             position: absolute;
-            width: 1em;
-            height: 1em;
-            transition: top 0.01s ease, left 0.5s ease;
+            width: 16px;
+            height: 16px;
+            transition: top 0.5s ease, left 0.5s ease;
         }
         .entity.player {
             color: #003399;
@@ -57,10 +50,9 @@ body {
 
     i {
         margin: 0;
-        display: block;
-        width: 1em;
-        height: 1em;
-        line-height: 1em;
+        width: 16px;
+        height: 16px;
+        line-height: 16px;
         background: transparent;
     }
 }
