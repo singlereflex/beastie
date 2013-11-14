@@ -5,22 +5,25 @@ angular.module('beastieApp')
         {
             name: 'empty',
             id: 'environment-empty',
+            push: false,
             heavy: false,
-            walkable: true
+            walk: true
         },
         {
             name: 'block',
             id: 'environment-block',
+            push: true,
             heavy: true,
-            walkable: false
+            walk: false
         },
         {
             name: 'wall',
             id: 'environment-wall-',
             dir: ['n','s','w','e'],
+            push: function(dir){
+
+            },
             heavy: false,
-            walkable: function(dir){
-                return dir < 4;
-            }
+            walk: false
         }
     ]);

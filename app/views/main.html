@@ -1,15 +1,13 @@
-<div class="hero-unit">
-    <div id="game-container">
-        <div ng-repeat="row in environment">
-            <i class="{{ column.classVal }}" ng-repeat="column in row"></i>
-        </div>
-        <div class="entityboard">
-            <div class="entity {{ entity.kind }}" ng-style="{
+<div id="game-container">
+    <div ng-repeat="row in environment">
+        <i class="{{ column.classVal }}" ng-repeat="column in row"></i>
+    </div>
+    <div class="entityboard">
+        <div class="entity {{ entity.kind }}" ng-style="{
                     'left': entity.x + 'em',
                     'top': entity.y + 'em'
                 }" ng-repeat="entity in entities">
-                <i class="{{ entity.classVal }}"></i>
-            </div>
+            <i class="{{ entity.classVal }}"></i>
         </div>
     </div>
 </div>

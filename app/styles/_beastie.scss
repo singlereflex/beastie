@@ -3,11 +3,11 @@
 
 @font-face {
 	font-family:"beastie";
-	src:url("beastie-2a02f466ef5922a0a085a0549394c868.eot");
-	src:url("beastie-2a02f466ef5922a0a085a0549394c868.eot?#iefix") format("embedded-opentype"),
-		url("beastie-2a02f466ef5922a0a085a0549394c868.woff") format("woff"),
-		url("beastie-2a02f466ef5922a0a085a0549394c868.ttf") format("truetype"),
-		url("beastie-2a02f466ef5922a0a085a0549394c868.svg?#beastie") format("svg");
+	src:url("beastie-642135b89883f39f7fb64dd345541a51.eot");
+	src:url("beastie-642135b89883f39f7fb64dd345541a51.eot?#iefix") format("embedded-opentype"),
+		url("beastie-642135b89883f39f7fb64dd345541a51.woff") format("woff"),
+		url("beastie-642135b89883f39f7fb64dd345541a51.ttf") format("truetype"),
+		url("beastie-642135b89883f39f7fb64dd345541a51.svg?#beastie") format("svg");
 	font-weight:normal;
 	font-style:normal;
 }
@@ -88,48 +88,51 @@ li[class*=" icon-"].icon-large:before {
 .icon-environment-block:before {
 	content:"\f104";
 }
-.icon-environment-wall-e:before {
+.icon-environment-empty:before {
 	content:"\f105";
 }
-.icon-environment-wall-n:before {
+.icon-environment-wall-e:before {
 	content:"\f106";
 }
-.icon-environment-wall-n-e:before {
+.icon-environment-wall-n:before {
 	content:"\f107";
 }
-.icon-environment-wall-n-s:before {
+.icon-environment-wall-n-e:before {
 	content:"\f108";
 }
-.icon-environment-wall-n-s-e:before {
+.icon-environment-wall-n-s:before {
 	content:"\f109";
 }
-.icon-environment-wall-n-s-w:before {
+.icon-environment-wall-n-s-e:before {
 	content:"\f10a";
 }
-.icon-environment-wall-n-s-w-e:before {
+.icon-environment-wall-n-s-w:before {
 	content:"\f10b";
 }
-.icon-environment-wall-n-w:before {
+.icon-environment-wall-n-s-w-e:before {
 	content:"\f10c";
 }
-.icon-environment-wall-n-w-e:before {
+.icon-environment-wall-n-w:before {
 	content:"\f10d";
 }
-.icon-environment-wall-s:before {
+.icon-environment-wall-n-w-e:before {
 	content:"\f10e";
 }
-.icon-environment-wall-s-e:before {
+.icon-environment-wall-s:before {
 	content:"\f10f";
 }
-.icon-environment-wall-s-w:before {
+.icon-environment-wall-s-e:before {
 	content:"\f110";
 }
-.icon-environment-wall-s-w-e:before {
+.icon-environment-wall-s-w:before {
 	content:"\f111";
 }
-.icon-environment-wall-w:before {
+.icon-environment-wall-s-w-e:before {
 	content:"\f112";
 }
-.icon-environment-wall-w-e:before {
+.icon-environment-wall-w:before {
 	content:"\f113";
+}
+.icon-environment-wall-w-e:before {
+	content:"\f114";
 }

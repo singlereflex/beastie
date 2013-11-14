@@ -46,6 +46,10 @@ module.exports = function (grunt) {
                 files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
                 tasks: ['copy:styles', 'autoprefixer']
             },
+            webfonts: {
+                files: ['<%= yeoman.app %>/svg/{,*/}*.svg'],
+                tasks: ['webfont']
+            },
             livereload: {
                 options: {
                     livereload: LIVERELOAD_PORT
