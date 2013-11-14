@@ -2,7 +2,7 @@
 
 angular.module('beastieApp')
     .controller('MainCtrl', ['$scope', 'beastieEnv', function ($scope, beastieEnv) {
-        var gridsize = 50;
+        var gridsize = 32;
         $scope.cellsize = 16;
         var backgrid = new Array(gridsize);
         $scope.iconPrefix = 'icon-';
@@ -80,7 +80,7 @@ angular.module('beastieApp')
         }
 
         var frame = 0;
-        var gamespeed = 26;
+        var gamespeed = 45;
 
         (function animloop(){
             frame++;
@@ -95,10 +95,10 @@ angular.module('beastieApp')
                         var newY = value.y + (Math.floor(Math.random() * 3) - 1);
 
                         newX = Math.max(0, newX);
-                        newX = Math.min(gridsize, newX);
+                        newX = Math.min(gridsize-1, newX);
 
                         newY = Math.max(0, newY);
-                        newY = Math.min(gridsize, newY);
+                        newY = Math.min(gridsize-1, newY);
 
                         value.x = Math.floor(newX);
                         value.y = Math.floor(newY);

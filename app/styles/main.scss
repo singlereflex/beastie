@@ -6,7 +6,8 @@ $iconWhiteSpritePath: "../images/glyphicons-halflings-white.png";
 
 /* Put your CSS here */
 html, body {
-  margin: 20px;
+  margin: 0;
+  background: #000000;
 }
 
 body {
@@ -19,8 +20,12 @@ body {
     position: relative;
     font-size: 16px;
     line-height: 16px;
+    color: #00501F;
+    background: #000;
+    text-shadow: 1px 1px 0 #3D8F28, 2px 2px 20px #000;
     div {
         height: 16px;
+        white-space: nowrap;
     }
     .entityboard {
         position: absolute;
@@ -33,18 +38,26 @@ body {
             width: 16px;
             height: 16px;
             transition: top 0.5s ease, left 0.5s ease;
+            text-shadow: none;
         }
         .entity.player {
-            color: #003399;
-            -webkit-animation: blink 1s infinite ease alternate;
+            color: #00a0ff;
+            -webkit-animation: blink 0.01s infinite ease alternate;
+            text-shadow: 0 0 8px #00a0ff;
         }
         .entity.monster {
-            color: red;
-            -webkit-animation: blink 0.05s infinite ease alternate;
+            color: #ff4823;
+            -webkit-animation: blink 0.01s infinite ease alternate;
+            text-shadow: 0 0 8px #ff4823;
+        }
+        .entity.mother {
+            color: #ff7b00;
+            -webkit-animation: blink 0.01s infinite ease alternate;
+            text-shadow: 0 0 3px #ff7b00;
         }
         .entity.egg {
-            color: red;
-            -webkit-animation: blink 2s infinite linear alternate;
+            color: #ffbf92;
+            -webkit-animation: blink 0.01s infinite linear alternate;
         }
     }
 
@@ -57,6 +70,6 @@ body {
     }
 }
 
-@-webkit-keyframes blink {
-    0% { opacity: 0 } 100% { opacity: 1 }
+@keyframes blink {
+    0% { opacity: 0.7 } 100% { opacity: 1 }
 }
