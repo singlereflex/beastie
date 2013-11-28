@@ -36,6 +36,7 @@ angular.module('beastieApp')
                 };
             }
         }
+        console.log(backgrid);
 
         $scope.environment = backgrid;
 
@@ -51,27 +52,32 @@ angular.module('beastieApp')
 
         var player = $scope.entities[0];
         document.body.addEventListener('keyup', function keydown(event){
+            var newX = player.x, newY = player.y;
             switch(event.which){
                 //left
                 case 37:
                 case 65:
-                    player.x -= 1;
+                    newX -= 1;
                 break;
                 //down
                 case 40:
                 case 83:
-                    player.y += 1;
+                    newY += 1;
                 //right
                 break;
                 case 39:
                 case 68:
-                    player.x += 1;
+                    newX += 1;
                 break;
                 //up
                 case 38:
                 case 87:
-                    player.y -= 1;
+                    newY -= 1;
                 break;   
+            }
+            if(backgrid[newY][newX].classVal !== "icon-environment-block"){
+                player.x = newX;
+                player.y = newY;
             }
         }, true);
 
@@ -108,10 +114,8 @@ angular.module('beastieApp')
         var frame = 0;
         var gamespeed = 45;
 
-        (function animloop(){
+        function animloop(){
             frame++;
-
-            requestAnimFrame(animloop);
             if (!(frame % gamespeed)) {
                 for (var i = 0; i < $scope.entities.length; i++) {
                     var value = $scope.entities[i];
@@ -126,12 +130,16 @@ angular.module('beastieApp')
                         newY = Math.max(0, newY);
                         newY = Math.min(gridsize-1, newY);
 
-                        value.x = Math.floor(newX);
-                        value.y = Math.floor(newY);
+                        if(backgrid[newY][newX].classVal !== "icon-environment-block"){
+                            value.x = Math.floor(newX);
+                            value.y = Math.floor(newY);
+                        }
                     }
                 }
                 $scope.$apply();
             }
-        })();
+            requestAnimFrame(animloop);
+        };
+        animloop();
 
     }]);
