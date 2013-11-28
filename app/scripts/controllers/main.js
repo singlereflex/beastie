@@ -49,6 +49,32 @@ angular.module('beastieApp')
             }
         ];
 
+        var player = $scope.entities[0];
+        document.body.addEventListener('keyup', function keydown(event){
+            switch(event.which){
+                //left
+                case 37:
+                case 65:
+                    player.x -= 1;
+                break;
+                //down
+                case 40:
+                case 83:
+                    player.y += 1;
+                //right
+                break;
+                case 39:
+                case 68:
+                    player.x += 1;
+                break;
+                //up
+                case 38:
+                case 87:
+                    player.y -= 1;
+                break;   
+            }
+        }, true);
+
         for (var i = 0; i < 10; i++) {
             $scope.entities.push({
                 kind: 'monster',
