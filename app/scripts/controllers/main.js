@@ -52,32 +52,42 @@ angular.module('beastieApp')
 
         var player = $scope.entities[0];
         document.body.addEventListener('keyup', function keydown(event){
-            var newX = player.x, newY = player.y;
+            event.preventDefault();
+            var newX = 0, newY = 0;
             switch(event.which){
                 //left
                 case 37:
                 case 65:
-                    newX -= 1;
+                    newX = -1;
                 break;
                 //down
                 case 40:
                 case 83:
-                    newY += 1;
+                    newY = 1;
                 //right
                 break;
                 case 39:
                 case 68:
-                    newX += 1;
+                    newX = 1;
                 break;
                 //up
                 case 38:
                 case 87:
-                    newY -= 1;
+                    newY = -1;
                 break;   
             }
-            if(backgrid[newY][newX].classVal !== "icon-environment-block"){
-                player.x = newX;
-                player.y = newY;
+            if(backgrid[player.y+newY][player.x+newX].classVal !== "icon-environment-block"){
+                player.x += newX;
+                player.y += newY;
+            } else {
+                var nextY = 2*newY;
+                var nextX = 2*newX;
+                if(backgrid[player.y+nextY][player.x+nextX].classVal !== "icon-environment-block"){
+                    backgrid[player.y+newY][player.x+newX].classVal = "icon-environment-empty"
+                    backgrid[player.y+nextY][player.x+nextX].classVal = "icon-environment-block"
+                    player.x += newX;
+                    player.y += newY;
+                }
             }
         }, true);
 

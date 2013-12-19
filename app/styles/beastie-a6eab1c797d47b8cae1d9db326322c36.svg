@@ -2,9 +2,9 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
 <svg xmlns="http://www.w3.org/2000/svg">
 <metadata>
-Created by FontForge 20120731 at Thu Nov 14 09:04:07 2013
- By Aaron Brewer
-Created by Aaron Brewer with FontForge 2.0 (http://fontforge.sf.net)
+Created by FontForge 20120731 at Wed Dec 18 20:15:20 2013
+ By David Gage
+Created by David Gage with FontForge 2.0 (http://fontforge.sf.net)
 </metadata>
 <defs>
 <font id="beastie" horiz-adv-x="512" >
@@ -19,7 +19,7 @@ Created by Aaron Brewer with FontForge 2.0 (http://fontforge.sf.net)
     bbox="0 -64 512 448"
     underline-thickness="25"
     underline-position="-52"
-    unicode-range="U+F100-F114"
+    unicode-range="U+E001-E015"
   />
 <missing-glyph 
 d="M17 0v341h136v-341h-136zM34 17h102v307h-102v-307z" />
@@ -29,47 +29,47 @@ d="M17 0v341h136v-341h-136zM34 17h102v307h-102v-307z" />
  />
     <glyph glyph-name="nonmarkingreturn" 
  />
-    <glyph glyph-name="uniF100" unicode="&#xf100;" 
+    <glyph glyph-name="uniE001" unicode="&#xe001;" 
 d="M192 128v128h128v-128h-128zM0 -64zM512 -64zM0 448zM512 448zM0 -60zM512 -60zM512 -64zM512 -64h-512h512zM512 448zM512 448h-512h512z" />
-    <glyph glyph-name="uniF101" unicode="&#xf101;" 
+    <glyph glyph-name="uniE002" unicode="&#xe002;" 
 d="M128 320h256v-256h-256v256zM320 128v128h-128v-128h128zM0 448h512h-512zM0 -64h512h-512z" />
-    <glyph glyph-name="uniF102" unicode="&#xf102;" 
+    <glyph glyph-name="uniE003" unicode="&#xe003;" 
 d="M66 384h384v-384h-384v384zM386 64v256h-256v-256h256zM514 -64zM512 448zM512 448h-512h512z" />
-    <glyph glyph-name="uniF103" unicode="&#xf103;" 
+    <glyph glyph-name="uniE004" unicode="&#xe004;" 
 d="M128 192l128 128l128 -128l-128 -128zM512 448h-512h512zM0 -64h512h-512z" />
-    <glyph glyph-name="uniF104" unicode="&#xf104;" 
+    <glyph glyph-name="uniE005" unicode="&#xe005;" 
 d="M0 -64v512h512v-512h-512z" />
-    <glyph glyph-name="uniF105" unicode="&#xf105;" 
+    <glyph glyph-name="uniE006" unicode="&#xe006;" 
 d="M512 -64h-512h512zM0 448h512h-512zM0 -64zM512 -64zM0 448zM512 448z" />
-    <glyph glyph-name="uniF106" unicode="&#xf106;" 
+    <glyph glyph-name="uniE007" unicode="&#xe007;" 
 d="M384 448h128v-512h-128v512zM512 -64zM512 448zM0 448v-512v512z" />
-    <glyph glyph-name="uniF107" unicode="&#xf107;" 
+    <glyph glyph-name="uniE008" unicode="&#xe008;" 
 d="M0 448h512v-128h-512v128zM0 -64zM512 -64zM0 448zM512 448zM512 -64h-512h512z" />
-    <glyph glyph-name="uniF108" unicode="&#xf108;" 
+    <glyph glyph-name="uniE009" unicode="&#xe009;" 
 d="M512 -64h-128v384h-384v128h512v-512zM0 -64zM512 -64zM0 448zM512 448z" />
-    <glyph glyph-name="uniF109" unicode="&#xf109;" 
+    <glyph glyph-name="uniE00A" unicode="&#xe00a;" 
 d="M0 64h512v-128h-512v128zM0 448h512v-128h-512v128zM0 -64zM512 -64zM0 448zM512 448z" />
-    <glyph glyph-name="uniF10A" unicode="&#xf10a;" 
+    <glyph glyph-name="uniE00B" unicode="&#xe00b;" 
 d="M384 320h-384v128h512v-512h-512v128h384v256zM0 448zM512 448z" />
-    <glyph glyph-name="uniF10B" unicode="&#xf10b;" 
+    <glyph glyph-name="uniE00C" unicode="&#xe00c;" 
 d="M512 320h-384v-256h384v-128h-512v512h512v-128zM0 -64zM512 -64zM0 448zM512 448z" />
-    <glyph glyph-name="uniF10C" unicode="&#xf10c;" 
+    <glyph glyph-name="uniE00D" unicode="&#xe00d;" 
 d="M0 448h512v-512h-512v512zM384 64v256h-256v-256h256zM0 -64zM512 -64zM0 448zM512 448z" />
-    <glyph glyph-name="uniF10D" unicode="&#xf10d;" 
+    <glyph glyph-name="uniE00E" unicode="&#xe00e;" 
 d="M512 448v-128h-384v-384h-128v512h512zM0 -64zM512 -64zM0 448zM512 448z" />
-    <glyph glyph-name="uniF10E" unicode="&#xf10e;" 
+    <glyph glyph-name="uniE00F" unicode="&#xe00f;" 
 d="M128 320v-384h-128v512h512v-512h-128v384h-256zM0 -64zM512 -64zM0 448zM512 448z" />
-    <glyph glyph-name="uniF10F" unicode="&#xf10f;" 
+    <glyph glyph-name="uniE010" unicode="&#xe010;" 
 d="M0 64h512v-128h-512v128zM0 -64zM512 -64zM0 448zM512 448zM512 448h-512h512z" />
-    <glyph glyph-name="uniF110" unicode="&#xf110;" 
+    <glyph glyph-name="uniE011" unicode="&#xe011;" 
 d="M0 64v-128h512v512h-128v-384h-384zM0 -64zM512 -64zM0 448zM512 448z" />
-    <glyph glyph-name="uniF111" unicode="&#xf111;" 
+    <glyph glyph-name="uniE012" unicode="&#xe012;" 
 d="M128 448h-128v-512h512v128h-384v384zM0 -64zM512 -64zM0 448zM512 448z" />
-    <glyph glyph-name="uniF112" unicode="&#xf112;" 
+    <glyph glyph-name="uniE013" unicode="&#xe013;" 
 d="M128 64v384h-128v-512h512v512h-128v-384h-256zM0 -64zM512 -64zM0 448zM512 448z" />
-    <glyph glyph-name="uniF113" unicode="&#xf113;" 
+    <glyph glyph-name="uniE014" unicode="&#xe014;" 
 d="M0 448h128v-512h-128v512zM0 -64zM0 448zM512 448v-512v512z" />
-    <glyph glyph-name="uniF114" unicode="&#xf114;" 
+    <glyph glyph-name="uniE015" unicode="&#xe015;" 
 d="M384 448h128v-512h-128v512zM0 448h128v-512h-128v512zM0 0zM512 -64zM0 448zM512 448z" />
   </font>
 </defs></svg>
