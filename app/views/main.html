@@ -4,8 +4,8 @@
     </div>
     <div class="entityboard">
         <div class="entity {{ entity.kind }}" ng-style="{
-                    'left': entity.x + 'em',
-                    'top': entity.y + 'em'
+                    'left': entity.position.x + 'em',
+                    'top': entity.position.y + 'em'
                 }" ng-repeat="entity in entities">
             <i class="{{ entity.classVal }}"></i>
         </div>
