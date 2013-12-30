@@ -202,7 +202,7 @@ angular.module('beastieApp')
                                     console.log("collision")
                                     console.log(entity);
                                     if(entity.kind === 'monster'){
-                                        $scope.entities = _.without($scope.entities, entity);
+                                        $scope.entities = _.without($scope.entities, this);
                                         $scope.$apply();
                                     }
                                 }
