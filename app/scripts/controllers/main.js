@@ -196,7 +196,17 @@ angular.module('beastieApp')
                                 x: Math.floor(Math.random()*gridsize),
                                 y: Math.floor(Math.random()*gridsize)
                             },
-                            components:[MoveComponent, PushComponent, CollisionComponent, ControllerComponent]
+                            components:[MoveComponent, PushComponent, CollisionComponent, ControllerComponent],
+                            events:{
+                                collided: function(entity){
+                                    console.log("collision")
+                                    console.log(entity);
+                                    if(entity.kind === 'monster'){
+                                        $scope.entities = _.without($scope.entities, entity);
+                                        $scope.$apply();
+                                    }
+                                }
+                            }
                         })
         ];
         $scope.environment = $scope.entities;
@@ -274,6 +284,16 @@ angular.module('beastieApp')
                     if (!(frame % gamespeed)) {
                         this.move((Math.floor(Math.random() * 3) - 1), (Math.floor(Math.random() * 3) - 1));
                         $scope.$apply();
+                    }
+                },
+                events:{
+                    collided: function(entity){
+                        console.log("collision")
+                        console.log(entity);
+                        if(entity.kind === 'player'){
+                            $scope.entities = _.without($scope.entities, entity);
+                            $scope.$apply();
+                        }
                     }
                 }
 
