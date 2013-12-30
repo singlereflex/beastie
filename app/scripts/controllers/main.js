@@ -38,21 +38,50 @@ angular.module('beastieApp')
             }, false);
         }
 
+        function CollisionComponent(entity){
+            entity.on('start_move', function(deltas){
+                var collided = findEntityByPosition(entity.position.x+deltas.delta_x, entity.position.y+deltas.delta_y);
+                if(collided !== undefined){
+                    entity.trigger('collided', collided);
+                }
+            });
+
+            entity.on('collided', function(collided){
+                if(collided.classVal === "icon-environment-block"){
+                    throw "hit a block";
+                }
+            })
+        }
+
+        function findEntityByPosition(x, y){
+            // console.log(x, y);
+            for (var i = $scope.entities.length - 1; i >= 0; i--) {
+                if($scope.entities[i].position.x == x && $scope.entities[i].position.y == y){
+                    return $scope.entities[i];
+                }
+            };
+            
+        }
+
         function MoveComponent(entity) {
             entity.move = function(delta_x,delta_y){
-                try {
-                    entity.trigger('start_move', {delta_x:delta_x, delta_y:delta_y})
-                    // if($scope.entities[entity.position.y+delta_y][entity.position.x+delta_x].classVal !== "icon-environment-block"){
-                        entity.position.x += delta_x;
-                        entity.position.y += delta_y;
-                    // } else {
-                    //     throw "failed to move, their's a blog in the way!!";
-                    // }
-                    entity.trigger('complete_move', {delta_x:delta_x, delta_y:delta_y});
-                } catch(e){
-                    console.log(e);
-                    entity.trigger('fail_move', {error: e});
-                }
+                // try {
+                entity.trigger('start_move', {delta_x:delta_x, delta_y:delta_y})
+                // console.log(neighbor);
+                entity.position.x += delta_x;
+                entity.position.y += delta_y;
+                // var neighbor = findEntityByPosition(entity.position.x+delta_x, entity.position.y+delta_y);
+                // if(neighbor !== undefined && neighbor.classVal !== "icon-environment-block"){
+                    
+                // } else {
+                //     throw "failed to move, their's a blog in the way!!";
+                // }
+                entity.trigger('complete_move', {delta_x:delta_x, delta_y:delta_y});
+                // } catch(e){
+                //     // throw e;
+                //     console.log(e);
+                //     entity.trigger('fail_move', {error: e});
+                // }
                 
                 
             }
@@ -61,12 +90,17 @@ angular.module('beastieApp')
         function PushComponent(entity){
             //subscribe to move event
             entity.on('start_move', function(deltas) {
-                var nextY = 2*deltas.delta_y;
-                var nextX = 2*deltas.delta_x;
+                // var nextY = 2*deltas.delta_y;
+                // var nextX = 2*deltas.delta_x;
+                var neighbor = findEntityByPosition(entity.position.x+deltas.delta_x, entity.position.y+deltas.delta_y);
+                if(neighbor !== undefined && neighbor.classVal === "icon-environment-block" ){
+                    console.log("move neighbor");
+                    neighbor.move(deltas.delta_x, deltas.delta_y);
                 // if($scope.entities[entity.position.y+deltas.delta_y][entity.position.x+deltas.delta_x].classVal === "icon-environment-block" && $scope.entities[entity.position.y+nextY][entity.position.x+nextX].classVal !== "icon-environment-block"){
                 //     $scope.entities[entity.position.y+deltas.delta_y][entity.position.x+deltas.delta_x].classVal = "icon-environment-empty"
                 //     $scope.entities[entity.position.y+nextY][entity.position.x+nextX].classVal = "icon-environment-block"
                 // }
+                }
             });
         }
 
@@ -113,7 +147,7 @@ angular.module('beastieApp')
                 push: true,
                 heavy: true,
                 walk: false,
-                components: [MoveComponent]
+                components: [MoveComponent, CollisionComponent]
             }
         ]
 
@@ -133,7 +167,7 @@ angular.module('beastieApp')
                                 x: Math.floor(Math.random()*gridsize),
                                 y: Math.floor(Math.random()*gridsize)
                             },
-                            components:[MoveComponent, ControllerComponent, PushComponent]
+                            components:[MoveComponent, PushComponent, CollisionComponent, ControllerComponent]
                         })
         ];
         $scope.environment = $scope.entities;
@@ -187,7 +221,7 @@ angular.module('beastieApp')
                     x: Math.floor(Math.random()*gridsize),
                     y: Math.floor(Math.random()*gridsize)
                 },
-                components:[MoveComponent]
+                components:[MoveComponent, CollisionComponent]
             }));
         }
 
@@ -200,7 +234,7 @@ angular.module('beastieApp')
                     x: Math.floor(Math.random()*gridsize),
                     y: Math.floor(Math.random()*gridsize)
                 },
-                components:[MoveComponent]
+                components:[MoveComponent, CollisionComponent]
             }));
         }
 
@@ -213,7 +247,7 @@ angular.module('beastieApp')
                     x: Math.floor(Math.random()*gridsize),
                     y: Math.floor(Math.random()*gridsize)
                 },
-                components:[MoveComponent]
+                components:[MoveComponent, CollisionComponent]
             }));
         }
 
@@ -227,15 +261,15 @@ angular.module('beastieApp')
                     var value = $scope.entities[i];
                     if (value.kind === "monster") {
 
-                        var newX = value.position.x + (Math.floor(Math.random() * 3) - 1);
-                        var newY = value.position.y + (Math.floor(Math.random() * 3) - 1);
+                        // var newX = value.position.x + (Math.floor(Math.random() * 3) - 1);
+                        // var newY = value.position.y + (Math.floor(Math.random() * 3) - 1);
 
-                        newX = Math.max(0, newX);
-                        newX = Math.min(gridsize-1, newX);
+                        // newX = Math.max(0, newX);
+                        // newX = Math.min(gridsize-1, newX);
 
-                        newY = Math.max(0, newY);
-                        newY = Math.min(gridsize-1, newY);
-
+                        // newY = Math.max(0, newY);
+                        // newY = Math.min(gridsize-1, newY);
+                        // value.move((Math.floor(Math.random() * 3) - 1), (Math.floor(Math.random() * 3) - 1))
                         // if($scope.entities[newY][newX].classVal !== "icon-environment-block"){
                         //     value.position.x = Math.floor(newX);
                         //     value.position.y = Math.floor(newY);
