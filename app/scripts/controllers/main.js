@@ -35,6 +35,7 @@ angular.module('beastieApp')
                         entity.move(0, -1);
                     break;   
                 }
+                $scope.$apply();
             }, false);
         }
 
@@ -47,14 +48,13 @@ angular.module('beastieApp')
             });
 
             entity.on('collided', function(collided){
-                if(collided.classVal === "icon-environment-block"){
+                if(collided.kind === "block"){
                     throw "hit a block";
                 }
             })
         }
 
         function findEntityByPosition(x, y){
-            // console.log(x, y);
             for (var i = $scope.entities.length - 1; i >= 0; i--) {
                 if($scope.entities[i].position.x == x && $scope.entities[i].position.y == y){
                     return $scope.entities[i];
@@ -93,10 +93,10 @@ angular.module('beastieApp')
                 // var nextY = 2*deltas.delta_y;
                 // var nextX = 2*deltas.delta_x;
                 var neighbor = findEntityByPosition(entity.position.x+deltas.delta_x, entity.position.y+deltas.delta_y);
-                if(neighbor !== undefined && neighbor.classVal === "icon-environment-block" ){
+                if(neighbor !== undefined && neighbor.kind === "block" ){
                     console.log("move neighbor");
                     neighbor.move(deltas.delta_x, deltas.delta_y);
-                // if($scope.entities[entity.position.y+deltas.delta_y][entity.position.x+deltas.delta_x].classVal === "icon-environment-block" && $scope.entities[entity.position.y+nextY][entity.position.x+nextX].classVal !== "icon-environment-block"){
+                // if($scope.entities[entity.position.y+deltas.delta_y][entity.position.x+deltas.delta_x].kind === "block" && $scope.entities[entity.position.y+nextY][entity.position.x+nextX].classVal !== "icon-environment-block"){
                 //     $scope.entities[entity.position.y+deltas.delta_y][entity.position.x+deltas.delta_x].classVal = "icon-environment-empty"
                 //     $scope.entities[entity.position.y+nextY][entity.position.x+nextX].classVal = "icon-environment-block"
                 // }
@@ -113,6 +113,16 @@ angular.module('beastieApp')
             for (var i = schematic.components.length - 1; i >= 0; i--) {
                 schematic.components[i](this);
             };
+            if(schematic.frame !== undefined){
+                gameLoop.on('frame', schematic.frame.bind(this));
+            }
+            if(schematic.events !== undefined){
+                for(var key in schematic.events){
+                    this.on(key, schematic.events[key].bind(this));
+                }
+            }
+
+
             _.extend(this, schematic);
         }
 
@@ -133,21 +143,40 @@ angular.module('beastieApp')
         };
 
         var env_schematics = [
+            // {
+            //     name: 'empty',
+            //     id: 'environment-empty',
+            //     push: false,
+            //     heavy: false,
+            //     walk: true,
+            //     components: []
+            // },
             {
-                name: 'empty',
-                id: 'environment-empty',
-                push: false,
-                heavy: false,
-                walk: true,
-                components: []
-            },
-            {
-                name: 'block',
+                kind: 'block',
                 id: 'environment-block',
                 push: true,
                 heavy: true,
                 walk: false,
-                components: [MoveComponent, CollisionComponent]
+                components: [MoveComponent, CollisionComponent],
+                events:{
+                    collided: function(entity){
+                        console.log("collision")
+                        console.log(entity);
+                        if(entity.kind === 'monster'){
+                            console.log('monster');
+                            var delta_x = entity.position.x - this.position.x;
+                            var delta_y = entity.position.y - this.position.y;
+                            var neighbor = findEntityByPosition(entity.position.x+delta_x, entity.position.y+delta_y);
+                            if(neighbor !== undefined && neighbor.kind === 'block'){
+                                $scope.entities = _.without($scope.entities, entity);
+                                $scope.$apply();
+                            } else {
+                                throw "chouldn't kill the monster";
+                            }
+                            
+                        }
+                    }
+                }
             }
         ]
 
@@ -175,37 +204,46 @@ angular.module('beastieApp')
         for (var i = 0; i < gridsize; i++) {
             // backgrid[i] = new Array(gridsize);
             for (var e = 0; e < gridsize; e++) {
-                var blocktype = _.sample(env_schematics);
-                blocktype.position = {
-                    x: e,
-                    y: i
-                }
-                var classVal = '';
-
-                if (blocktype.id) {
-                    if (blocktype.dir) {
-                        var dir = _.chain(blocktype.dir)
-                            .filter(function(num){ return Math.random() < 0.2; })
-                            .value();
-
-                        if (!dir.length) {
-                            dir = _.sample(blocktype.dir);
-                        } else {
-                            dir = dir.reduce(function(memo, d){ return memo + d; });
-                        }
-
-                        blocktype.classVal = $scope.iconPrefix + blocktype.id + dir;
-                    } else {
-                        blocktype.classVal = $scope.iconPrefix + blocktype.id;
+                if(Math.floor(Math.random() * 2) > 0){
+                    var blocktype = _.sample(env_schematics);
+                    blocktype.position = {
+                        x: e,
+                        y: i
                     }
+                    var classVal = '';
+
+                    if (blocktype.id) {
+                        if (blocktype.dir) {
+                            // var dir = _.chain(blocktype.dir)
+                            //     .filter(function(num){ return Math.random() < 0.2; })
+                            //     .value();
+
+                            // if (!dir.length) {
+                            //     dir = _.sample(blocktype.dir);
+                            // } else {
+                            //     dir = dir.reduce(function(memo, d){ return memo + d; });
+                            // }
+
+                            blocktype.classVal = $scope.iconPrefix + blocktype.id + dir;
+                        } else {
+                            blocktype.classVal = $scope.iconPrefix + blocktype.id;
+                        }
+                    }
+                    $scope.entities.push(new Entity(blocktype));
                 }
-                $scope.entities.push(new Entity(blocktype));
                 // backgrid[i][e] = {
                 //     classVal : classVal
                 // };
             }
         }
 
+         var frame = 0;
+        var gamespeed = 45;
+
+        var gameLoop = new Entity({
+                            kind: 'loop',
+                            components:[]
+                        })
 
         // var player = new Entity($scope.entities[0]);
         //  = player;
@@ -213,70 +251,87 @@ angular.module('beastieApp')
        
 
         for (var i = 0; i < 10; i++) {
+
+            var x = Math.floor(Math.random()*gridsize);
+            var y = Math.floor(Math.random()*gridsize);
+
+            while(findEntityByPosition(x, y) !== undefined){
+                x = Math.floor(Math.random()*gridsize);
+                y = Math.floor(Math.random()*gridsize);
+            }
+
             $scope.entities.push(new Entity({
                 kind: 'monster',
                 classVal: $scope.iconPrefix + 'entities-monster',
                 keyboard: false,
                 position: {
-                    x: Math.floor(Math.random()*gridsize),
-                    y: Math.floor(Math.random()*gridsize)
+                    x: x,
+                    y: y
                 },
-                components:[MoveComponent, CollisionComponent]
+                components:[MoveComponent, CollisionComponent],
+                frame: function(frame){
+                    // console.log("test");
+                    if (!(frame % gamespeed)) {
+                        this.move((Math.floor(Math.random() * 3) - 1), (Math.floor(Math.random() * 3) - 1));
+                        $scope.$apply();
+                    }
+                }
+
             }));
         }
 
         for (var i = 0; i < 5; i++) {
+
+            var x = Math.floor(Math.random()*gridsize);
+            var y = Math.floor(Math.random()*gridsize);
+
+            while(findEntityByPosition(x, y) !== undefined){
+                x = Math.floor(Math.random()*gridsize);
+                y = Math.floor(Math.random()*gridsize);
+            }
+
             $scope.entities.push(new Entity({
                 kind: 'mother',
                 classVal: $scope.iconPrefix + 'entities-mother',
                 keyboard: false,
                 position: {
-                    x: Math.floor(Math.random()*gridsize),
-                    y: Math.floor(Math.random()*gridsize)
+                    x: x,
+                    y: y
                 },
                 components:[MoveComponent, CollisionComponent]
             }));
         }
 
         for (var i = 0; i < 20; i++) {
+
+            var x = Math.floor(Math.random()*gridsize);
+            var y = Math.floor(Math.random()*gridsize);
+
+            while(findEntityByPosition(x, y) !== undefined){
+                x = Math.floor(Math.random()*gridsize);
+                y = Math.floor(Math.random()*gridsize);
+            }
+
             $scope.entities.push(new Entity({
                 kind: 'egg',
                 classVal: $scope.iconPrefix + 'entities-egg',
                 keyboard: false,
                 position: {
-                    x: Math.floor(Math.random()*gridsize),
-                    y: Math.floor(Math.random()*gridsize)
+                    x: x,
+                    y: y
                 },
                 components:[MoveComponent, CollisionComponent]
             }));
         }
 
-        var frame = 0;
-        var gamespeed = 45;
+       
 
         function animloop(){
             frame++;
-            if (!(frame % gamespeed)) {
-                for (var i = 0; i < $scope.entities.length; i++) {
-                    var value = $scope.entities[i];
-                    if (value.kind === "monster") {
-
-                        // var newX = value.position.x + (Math.floor(Math.random() * 3) - 1);
-                        // var newY = value.position.y + (Math.floor(Math.random() * 3) - 1);
-
-                        // newX = Math.max(0, newX);
-                        // newX = Math.min(gridsize-1, newX);
-
-                        // newY = Math.max(0, newY);
-                        // newY = Math.min(gridsize-1, newY);
-                        // value.move((Math.floor(Math.random() * 3) - 1), (Math.floor(Math.random() * 3) - 1))
-                        // if($scope.entities[newY][newX].classVal !== "icon-environment-block"){
-                        //     value.position.x = Math.floor(newX);
-                        //     value.position.y = Math.floor(newY);
-                        // }
-                    }
-                }
-                $scope.$apply();
+            try{
+                gameLoop.trigger('frame', frame);
+            } catch(e){
+                console.log(e);
             }
             requestAnimFrame(animloop);
         };
