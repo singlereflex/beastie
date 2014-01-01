@@ -38,6 +38,9 @@ body {
             transition: top 0.5s ease, left 0.5s ease;
             text-shadow: none;
         }
+        .entity.block{
+            text-shadow: 1px 1px 0 #807a77, 2px 2px 20px #000;
+        }
         .entity.player {
             color: #00a0ff;
             -webkit-animation: blink 0.01s infinite ease alternate;
