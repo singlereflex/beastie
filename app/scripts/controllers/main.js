@@ -16,7 +16,7 @@ angular.module('beastieApp')
                         collided: function(entity){
                             console.log("collision")
                             console.log(entity);
-                            if(entity.kind === 'monster'){
+                            if(entity.kind === 'monster' || entity.kind === 'mother' || entity.kind === 'egg'){
                                 console.log('monster');
                                 var delta_x = entity.position.x - this.position.x;
                                 var delta_y = entity.position.y - this.position.y;
@@ -96,6 +96,65 @@ angular.module('beastieApp')
                         }
                     },
                     world: $scope
+                }
+            },
+            egg: function(){
+                return {
+                    kind: 'egg',
+                    classVal: $scope.iconPrefix + 'entities-egg',
+                    keyboard: false,
+                    position: {
+                        x: x,
+                        y: y
+                    },
+                    events:{
+                        die: function(){
+                            $scope.entities = _.without($scope.entities, this);
+                            $scope.$apply();
+                        },
+                        collided: function(entity){
+                            console.log("collision")
+                            console.log(entity);
+                            if(entity.kind === 'player'){
+                                $scope.entities = _.without($scope.entities, entity);
+                                $scope.$apply();
+                            }
+                        }
+                    },
+                    components:[CollisionComponent, DeathComponent]
+                }
+            },
+            mother: function(){
+                return {
+                    kind: 'mother',
+                    classVal: $scope.iconPrefix + 'entities-mother',
+                    keyboard: false,
+                    position: {
+                        x: x,
+                        y: y
+                    },
+                    frame: function(frame){
+                        // console.log("test");
+                        if (!(frame % gamespeed)) {
+                            this.move((Math.floor(Math.random() * 3) - 1), (Math.floor(Math.random() * 3) - 1));
+                            $scope.$apply();
+                        }
+                    },
+                    events:{
+                        die: function(){
+                            $scope.entities = _.without($scope.entities, this);
+                            $scope.$apply();
+                        },
+                        collided: function(entity){
+                            console.log("collision")
+                            console.log(entity);
+                            if(entity.kind === 'player'){
+                                $scope.entities = _.without($scope.entities, entity);
+                                $scope.$apply();
+                            }
+                        }
+                    },
+                    components:[MoveComponent, CollisionComponent, DeathComponent]
                 }
             }
         };
@@ -192,16 +251,7 @@ angular.module('beastieApp')
                 y = Math.floor(Math.random()*gridsize);
             }
 
-            $scope.entities.push(new Entity({
-                kind: 'mother',
-                classVal: $scope.iconPrefix + 'entities-mother',
-                keyboard: false,
-                position: {
-                    x: x,
-                    y: y
-                },
-                components:[MoveComponent, CollisionComponent]
-            }));
+            $scope.entities.push(new Entity(env_schematics.mother()));
         }
 
         for (var i = 0; i < 20; i++) {
@@ -214,16 +264,7 @@ angular.module('beastieApp')
                 y = Math.floor(Math.random()*gridsize);
             }
 
-            $scope.entities.push(new Entity({
-                kind: 'egg',
-                classVal: $scope.iconPrefix + 'entities-egg',
-                keyboard: false,
-                position: {
-                    x: x,
-                    y: y
-                },
-                components:[MoveComponent, CollisionComponent]
-            }));
+            $scope.entities.push(new Entity(env_schematics.egg()));
         }
 
        
