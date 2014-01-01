@@ -121,7 +121,8 @@ angular.module('beastieApp')
                             }
                         }
                     },
-                    components:[CollisionComponent, DeathComponent]
+                    components:[CollisionComponent, DeathComponent],
+                    world: $scope
                 }
             },
             mother: function(){
@@ -154,7 +155,8 @@ angular.module('beastieApp')
                             }
                         }
                     },
-                    components:[MoveComponent, CollisionComponent, DeathComponent]
+                    components:[MoveComponent, CollisionComponent, DeathComponent],
+                    world: $scope
                 }
             }
         };
