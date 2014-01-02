@@ -69,48 +69,6 @@ angular.module('beastieApp')
                     world: $scope
                 }
             },
-            monster: function(x, y) {
-                return {
-                    kind: 'monster',
-                    classVal: $scope.iconPrefix + 'entities-monster',
-                    keyboard: false,
-                    position: {
-                        x: x,
-                        y: y
-                    },
-                    components:[MoveComponent, CollisionComponent, DeathComponent],
-                    frame: function(frame){
-                        // console.log("monster move")
-                        // console.log("test");
-                        if (!(frame % gamespeed)) {
-
-                            this.move((Math.floor(Math.random() * 3) - 1), (Math.floor(Math.random() * 3) - 1));
-                            // $scope.$apply();
-                        }
-                    },
-                    events:{
-                        complete_move: function(deltas){
-                            $scope.$apply();
-                        },
-                        die: function(){
-                            $scope.entities = _.without($scope.entities, this);
-                            $scope.$apply();
-                        },
-                        collided: function(entity){
-                            // console.log("collision")
-                            // console.log(entity);
-                            if(entity.kind === "block"){
-                                throw "hit a block";
-                            }
-                            if(entity.kind === 'player'){
-                                $scope.entities = _.without($scope.entities, entity);
-                                $scope.$apply();
-                            }
-                        }
-                    },
-                    world: $scope
-                }
-            },
             egg: function(x, y){
                 return {
                     kind: 'egg',
@@ -161,6 +119,14 @@ angular.module('beastieApp')
                                 if (!(frame % gamespeed)) {
                                     this.move((Math.floor(Math.random() * 3) - 1), (Math.floor(Math.random() * 3) - 1));
                                     // $scope.$apply();
+                                } else {
+                                    var test = Math.floor(Math.random() * 1000);
+                                    // console.log(test);
+                                    if (test == 0) {
+                                        // console.log("test", test);
+                                        this.transition('evolve');
+                                        
+                                    }
                                 }
                             },
                             events:{
@@ -184,48 +150,51 @@ angular.module('beastieApp')
                                     }
                                 }
                             },
+                        },
+                        evolve:{
+                            kind: 'mother',
+                            classVal: $scope.iconPrefix + 'entities-mother',
+                            frame: function(frame){
+                                // console.log("test");
+                                if (!(frame % gamespeed)) {
+                                    this.move((Math.floor(Math.random() * 3) - 1), (Math.floor(Math.random() * 3) - 1));
+                                    // $scope.$apply();
+                                }else {
+                                    var test = Math.floor(Math.random() * 1000);
+                                    // console.log(test);
+                                    if (test == 0) {
+                                        // console.log("test", test);
+                                        this.lay();
+                                        
+                                    }
+                                }
+                            },
+                            lay: function(){
+                                $scope.entities.push(new Entity(env_schematics.egg(this.position.x, this.position.y)));
+                            },
+                            events:{
+                                complete_move: function(deltas){
+                                    $scope.$apply();
+                                },
+                                die: function(){
+                                    $scope.entities = _.without($scope.entities, this);
+                                    $scope.$apply();
+                                },
+                                collided: function(entity){
+                                    // console.log("collision")
+                                    // console.log(entity);
+                                    if(entity.kind === "block"){
+                                        throw "hit a block";
+                                    }
+                                    if(entity.kind === 'player'){
+                                        $scope.entities = _.without($scope.entities, entity);
+                                        $scope.$apply();
+                                    }
+                                }
+                            },
+                            components:[MoveComponent, CollisionComponent, DeathComponent],
                         }
                     }
-                }
-            },
-            mother: function(x, y){
-                return {
-                    kind: 'mother',
-                    classVal: $scope.iconPrefix + 'entities-mother',
-                    keyboard: false,
-                    position: {
-                        x: x,
-                        y: y
-                    },
-                    frame: function(frame){
-                        // console.log("test");
-                        if (!(frame % gamespeed)) {
-                            this.move((Math.floor(Math.random() * 3) - 1), (Math.floor(Math.random() * 3) - 1));
-                            // $scope.$apply();
-                        }
-                    },
-                    events:{
-                        complete_move: function(deltas){
-                            $scope.$apply();
-                        },
-                        die: function(){
-                            $scope.entities = _.without($scope.entities, this);
-                            $scope.$apply();
-                        },
-                        collided: function(entity){
-                            // console.log("collision")
-                            // console.log(entity);
-                            if(entity.kind === "block"){
-                                throw "hit a block";
-                            }
-                            if(entity.kind === 'player'){
-                                $scope.entities = _.without($scope.entities, entity);
-                                $scope.$apply();
-                            }
-                        }
-                    },
-                    components:[MoveComponent, CollisionComponent, DeathComponent],
-                    world: $scope
                 }
             }
         };
@@ -306,31 +275,31 @@ angular.module('beastieApp')
 
        
 
-        for (var i = 0; i < 10; i++) {
+        // for (var i = 0; i < 10; i++) {
 
-            var x = Math.floor(Math.random()*gridsize);
-            var y = Math.floor(Math.random()*gridsize);
+        //     var x = Math.floor(Math.random()*gridsize);
+        //     var y = Math.floor(Math.random()*gridsize);
 
-            while($scope.findEntityByPosition(x, y) !== undefined){
-                x = Math.floor(Math.random()*gridsize);
-                y = Math.floor(Math.random()*gridsize);
-            }
+        //     while($scope.findEntityByPosition(x, y) !== undefined){
+        //         x = Math.floor(Math.random()*gridsize);
+        //         y = Math.floor(Math.random()*gridsize);
+        //     }
 
-            $scope.entities.push(new Entity(env_schematics.monster(x, y)));
-        }
+        //     $scope.entities.push(new Entity(env_schematics.monster(x, y)));
+        // }
 
-        for (var i = 0; i < 5; i++) {
+        // for (var i = 0; i < 5; i++) {
 
-            var x = Math.floor(Math.random()*gridsize);
-            var y = Math.floor(Math.random()*gridsize);
+        //     var x = Math.floor(Math.random()*gridsize);
+        //     var y = Math.floor(Math.random()*gridsize);
 
-            while($scope.findEntityByPosition(x, y) !== undefined){
-                x = Math.floor(Math.random()*gridsize);
-                y = Math.floor(Math.random()*gridsize);
-            }
+        //     while($scope.findEntityByPosition(x, y) !== undefined){
+        //         x = Math.floor(Math.random()*gridsize);
+        //         y = Math.floor(Math.random()*gridsize);
+        //     }
 
-            $scope.entities.push(new Entity(env_schematics.mother(x, y)));
-        }
+        //     $scope.entities.push(new Entity(env_schematics.mother(x, y)));
+        // }
 
         for (var i = 0; i < 20; i++) {
 
