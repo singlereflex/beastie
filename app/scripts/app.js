@@ -41,12 +41,6 @@ function CollisionComponent(entity){
             entity.trigger('collided', collided);
         }
     });
-
-    entity.on('collided', function(collided){
-        if(collided.kind === "block"){
-            throw "hit a block";
-        }
-    })
 }
 
 function MoveComponent(entity) {
@@ -130,11 +124,14 @@ function DeathComponent(entity){
 var Entity = function(schematic){
     this._events = {};
     _.extend(this, schematic);
+    this.schematic = schematic;
     for (var i = schematic.components.length - 1; i >= 0; i--) {
         schematic.components[i](this);
     };
+
     if(schematic.frame !== undefined){
-        this.world.gameLoop.on('frame', schematic.frame.bind(this));
+    //     this.world.gameLoop.on('frame', schematic.frame.bind(this));
+      this.frame = schematic.frame.bind(this);
     }
     if(schematic.events !== undefined){
         for(var key in schematic.events){
@@ -152,11 +149,44 @@ Entity.prototype.on = function(name, callback) {
 
 Entity.prototype.trigger = function(name, stuff) {
     var callbacks = this._events[name];
+    // console.log(name);
     if(callbacks !== undefined){
         for (var i = callbacks.length - 1; i >= 0; i--) {
-            callbacks[i](stuff);
+            callbacks[i](stuff);//should use arguments instead of single argument
         };
     }
+};
+
+Entity.prototype.remove = function(event_name, cb) {
+  this._events[event_name] = _.without(this._events[event_name], cb);
+  // console.log(_.without(this._events[event_name], cb));
+  // console.log(event_name, this._events[event_name]);
+  return cb;
+};
+
+Entity.prototype.transition = function(state_name) {
+  this.state = state_name;
+
+  if(this.states[state_name].frame !== undefined){
+      // this.world.gameLoop.remove('frame', this.frame);
+      // this.world.gameLoop.on('frame', this.states[state_name].frame.bind(this));
+      this.frame = this.states[state_name].frame.bind(this);
+  }
+  if(this.states[state_name].events !== undefined){
+    this._events = {};
+    for(var key in this.states[state_name].events){
+        this.on(key, this.states[state_name].events[key].bind(this));
+    }
+  }
+  if(this.states[state_name].components !== undefined){
+    for (var i = this.states[state_name].components.length - 1; i >= 0; i--) {
+        this.states[state_name].components[i](this);
+        // console.log(this.states[state_name].components);
+    };
+  }
+  // console.log(this._events);
+  _.extend(this, this.states[state_name]);//that should override the correct things
+  this.trigger('transition', state_name);
 };
 
 // shim layer with setTimeout fallback
