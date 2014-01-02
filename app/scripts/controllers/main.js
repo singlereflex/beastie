@@ -222,43 +222,6 @@ angular.module('beastieApp')
             $scope.entities.push(new Entity(env_schematics.player(x, y)));
         }
         $scope.world = {};
-        for (var i = 0; i < gridsize; i++) {
-            // backgrid[i] = new Array(gridsize);
-            for (var e = 0; e < gridsize; e++) {
-                $scope.world[i+"/"+e] = true;//we'll figure out if i feel like updating it later to actually store a layout
-                // e == 0 || i == 0 || e == gridsize-1 || i == gridsize-1
-                if(Math.floor(Math.random() * 2) > 0){
-                    var blocktype = env_schematics.block();
-                    blocktype.position = {
-                        x: e,
-                        y: i
-                    }
-                    var classVal = '';
-
-                    if (blocktype.id) {
-                        if (blocktype.dir) {
-                            // var dir = _.chain(blocktype.dir)
-                            //     .filter(function(num){ return Math.random() < 0.2; })
-                            //     .value();
-
-                            // if (!dir.length) {
-                            //     dir = _.sample(blocktype.dir);
-                            // } else {
-                            //     dir = dir.reduce(function(memo, d){ return memo + d; });
-                            // }
-
-                            blocktype.classVal = $scope.iconPrefix + blocktype.id + dir;
-                        } else {
-                            blocktype.classVal = $scope.iconPrefix + blocktype.id;
-                        }
-                    }
-                    $scope.entities.push(new Entity(blocktype));
-                }
-                // backgrid[i][e] = {
-                //     classVal : classVal
-                // };
-            }
-        }
 
         function explore(x, y){
             console.log('exploreing');
@@ -302,7 +265,20 @@ angular.module('beastieApp')
                     // };
                 }
             }
+            for (var i = 0; i < 20; i++) {
+
+                var _x = Math.floor(Math.random()*gridsize + x);
+                var _y = Math.floor(Math.random()*gridsize + y);
+
+                while($scope.findEntityByPosition(_x, _y) !== undefined){
+                    _x = Math.floor(Math.random()*gridsize + x);
+                    _y = Math.floor(Math.random()*gridsize + y);
+                }
+
+                $scope.entities.push(new Entity(env_schematics.egg(_x, _y)));
+            }
         }
+        explore(0,0);
 
         addPlayer();
         var frame = 0;
@@ -346,18 +322,7 @@ angular.module('beastieApp')
         //     $scope.entities.push(new Entity(env_schematics.mother(x, y)));
         // }
 
-        for (var i = 0; i < 20; i++) {
-
-            var x = Math.floor(Math.random()*gridsize);
-            var y = Math.floor(Math.random()*gridsize);
-
-            while($scope.findEntityByPosition(x, y) !== undefined){
-                x = Math.floor(Math.random()*gridsize);
-                y = Math.floor(Math.random()*gridsize);
-            }
-
-            $scope.entities.push(new Entity(env_schematics.egg(x, y)));
-        }
+        
 
        
 
