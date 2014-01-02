@@ -100,10 +100,11 @@ function PullComponent(entity){
       }
   });
   //subscribe to move event
-    entity.on('start_move', function(deltas) {
+    entity.on('complete_move', function(deltas) {
+        console.log('pull');
         // var nextY = 2*deltas.delta_y;
         // var nextX = 2*deltas.delta_x;
-        var neighbor = entity.world.findEntityByPosition(entity.position.x-deltas.delta_x, entity.position.y-deltas.delta_y);
+        var neighbor = entity.world.findEntityByPosition(entity.position.x-(deltas.delta_x*2), entity.position.y-(deltas.delta_y*2));
         if(neighbor !== undefined && neighbor.kind === "block" && entity.shiftDown){
             console.log("move neighbor");
             neighbor.move(deltas.delta_x, deltas.delta_y);
