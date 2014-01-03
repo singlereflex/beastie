@@ -7,23 +7,25 @@ angular.module('beastieApp')
             id: 'environment-empty',
             push: false,
             heavy: false,
-            walk: true
+            walk: true,
+            components: []
         },
         {
             name: 'block',
             id: 'environment-block',
             push: true,
             heavy: true,
-            walk: false
+            walk: false,
+            components: []
         },
-        {
-            name: 'wall',
-            id: 'environment-wall-',
-            dir: ['n','s','w','e'],
-            push: function(dir){
+        // {
+        //     name: 'wall',
+        //     id: 'environment-wall-',
+        //     dir: ['n','s','w','e'],
+        //     push: function(dir){
 
-            },
-            heavy: false,
-            walk: false
-        }
+        //     },
+        //     heavy: false,
+        //     walk: false
+        // }
     ]);

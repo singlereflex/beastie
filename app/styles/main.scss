@@ -8,6 +8,8 @@ $iconWhiteSpritePath: "../images/glyphicons-halflings-white.png";
 html, body {
     margin: 0;
     background: #002505 url(../images/graphy.png) top left;
+    height:100%;
+    width:100%;
 }
 
 body {
@@ -19,6 +21,8 @@ body {
     position: relative;
     font-size: 16px;
     line-height: 16px;
+    height:100%;
+    width:100%;
     color: #464646;
     text-shadow: 1px 1px 0 #807a77, 2px 2px 20px #000;
     div {
@@ -37,6 +41,9 @@ body {
             height: 16px;
             transition: top 0.5s ease, left 0.5s ease;
             text-shadow: none;
+        }
+        .entity.block{
+            text-shadow: 1px 1px 0 #807a77, 2px 2px 20px #000;
         }
         .entity.player {
             color: #00a0ff;
