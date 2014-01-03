@@ -46,14 +46,11 @@ angular.module('beastieApp')
                         y: y
                     },
                     //order matthers X_x
-                    components:[MoveComponent, PushComponent, PullComponent, CollisionComponent, ControllerComponent, DeathComponent],
+                    components:[MoveComponent, PushComponent, PullComponent, CollisionComponent, ControllerComponent, DeathComponent, ExploreComponent],
                     events:{
                         complete_move: function(deltas){
                             console.log(this.position);
-                            if($scope.world[this.position.x+"/"+this.position.y] === undefined){
-                                console.log("explore");
-                                explore(this.position.x, this.position.y);
-                            }
+                            
                         },
                         die: function(){
                             $scope.entities = _.without($scope.entities, this);
@@ -93,11 +90,13 @@ angular.module('beastieApp')
                             }
                         }
                     },
+                    age: 0,
                     frame: function(frame){
                         // console.log("test");
                         var test = Math.floor(Math.random() * 1000);
+
                         // console.log(test);
-                        if (test == 0) {
+                        if (test == 0 && this.age > 1000) {
                             // console.log("test", test);
                             this.transition('hatch');
                             console.log('egg hatch');
@@ -107,6 +106,7 @@ angular.module('beastieApp')
 
                             }
                         }
+                        this.age++;
                     },
                     components:[CollisionComponent, DeathComponent],
                     world: $scope,
@@ -114,21 +114,25 @@ angular.module('beastieApp')
                         hatch:{
                             kind: 'monster',
                             classVal: $scope.iconPrefix + 'entities-monster',
-                            components:[MoveComponent, CollisionComponent, DeathComponent],
+                            components:[MoveComponent, CollisionComponent, DeathComponent, ExploreComponent],
                             frame: function(frame){
                                 // console.log("test");
                                 if (!(frame % gamespeed)) {
-                                    this.move((Math.floor(Math.random() * 3) - 1), (Math.floor(Math.random() * 3) - 1));
+                                    var delta = (Math.floor(Math.random() * 3) - 1);
+                                    var y = Math.floor(Math.random() * 2)
+                                    console.log((1-(y))*delta, (y)*delta);
+                                    this.move((1-(y))*delta, (y)*delta);
                                     // 
                                 } else {
                                     var test = Math.floor(Math.random() * 1000);
                                     // console.log(test);
-                                    if (test == 0) {
+                                    if (test == 0 && this.age > 10000) {
                                         // console.log("test", test);
                                         this.transition('evolve');
                                         
                                     }
                                 }
+                                this.age++;
                             },
                             events:{
                                 complete_move: function(deltas){
@@ -156,7 +160,10 @@ angular.module('beastieApp')
                             frame: function(frame){
                                 // console.log("test");
                                 if (!(frame % gamespeed)) {
-                                    this.move((Math.floor(Math.random() * 3) - 1), (Math.floor(Math.random() * 3) - 1));
+                                    var delta = (Math.floor(Math.random() * 3) - 1);
+                                    var y = Math.floor(Math.random() * 2)
+                                    console.log((1-(y))*delta, (y)*delta);
+                                    this.move((1-(y))*delta, (y)*delta);
                                     // 
                                 }else {
                                     var test = Math.floor(Math.random() * 1000);
@@ -167,6 +174,7 @@ angular.module('beastieApp')
                                         
                                     }
                                 }
+                                // this.age++;
                             },
                             lay: function(){
                                 $scope.entities.push(new Entity(env_schematics.egg(this.position.x, this.position.y)));
@@ -190,7 +198,7 @@ angular.module('beastieApp')
                                     }
                                 }
                             },
-                            components:[MoveComponent, PushComponent, CollisionComponent, DeathComponent],
+                            components:[MoveComponent, PushComponent, CollisionComponent, DeathComponent, ExploreComponent],
                         }
                     }
                 }
@@ -223,15 +231,15 @@ angular.module('beastieApp')
         }
         $scope.world = {};
 
-        function explore(x, y){
+        $scope.explore = function(x, y, size){
             console.log('exploreing');
-            for (var i = x; i < x+gridsize; i++) {
+            for (var i = x; i < x+size; i++) {
                 // backgrid[i] = new Array(gridsize);
-                for (var e = y; e < y+gridsize; e++) {
+                for (var e = y; e < y+size; e++) {
                     if($scope.world[i+"/"+e] === undefined){
                         $scope.world[i+"/"+e] = true;//we'll figure out if i feel like updating it later to actually store a layout
                         // e == 0 || i == 0 || e == gridsize-1 || i == gridsize-1
-                        if(Math.floor(Math.random() * 2) > 0){
+                        if(Math.floor(Math.random() * 2) > 0 && $scope.findEntityByPosition(i, e) === undefined){
                             var blocktype = env_schematics.block();
                             blocktype.position = {
                                 x: i,
@@ -265,20 +273,20 @@ angular.module('beastieApp')
                     // };
                 }
             }
-            for (var i = 0; i < 20; i++) {
+            for (var i = 0; i < Math.floor(size/5); i++) {
 
-                var _x = Math.floor(Math.random()*gridsize + x);
-                var _y = Math.floor(Math.random()*gridsize + y);
+                var _x = Math.floor(Math.random()*size + x);
+                var _y = Math.floor(Math.random()*size + y);
 
                 while($scope.findEntityByPosition(_x, _y) !== undefined){
-                    _x = Math.floor(Math.random()*gridsize + x);
-                    _y = Math.floor(Math.random()*gridsize + y);
+                    _x = Math.floor(Math.random()*size + x);
+                    _y = Math.floor(Math.random()*size + y);
                 }
 
                 $scope.entities.push(new Entity(env_schematics.egg(_x, _y)));
             }
         }
-        explore(0,0);
+        $scope.explore(0,0, gridsize);
 
         addPlayer();
         var frame = 0;
