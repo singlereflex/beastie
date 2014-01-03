@@ -32,6 +32,27 @@ function ControllerComponent(entity){
             break;   
         }
     }, false);
+
+    Hammer(document).on("dragleft", function(e) {
+      // e.preventDefault();
+      // alert("hammer left");
+      entity.move(-1, 0);
+    });
+    Hammer(document).on("dragup", function(e) {
+      // e.preventDefault();
+      // alert("hammer up");
+      entity.move(0, -1);
+    });
+    Hammer(document).on("dragdown", function(e) {
+      // e.preventDefault();
+      // alert("hammer down");
+      entity.move(0, 1);
+    });
+    Hammer(document).on("dragright", function(e) {
+      // e.preventDefault();
+      // alert("hammer right");
+      entity.move(1, 0);
+    });
 }
 
 function CollisionComponent(entity){
@@ -43,10 +64,21 @@ function CollisionComponent(entity){
     });
 }
 
+function ExploreComponent(entity){
+  entity.on('complete_move', function(deltas){
+    if(entity.world.world[entity.position.x+"/"+entity.position.y] === undefined){
+        entity.world.explore(entity.position.x-8, entity.position.y-8, 16);
+    }
+  });
+}
+
 function MoveComponent(entity) {
     entity.move = function(delta_x,delta_y){
         // try {
         entity.trigger('start_move', {delta_x:delta_x, delta_y:delta_y})
+        if(entity.position.x + delta_x < 0 ||entity.position.y + delta_y < 0){
+          throw "stay on the board please";
+        }
         // console.log(neighbor);
         entity.position.x += delta_x;
         entity.position.y += delta_y;
@@ -100,10 +132,11 @@ function PullComponent(entity){
       }
   });
   //subscribe to move event
-    entity.on('start_move', function(deltas) {
+    entity.on('complete_move', function(deltas) {
+        console.log('pull');
         // var nextY = 2*deltas.delta_y;
         // var nextX = 2*deltas.delta_x;
-        var neighbor = entity.world.findEntityByPosition(entity.position.x-deltas.delta_x, entity.position.y-deltas.delta_y);
+        var neighbor = entity.world.findEntityByPosition(entity.position.x-(deltas.delta_x*2), entity.position.y-(deltas.delta_y*2));
         if(neighbor !== undefined && neighbor.kind === "block" && entity.shiftDown){
             console.log("move neighbor");
             neighbor.move(deltas.delta_x, deltas.delta_y);
