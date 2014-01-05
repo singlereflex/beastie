@@ -3,6 +3,15 @@
 angular.module('beastieApp')
     .controller('MainCtrl', ['$scope', 'beastieEnv', function ($scope, beastieEnv) {
 
+        var frame = 0;
+        var gamespeed = 45;
+        var gridsize = 16;
+        $scope.cellsize = 16;
+        // var backgrid = new Array(gridsize);
+        $scope.iconPrefix = 'icon-';
+        $scope.entities = [];
+        $scope.world = {};
+
         var env_schematics = {
             block: function(){
                 return {
@@ -13,9 +22,11 @@ angular.module('beastieApp')
                     walk: false,
                     components: [MoveComponent, CollisionComponent],
                     events:{
+                        complete_move: function(deltas){
+                            // console.log(this.position);
+                            $scope.$apply();
+                        },
                         collided: function(entity){
-                            console.log("collision")
-                            console.log(entity);
                             if(entity.kind === "block"){
                                 throw "hit a block";
                             }
@@ -49,15 +60,15 @@ angular.module('beastieApp')
                     components:[MoveComponent, PushComponent, PullComponent, CollisionComponent, ControllerComponent, DeathComponent, ExploreComponent],
                     events:{
                         complete_move: function(deltas){
-                            console.log(this.position);
-                            
+                            // console.log(this.position);
+                            $scope.$apply();
                         },
                         die: function(){
                             $scope.entities = _.without($scope.entities, this);
                             
                         },
                         collided: function(entity){
-                            console.log("collision")
+                            
                             if(entity.kind === 'monster' || entity.kind === 'mother'){
                                 this.die();
                             } else {
@@ -92,21 +103,17 @@ angular.module('beastieApp')
                     },
                     age: 0,
                     frame: function(frame){
-                        // console.log("test");
-                        var test = Math.floor(Math.random() * 1000);
-
+                        var test = Math.floor(Math.random() * 100);
+                        this.age++;
                         // console.log(test);
                         if (test == 0 && this.age > 1000) {
-                            // console.log("test", test);
+                            console.log("hatch");
                             this.transition('hatch');
-                            console.log('egg hatch');
-                            try{
-                                // 
-                            } catch(e){
-
-                            }
+                            return true;
+                            
                         }
-                        this.age++;
+                        return false
+                        
                     },
                     components:[CollisionComponent, DeathComponent],
                     world: $scope,
@@ -117,22 +124,26 @@ angular.module('beastieApp')
                             components:[MoveComponent, CollisionComponent, DeathComponent, ExploreComponent],
                             frame: function(frame){
                                 // console.log("test");
+                                this.age++;
                                 if (!(frame % gamespeed)) {
-                                    var delta = (Math.floor(Math.random() * 3) - 1);
-                                    var y = Math.floor(Math.random() * 2)
-                                    console.log((1-(y))*delta, (y)*delta);
-                                    this.move((1-(y))*delta, (y)*delta);
-                                    // 
-                                } else {
-                                    var test = Math.floor(Math.random() * 1000);
-                                    // console.log(test);
-                                    if (test == 0 && this.age > 10000) {
+                                    if (this.age > 2000) {
+                                        console.log("evolving");
                                         // console.log("test", test);
                                         this.transition('evolve');
-                                        
+                                        return true;
                                     }
-                                }
-                                this.age++;
+                                    var delta = (Math.floor(Math.random() * 3) - 1);
+                                    var y = Math.floor(Math.random() * 2)
+                                    // console.log((1-(y))*delta, (y)*delta);
+                                    this.move((1-(y))*delta, (y)*delta);
+                                    // 
+                                    
+                                    // console.log(test);
+                                    
+                                    return true;
+                                } 
+                                
+                                return false;
                             },
                             events:{
                                 complete_move: function(deltas){
@@ -144,8 +155,6 @@ angular.module('beastieApp')
                                     
                                 },
                                 collided: function(entity){
-                                    // console.log("egg collision")
-                                    // console.log(entity);
                                     if(entity.kind === 'player'){
                                         entity.die();
                                     } else {
@@ -162,10 +171,9 @@ angular.module('beastieApp')
                                 if (!(frame % gamespeed)) {
                                     var delta = (Math.floor(Math.random() * 3) - 1);
                                     var y = Math.floor(Math.random() * 2)
-                                    console.log((1-(y))*delta, (y)*delta);
+                                    // console.log((1-(y))*delta, (y)*delta);
                                     this.move((1-(y))*delta, (y)*delta);
                                     // 
-                                }else {
                                     var test = Math.floor(Math.random() * 1000);
                                     // console.log(test);
                                     if (test == 0) {
@@ -173,8 +181,8 @@ angular.module('beastieApp')
                                         this.lay();
                                         
                                     }
+                                    return true;
                                 }
-                                // this.age++;
                             },
                             lay: function(){
                                 $scope.entities.push(new Entity(env_schematics.egg(this.position.x, this.position.y)));
@@ -188,9 +196,6 @@ angular.module('beastieApp')
                                     
                                 },
                                 collided: function(entity){
-                                    // console.log("collision")
-                                    // console.log(entity);
-                                    
                                     if(entity.kind === 'player'){
                                         entity.die();
                                     } else {
@@ -205,10 +210,6 @@ angular.module('beastieApp')
             }
         };
 
-        var gridsize = 32;
-        $scope.cellsize = 16;
-        // var backgrid = new Array(gridsize);
-        $scope.iconPrefix = 'icon-';
 
         $scope.findEntityByPosition = function(x, y){
             for (var i = $scope.entities.length - 1; i >= 0; i--) {
@@ -218,7 +219,7 @@ angular.module('beastieApp')
             };
             
         }
-        $scope.entities = [];
+
         function addPlayer(){
             var x = Math.floor(Math.random()*gridsize);
             var y = Math.floor(Math.random()*gridsize);
@@ -229,7 +230,7 @@ angular.module('beastieApp')
             }
             $scope.entities.push(new Entity(env_schematics.player(x, y)));
         }
-        $scope.world = {};
+        
 
         $scope.explore = function(x, y, size){
             console.log('exploreing');
@@ -237,8 +238,7 @@ angular.module('beastieApp')
                 // backgrid[i] = new Array(gridsize);
                 for (var e = y; e < y+size; e++) {
                     if($scope.world[i+"/"+e] === undefined){
-                        $scope.world[i+"/"+e] = true;//we'll figure out if i feel like updating it later to actually store a layout
-                        // e == 0 || i == 0 || e == gridsize-1 || i == gridsize-1
+                        $scope.world[i+"/"+e] = true;
                         if(Math.floor(Math.random() * 2) > 0 && $scope.findEntityByPosition(i, e) === undefined){
                             var blocktype = env_schematics.block();
                             blocktype.position = {
@@ -248,29 +248,12 @@ angular.module('beastieApp')
                             var classVal = '';
 
                             if (blocktype.id) {
-                                if (blocktype.dir) {
-                                    // var dir = _.chain(blocktype.dir)
-                                    //     .filter(function(num){ return Math.random() < 0.2; })
-                                    //     .value();
-
-                                    // if (!dir.length) {
-                                    //     dir = _.sample(blocktype.dir);
-                                    // } else {
-                                    //     dir = dir.reduce(function(memo, d){ return memo + d; });
-                                    // }
-
-                                    blocktype.classVal = $scope.iconPrefix + blocktype.id + dir;
-                                } else {
-                                    blocktype.classVal = $scope.iconPrefix + blocktype.id;
-                                }
+                                blocktype.classVal = $scope.iconPrefix + blocktype.id;
                             }
-                            console.log(blocktype);
+                            // console.log(blocktype);
                             $scope.entities.push(new Entity(blocktype));
                         }
                     }
-                    // backgrid[i][e] = {
-                    //     classVal : classVal
-                    // };
                 }
             }
             for (var i = 0; i < Math.floor(size/5); i++) {
@@ -286,72 +269,39 @@ angular.module('beastieApp')
                 $scope.entities.push(new Entity(env_schematics.egg(_x, _y)));
             }
         }
-        $scope.explore(0,0, gridsize);
-
-        addPlayer();
-        var frame = 0;
-        var gamespeed = 45;
-
-        var gameLoop = new Entity({
+        
+        $scope.gameLoop = new Entity({
                             kind: 'loop',
-                            components:[]
+                            components:[],
+                            world:$scope
                         });
 
-        $scope.gameLoop = gameLoop;
 
-        // var player = new Entity($scope.entities[0]);
-        //  = player;
-
-       
-
-        // for (var i = 0; i < 10; i++) {
-
-        //     var x = Math.floor(Math.random()*gridsize);
-        //     var y = Math.floor(Math.random()*gridsize);
-
-        //     while($scope.findEntityByPosition(x, y) !== undefined){
-        //         x = Math.floor(Math.random()*gridsize);
-        //         y = Math.floor(Math.random()*gridsize);
-        //     }
-
-        //     $scope.entities.push(new Entity(env_schematics.monster(x, y)));
-        // }
-
-        // for (var i = 0; i < 5; i++) {
-
-        //     var x = Math.floor(Math.random()*gridsize);
-        //     var y = Math.floor(Math.random()*gridsize);
-
-        //     while($scope.findEntityByPosition(x, y) !== undefined){
-        //         x = Math.floor(Math.random()*gridsize);
-        //         y = Math.floor(Math.random()*gridsize);
-        //     }
-
-        //     $scope.entities.push(new Entity(env_schematics.mother(x, y)));
-        // }
-
-        
-
-       
 
         function animloop(){
             frame++;
-            
-                // gameLoop.trigger('frame', frame);
-            for (var i = $scope.entities.length - 1; i >= 0; i--) {
-                if($scope.entities[i].frame !== undefined){
-                    try{
-                        $scope.entities[i].frame(frame);
-                    } catch(e){
-                        // throw e;
-                        console.log(e);
+           
+            if(!(frame % gamespeed)){
+                 var updated = false;
+                for (var i = $scope.entities.length - 1; i >= 0; i--) {
+                    if($scope.entities[i].frame !== undefined){
+                        try{
+                            updated = updated || $scope.entities[i].frame(frame);
+                        } catch(e){
+                            // throw e;
+                            console.log(e);
+                        }
                     }
+                };
+                if(updated){
+                    $scope.$apply();
                 }
-            };
-            $scope.$apply();
+            }
             
             requestAnimFrame(animloop);
         };
-        animloop();
+        $scope.explore(0,0, gridsize);
+        addPlayer();
+        animloop()
 
     }]);
