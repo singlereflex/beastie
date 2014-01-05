@@ -7,7 +7,7 @@ angular.module('beastieApp')
         };
         var frame = 0;
         var gamespeed = 45;
-        var gridsize = 132;
+        var gridsize = 16;
         $scope.cellsize = 16;
         // var backgrid = new Array(gridsize);
         $scope.iconPrefix = 'icon-';
