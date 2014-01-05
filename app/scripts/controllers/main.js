@@ -78,7 +78,7 @@ angular.module('beastieApp')
                         },
                         die: function(){
                             $scope.entities = _.without($scope.entities, this);
-                            
+                            document.getElementById('entityboard').removeChild(this.el);
                         },
                         collided: function(entity){
                             
@@ -113,7 +113,7 @@ angular.module('beastieApp')
                     events:{
                         die: function(){
                             $scope.entities = _.without($scope.entities, this);
-                            
+                            document.getElementById('entityboard').removeChild(this.el);
                         },
                         collided: function(entity){
                             // console.log("collision")
@@ -168,6 +168,7 @@ angular.module('beastieApp')
                                     }
                                     var delta = (Math.floor(Math.random() * 3) - 1);
                                     var y = Math.floor(Math.random() * 2)
+                                    
                                     // console.log((1-(y))*delta, (y)*delta);
                                     this.move((1-(y))*delta, (y)*delta);
                                     // 
@@ -186,7 +187,7 @@ angular.module('beastieApp')
                                 },
                                 die: function(){
                                     $scope.entities = _.without($scope.entities, this);
-                                    
+                                    document.getElementById('entityboard').removeChild(this.el);
                                 },
                                 collided: function(entity){
                                     if(entity.kind === 'player'){
@@ -211,17 +212,20 @@ angular.module('beastieApp')
                                 // console.log("test");
                                 if (!(frame % gamespeed)) {
                                     var delta = (Math.floor(Math.random() * 3) - 1);
-                                    var y = Math.floor(Math.random() * 2)
+                                    var y = Math.floor(Math.random() * 2);
+                                    
+
                                     // console.log((1-(y))*delta, (y)*delta);
-                                    this.move((1-(y))*delta, (y)*delta);
+                                    
                                     // 
-                                    var test = Math.floor(Math.random() * 1000);
+                                    var test = Math.floor(Math.random() * 10);
                                     // console.log(test);
                                     if (test == 0) {
                                         // console.log("test", test);
                                         this.lay();
                                         
                                     }
+                                    this.move((1-(y))*delta, (y)*delta);
                                     return true;
                                 }
                             },
@@ -235,7 +239,7 @@ angular.module('beastieApp')
                                 },
                                 die: function(){
                                     $scope.entities = _.without($scope.entities, this);
-                                    
+                                    document.getElementById('entityboard').removeChild(this.el);
                                 },
                                 collided: function(entity){
                                     if(entity.kind === 'player'){
