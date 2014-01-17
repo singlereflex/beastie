@@ -2,267 +2,15 @@
 
 angular.module('beastieApp')
     .controller('MainCtrl', ['$scope', 'beastieEnv', function ($scope, beastieEnv) {
-        _.templateSettings = {
-          interpolate: /\{\{(.+?)\}\}/g
-        };
+        
         var frame = 0;
-        var gamespeed = 45;
+        
         var gridsize = 16;
         $scope.cellsize = 16;
         // var backgrid = new Array(gridsize);
         $scope.iconPrefix = 'icon-';
         $scope.entities = [];
         $scope.world = {};
-
-        var template = _.template('<i class="{{ entity.classVal }}"></i>');
-
-        var env_schematics = {
-            block: function(){
-                return {
-                    kind: 'block',
-                    id: 'environment-block',
-                    push: true,
-                    heavy: true,
-                    walk: false,
-                    template:template,
-                    components: [DomRenderer, MoveComponent, CollisionComponent],
-                    events:{
-                        complete_move: function(deltas){
-                            // console.log(this.position);
-                            //$scope.$apply();
-                        },
-                        collided: function(entity){
-                            if(entity.kind === "block"){
-                                throw "hit a block";
-                            }
-                            if(entity.kind !== 'block'){
-                                console.log('monster');
-                                var delta_x = entity.position.x - this.position.x;
-                                var delta_y = entity.position.y - this.position.y;
-                                var neighbor = this.world.findEntityByPosition(entity.position.x+delta_x, entity.position.y+delta_y);
-                                if(neighbor !== undefined && neighbor.kind === 'block'){
-                                    entity.die();
-                                } else {
-                                    throw "chouldn't kill the monster";
-                                }
-                                
-                            }
-                        },
-                        rendered: function(el){
-                            this.el = document.getElementById('entityboard').appendChild(el);
-                            this.on('complete_move', function(deltas){
-                                this.el.style.top = this.position.y+'em';
-                                this.el.style.left = this.position.x+'em';
-                            });
-                        }
-                    },
-                    world: $scope
-                }
-            },
-            player: function(x, y){
-                return {
-                    kind: 'player',
-                    classVal: $scope.iconPrefix + 'entities-player',
-                    keyboard: true,
-                    position: {
-                        x: x,
-                        y: y
-                    },
-                    template:template,
-                    //order matthers X_x
-                    components:[DomRenderer, MoveComponent, PushComponent, PullComponent, CollisionComponent, ControllerComponent, DeathComponent, ExploreComponent],
-                    events:{
-                        complete_move: function(deltas){
-                            // console.log(this.position);
-                            //$scope.$apply();
-                        },
-                        die: function(){
-                            $scope.entities = _.without($scope.entities, this);
-                            document.getElementById('entityboard').removeChild(this.el);
-                        },
-                        collided: function(entity){
-                            
-                            if(entity.kind === 'monster' || entity.kind === 'mother'){
-                                this.die();
-                            } else {
-                                throw "hit a block";
-                            }
-                        },
-                        rendered: function(el){
-
-                            this.el = document.getElementById('entityboard').appendChild(el);
-                            this.on('complete_move', function(deltas){
-                                this.el.style.top = this.position.y+'em';
-                                this.el.style.left = this.position.x+'em';
-                            });
-                        }
-                    },
-                    world: $scope
-                }
-            },
-            egg: function(x, y){
-                return {
-                    kind: 'egg',
-                    classVal: $scope.iconPrefix + 'entities-egg',
-                    keyboard: false,
-                    position: {
-                        x: x,
-                        y: y
-                    },
-                    template:template,
-                    events:{
-                        die: function(){
-                            $scope.entities = _.without($scope.entities, this);
-                            document.getElementById('entityboard').removeChild(this.el);
-                        },
-                        collided: function(entity){
-                            // console.log("collision")
-                            // console.log(entity);
-                            if(entity.kind === 'player'){
-                                entity.die();
-                            }
-                        },
-                        rendered: function(el){
-                            this.el = document.getElementById('entityboard').appendChild(el);
-                            this.on('complete_move', function(deltas){
-                                this.el.style.top = this.position.y+'em';
-                                this.el.style.left = this.position.x+'em';
-                            });
-                        }
-                    },
-                    age: 0,
-                    frame: function(frame){
-                        // var test = Math.floor(Math.random() * 100);
-                        this.age++;
-                        // console.log(this.age);
-                        // console.log(test);
-                        if (this.age > 10) {
-                            console.log("hatch");
-                            
-                            this.transition('hatch');
-
-                            return true;
-                            
-                        }
-
-                        return false
-                        
-                    },
-                    components:[DomRenderer, CollisionComponent, DeathComponent],
-                    world: $scope,
-                    states: {
-                        hatch:{
-                            kind: 'monster',
-                            classVal: $scope.iconPrefix + 'entities-monster',
-                            template:template,
-                            components:[DomRenderer, MoveComponent, CollisionComponent, DeathComponent, ExploreComponent],
-                            frame: function(frame){
-                                // console.log("test");
-                                this.age++;
-                                if (!(frame % gamespeed)) {
-                                    if (this.age > 20) {
-                                        console.log("evolving");
-                                        // console.log("test", test);
-                                        this.transition('evolve');
-                                        return true;
-                                    }
-                                    var delta = (Math.floor(Math.random() * 3) - 1);
-                                    var y = Math.floor(Math.random() * 2)
-                                    
-                                    // console.log((1-(y))*delta, (y)*delta);
-                                    this.move((1-(y))*delta, (y)*delta);
-                                    // 
-                                    
-                                    // console.log(test);
-                                    
-                                    return true;
-                                } 
-                                
-                                return false;
-                            },
-                            events:{
-                                complete_move: function(deltas){
-                                    console.log("egg move");
-                                    
-                                },
-                                die: function(){
-                                    $scope.entities = _.without($scope.entities, this);
-                                    document.getElementById('entityboard').removeChild(this.el);
-                                },
-                                collided: function(entity){
-                                    if(entity.kind === 'player'){
-                                        entity.die();
-                                    } else {
-                                        throw "hit a block";
-                                    }
-                                },
-                                rendered: function(el){
-                                    this.el = document.getElementById('entityboard').appendChild(el);
-                                    this.on('complete_move', function(deltas){
-                                        this.el.style.top = this.position.y+'em';
-                                        this.el.style.left = this.position.x+'em';
-                                    });
-                                }
-                            },
-                        },
-                        evolve:{
-                            kind: 'mother',
-                            classVal: $scope.iconPrefix + 'entities-mother',
-                            frame: function(frame){
-                                // console.log("test");
-                                if (!(frame % gamespeed)) {
-                                    var delta = (Math.floor(Math.random() * 3) - 1);
-                                    var y = Math.floor(Math.random() * 2);
-                                    
-
-                                    // console.log((1-(y))*delta, (y)*delta);
-                                    
-                                    // 
-                                    var test = Math.floor(Math.random() * 10);
-                                    // console.log(test);
-                                    if (test == 0) {
-                                        // console.log("test", test);
-                                        this.lay();
-                                        
-                                    }
-                                    this.move((1-(y))*delta, (y)*delta);
-                                    return true;
-                                }
-                            },
-                            lay: function(){
-                                $scope.entities.push(new Entity(env_schematics.egg(this.position.x, this.position.y)));
-                            },
-                            template:template,
-                            events:{
-                                complete_move: function(deltas){
-                                    
-                                },
-                                die: function(){
-                                    $scope.entities = _.without($scope.entities, this);
-                                    document.getElementById('entityboard').removeChild(this.el);
-                                },
-                                collided: function(entity){
-                                    if(entity.kind === 'player'){
-                                        entity.die();
-                                    } else {
-                                        throw "hit a block"
-                                    }
-                                },
-                                rendered: function(el){
-                                    this.el = document.getElementById('entityboard').appendChild(el);
-                                    this.on('complete_move', function(deltas){
-                                        this.el.style.top = this.position.y+'em';
-                                        this.el.style.left = this.position.x+'em';
-                                    });
-                                }
-                            },
-                            components:[DomRenderer, MoveComponent, PushComponent, CollisionComponent, DeathComponent, ExploreComponent],
-                        }
-                    }
-                }
-            }
-        };
-
 
         $scope.findEntityByPosition = function(x, y){
             for (var i = $scope.entities.length - 1; i >= 0; i--) {
@@ -281,7 +29,7 @@ angular.module('beastieApp')
                 x = Math.floor(Math.random()*gridsize);
                 y = Math.floor(Math.random()*gridsize);
             }
-            $scope.entities.push(new Entity(env_schematics.player(x, y)));
+            $scope.entities.push(new Entity(env_schematics.player($scope, x, y)));
         }
         
 
@@ -293,7 +41,7 @@ angular.module('beastieApp')
                     if($scope.world[i+"/"+e] === undefined){
                         $scope.world[i+"/"+e] = true;
                         if(Math.floor(Math.random() * 2) > 0 && $scope.findEntityByPosition(i, e) === undefined){
-                            var blocktype = env_schematics.block();
+                            var blocktype = env_schematics.block($scope);
                             blocktype.position = {
                                 x: i,
                                 y: e
@@ -319,42 +67,29 @@ angular.module('beastieApp')
                     _y = Math.floor(Math.random()*size + y);
                 }
 
-                $scope.entities.push(new Entity(env_schematics.egg(_x, _y)));
+                $scope.entities.push(new Entity(env_schematics.egg($scope, _x, _y)));
             }
         }
+
+        /*
+        world should have
+        environment = {
+            loop,///the game loop
+            entities,///the list of entities
+            world,///a representation of the list of entities?
+            explore?///the ability to add to the entities, works with world
+
+        }
+         */
         
-        $scope.gameLoop = new Entity({
+        
+        $scope.loop = new Entity({
                             kind: 'loop',
-                            components:[],
+                            components:[WorldComponent],
                             world:$scope
                         });
-
-
-
-        function animloop(){
-            frame++;
-           
-            if(!(frame % gamespeed)){
-                 var updated = false;
-                for (var i = $scope.entities.length - 1; i >= 0; i--) {
-                    if($scope.entities[i].frame !== undefined){
-                        try{
-                            updated = updated || $scope.entities[i].frame(frame);
-                        } catch(e){
-                            // throw e;
-                            console.log(e);
-                        }
-                    }
-                };
-                if(updated){
-                    //$scope.$apply();
-                }
-            }
-            
-            requestAnimFrame(animloop);
-        };
         $scope.explore(0,0, gridsize);
         addPlayer();
-        animloop();
-
+        $scope.loop.start();
+        // $scope.loop.pause();
     }]);

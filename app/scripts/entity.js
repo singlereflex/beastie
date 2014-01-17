@@ -1,4 +1,41 @@
 
+function WorldComponent(entity){
+  entity.frame_count = 0;
+  entity.running = false;
+  function animloop(){
+      entity.frame_count++;
+      try{
+        entity.trigger('frame', entity.frame_count);
+      } catch(e) {
+        console.log(e);
+      }
+      if(entity.running){
+        requestAnimFrame(animloop);
+      }
+  };
+  entity.start = function(){
+    this.running = true;
+    animloop();
+  }
+
+  entity.pause = function(){
+    this.running = false;
+  }
+
+  entity.stop = function(){
+    this.running = false;
+    this.frame_count = 0;
+  }
+  
+}
+
+function FrameComponent(entity){
+  entity.loop_id = entity.world.loop.on('frame', entity.frame.bind(entity));//really need a remove thing..
+  entity.on('die', function(){
+    entity.world.loop.remove('frame', entity.loop_id);
+  });
+}
+
 function DomRenderer(entity){
   if(entity.el !== undefined){
     document.getElementById('entityboard').removeChild(entity.el);
@@ -102,7 +139,9 @@ function MoveComponent(entity) {
 function PushComponent(entity){
     //subscribe to move event
     entity.on('start_move', function(deltas) {
+      console.log("test");
         var neighbor = entity.world.findEntityByPosition(entity.position.x+deltas.delta_x, entity.position.y+deltas.delta_y);
+        console.log(neighbor);
         if(neighbor !== undefined && neighbor.kind === "block" ){
             neighbor.move(deltas.delta_x, deltas.delta_y);
         }
@@ -159,9 +198,11 @@ var Entity = function(schematic){
 
 Entity.prototype.on = function(name, callback) {
     if(this._events[name] === undefined){
-        this._events[name] = [];
+        this._events[name] = {};
     }
-    this._events[name].push(callback);
+    var event_id = name + _.size(this._events[name]);
+    this._events[name][event_id] = callback;
+    return event_id;
 };
 
 Entity.prototype.trigger = function() {
@@ -172,18 +213,24 @@ Entity.prototype.trigger = function() {
     var callbacks = this._events[name];
     // console.log(callbacks);
     // console.log(name);
+    // console.log(name, callbacks);
     if(callbacks !== undefined){
-        for (var i = callbacks.length - 1; i >= 0; i--) {
+      console.log(callbacks);
+        for (var i in callbacks) {
+          console.log(i);
             callbacks[i].apply(this, args);//should use arguments instead of single argument
         };
     }
 };
 
-Entity.prototype.remove = function(event_name, cb) {
-  this._events[event_name] = _.without(this._events[event_name], cb);
-  return cb;
+Entity.prototype.remove = function(event_name, event_id) {
+  this._events[event_name][event_id] = null;
+  delete this._events[event_name][event_id] = null;
 };
 
+/**
+ * @todo move this to a component
+ */
 Entity.prototype.transition = function(state_name) {
   this.state = state_name;
 
