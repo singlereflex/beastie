@@ -29,7 +29,7 @@ function ControllerComponent(entity){
             case 38:
             case 87:
                 entity.move(0, -1);
-            break;   
+            break;
         }
     }, false);
 
