@@ -1,6 +1,6 @@
 <div id="game-container">
     <div class="entityboard">
-        <div class="entity {{ entity.kind }}" ng-style="{
+        <div ng-model="entity" class="entity {{ entity.kind }}" ng-style="{
                     'left': entity.position.x + 'em',
                     'top': entity.position.y + 'em'
                 }" ng-repeat="entity in entities">

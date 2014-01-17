@@ -34,14 +34,12 @@
         <!-- Add your site or application content here -->
         <div ng-controller="MainCtrl" >
             <div id="game-container">
-                <div class="entityboard">
-                    <div class="entity {{ entity.kind }}" ng-style="{
-                                'left': entity.position.x + 'em',
-                                'top': entity.position.y + 'em'
-                            }" ng-repeat="entity in entities">
-                        <i class="{{ entity.classVal }}"></i>
+                <div id="game-container">
+                    <div class="entityboard" id="entityboard">
+                        
                     </div>
                 </div>
+
             </div>
         </div>
 
@@ -73,6 +71,8 @@
         <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <script src="scripts/entity.js"></script>
+        <script src="scripts/beastie.js"></script>
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/services/beastieEnv.js"></script>

@@ -2,213 +2,15 @@
 
 angular.module('beastieApp')
     .controller('MainCtrl', ['$scope', 'beastieEnv', function ($scope, beastieEnv) {
-
-        var env_schematics = {
-            block: function(){
-                return {
-                    kind: 'block',
-                    id: 'environment-block',
-                    push: true,
-                    heavy: true,
-                    walk: false,
-                    components: [MoveComponent, CollisionComponent],
-                    events:{
-                        collided: function(entity){
-                            console.log("collision")
-                            console.log(entity);
-                            if(entity.kind === "block"){
-                                throw "hit a block";
-                            }
-                            if(entity.kind !== 'block'){
-                                console.log('monster');
-                                var delta_x = entity.position.x - this.position.x;
-                                var delta_y = entity.position.y - this.position.y;
-                                var neighbor = this.world.findEntityByPosition(entity.position.x+delta_x, entity.position.y+delta_y);
-                                if(neighbor !== undefined && neighbor.kind === 'block'){
-                                    entity.die();
-                                } else {
-                                    throw "chouldn't kill the monster";
-                                }
-                                
-                            }
-                        }
-                    },
-                    world: $scope
-                }
-            },
-            player: function(x, y){
-                return {
-                    kind: 'player',
-                    classVal: $scope.iconPrefix + 'entities-player',
-                    keyboard: true,
-                    position: {
-                        x: x,
-                        y: y
-                    },
-                    //order matthers X_x
-                    components:[MoveComponent, PushComponent, PullComponent, CollisionComponent, ControllerComponent, DeathComponent, ExploreComponent],
-                    events:{
-                        complete_move: function(deltas){
-                            console.log(this.position);
-                            
-                        },
-                        die: function(){
-                            $scope.entities = _.without($scope.entities, this);
-                            
-                        },
-                        collided: function(entity){
-                            console.log("collision")
-                            if(entity.kind === 'monster' || entity.kind === 'mother'){
-                                this.die();
-                            } else {
-                                throw "hit a block";
-                            }
-                        }
-                    },
-                    world: $scope
-                }
-            },
-            egg: function(x, y){
-                return {
-                    kind: 'egg',
-                    classVal: $scope.iconPrefix + 'entities-egg',
-                    keyboard: false,
-                    position: {
-                        x: x,
-                        y: y
-                    },
-                    events:{
-                        die: function(){
-                            $scope.entities = _.without($scope.entities, this);
-                            
-                        },
-                        collided: function(entity){
-                            // console.log("collision")
-                            // console.log(entity);
-                            if(entity.kind === 'player'){
-                                entity.die();
-                            }
-                        }
-                    },
-                    age: 0,
-                    frame: function(frame){
-                        // console.log("test");
-                        var test = Math.floor(Math.random() * 1000);
-
-                        // console.log(test);
-                        if (test == 0 && this.age > 1000) {
-                            // console.log("test", test);
-                            this.transition('hatch');
-                            console.log('egg hatch');
-                            try{
-                                // 
-                            } catch(e){
-
-                            }
-                        }
-                        this.age++;
-                    },
-                    components:[CollisionComponent, DeathComponent],
-                    world: $scope,
-                    states: {
-                        hatch:{
-                            kind: 'monster',
-                            classVal: $scope.iconPrefix + 'entities-monster',
-                            components:[MoveComponent, CollisionComponent, DeathComponent, ExploreComponent],
-                            frame: function(frame){
-                                // console.log("test");
-                                if (!(frame % gamespeed)) {
-                                    var delta = (Math.floor(Math.random() * 3) - 1);
-                                    var y = Math.floor(Math.random() * 2)
-                                    console.log((1-(y))*delta, (y)*delta);
-                                    this.move((1-(y))*delta, (y)*delta);
-                                    // 
-                                } else {
-                                    var test = Math.floor(Math.random() * 1000);
-                                    // console.log(test);
-                                    if (test == 0 && this.age > 10000) {
-                                        // console.log("test", test);
-                                        this.transition('evolve');
-                                        
-                                    }
-                                }
-                                this.age++;
-                            },
-                            events:{
-                                complete_move: function(deltas){
-                                    console.log("egg move");
-                                    
-                                },
-                                die: function(){
-                                    $scope.entities = _.without($scope.entities, this);
-                                    
-                                },
-                                collided: function(entity){
-                                    // console.log("egg collision")
-                                    // console.log(entity);
-                                    if(entity.kind === 'player'){
-                                        entity.die();
-                                    } else {
-                                        throw "hit a block";
-                                    }
-                                }
-                            },
-                        },
-                        evolve:{
-                            kind: 'mother',
-                            classVal: $scope.iconPrefix + 'entities-mother',
-                            frame: function(frame){
-                                // console.log("test");
-                                if (!(frame % gamespeed)) {
-                                    var delta = (Math.floor(Math.random() * 3) - 1);
-                                    var y = Math.floor(Math.random() * 2)
-                                    console.log((1-(y))*delta, (y)*delta);
-                                    this.move((1-(y))*delta, (y)*delta);
-                                    // 
-                                }else {
-                                    var test = Math.floor(Math.random() * 1000);
-                                    // console.log(test);
-                                    if (test == 0) {
-                                        // console.log("test", test);
-                                        this.lay();
-                                        
-                                    }
-                                }
-                                // this.age++;
-                            },
-                            lay: function(){
-                                $scope.entities.push(new Entity(env_schematics.egg(this.position.x, this.position.y)));
-                            },
-                            events:{
-                                complete_move: function(deltas){
-                                    
-                                },
-                                die: function(){
-                                    $scope.entities = _.without($scope.entities, this);
-                                    
-                                },
-                                collided: function(entity){
-                                    // console.log("collision")
-                                    // console.log(entity);
-                                    
-                                    if(entity.kind === 'player'){
-                                        entity.die();
-                                    } else {
-                                        throw "hit a block"
-                                    }
-                                }
-                            },
-                            components:[MoveComponent, PushComponent, CollisionComponent, DeathComponent, ExploreComponent],
-                        }
-                    }
-                }
-            }
-        };
-
-        var gridsize = 32;
+        
+        var frame = 0;
+        
+        var gridsize = 16;
         $scope.cellsize = 16;
         // var backgrid = new Array(gridsize);
         $scope.iconPrefix = 'icon-';
+        $scope.entities = [];
+        $scope.world = {};
 
         $scope.findEntityByPosition = function(x, y){
             for (var i = $scope.entities.length - 1; i >= 0; i--) {
@@ -218,7 +20,7 @@ angular.module('beastieApp')
             };
             
         }
-        $scope.entities = [];
+
         function addPlayer(){
             var x = Math.floor(Math.random()*gridsize);
             var y = Math.floor(Math.random()*gridsize);
@@ -227,9 +29,9 @@ angular.module('beastieApp')
                 x = Math.floor(Math.random()*gridsize);
                 y = Math.floor(Math.random()*gridsize);
             }
-            $scope.entities.push(new Entity(env_schematics.player(x, y)));
+            $scope.entities.push(new Entity(env_schematics.player($scope, x, y)));
         }
-        $scope.world = {};
+        
 
         $scope.explore = function(x, y, size){
             console.log('exploreing');
@@ -237,10 +39,9 @@ angular.module('beastieApp')
                 // backgrid[i] = new Array(gridsize);
                 for (var e = y; e < y+size; e++) {
                     if($scope.world[i+"/"+e] === undefined){
-                        $scope.world[i+"/"+e] = true;//we'll figure out if i feel like updating it later to actually store a layout
-                        // e == 0 || i == 0 || e == gridsize-1 || i == gridsize-1
+                        $scope.world[i+"/"+e] = true;
                         if(Math.floor(Math.random() * 2) > 0 && $scope.findEntityByPosition(i, e) === undefined){
-                            var blocktype = env_schematics.block();
+                            var blocktype = env_schematics.block($scope);
                             blocktype.position = {
                                 x: i,
                                 y: e
@@ -248,29 +49,12 @@ angular.module('beastieApp')
                             var classVal = '';
 
                             if (blocktype.id) {
-                                if (blocktype.dir) {
-                                    // var dir = _.chain(blocktype.dir)
-                                    //     .filter(function(num){ return Math.random() < 0.2; })
-                                    //     .value();
-
-                                    // if (!dir.length) {
-                                    //     dir = _.sample(blocktype.dir);
-                                    // } else {
-                                    //     dir = dir.reduce(function(memo, d){ return memo + d; });
-                                    // }
-
-                                    blocktype.classVal = $scope.iconPrefix + blocktype.id + dir;
-                                } else {
-                                    blocktype.classVal = $scope.iconPrefix + blocktype.id;
-                                }
+                                blocktype.classVal = $scope.iconPrefix + blocktype.id;
                             }
-                            console.log(blocktype);
+                            // console.log(blocktype);
                             $scope.entities.push(new Entity(blocktype));
                         }
                     }
-                    // backgrid[i][e] = {
-                    //     classVal : classVal
-                    // };
                 }
             }
             for (var i = 0; i < Math.floor(size/5); i++) {
@@ -283,75 +67,29 @@ angular.module('beastieApp')
                     _y = Math.floor(Math.random()*size + y);
                 }
 
-                $scope.entities.push(new Entity(env_schematics.egg(_x, _y)));
+                $scope.entities.push(new Entity(env_schematics.egg($scope, _x, _y)));
             }
         }
-        $scope.explore(0,0, gridsize);
 
-        addPlayer();
-        var frame = 0;
-        var gamespeed = 45;
+        /*
+        world should have
+        environment = {
+            loop,///the game loop
+            entities,///the list of entities
+            world,///a representation of the list of entities?
+            explore?///the ability to add to the entities, works with world
 
-        var gameLoop = new Entity({
-                            kind: 'loop',
-                            components:[]
-                        });
-
-        $scope.gameLoop = gameLoop;
-
-        // var player = new Entity($scope.entities[0]);
-        //  = player;
-
-       
-
-        // for (var i = 0; i < 10; i++) {
-
-        //     var x = Math.floor(Math.random()*gridsize);
-        //     var y = Math.floor(Math.random()*gridsize);
-
-        //     while($scope.findEntityByPosition(x, y) !== undefined){
-        //         x = Math.floor(Math.random()*gridsize);
-        //         y = Math.floor(Math.random()*gridsize);
-        //     }
-
-        //     $scope.entities.push(new Entity(env_schematics.monster(x, y)));
-        // }
-
-        // for (var i = 0; i < 5; i++) {
-
-        //     var x = Math.floor(Math.random()*gridsize);
-        //     var y = Math.floor(Math.random()*gridsize);
-
-        //     while($scope.findEntityByPosition(x, y) !== undefined){
-        //         x = Math.floor(Math.random()*gridsize);
-        //         y = Math.floor(Math.random()*gridsize);
-        //     }
-
-        //     $scope.entities.push(new Entity(env_schematics.mother(x, y)));
-        // }
-
+        }
+         */
         
-
-       
-
-        function animloop(){
-            frame++;
-            
-                // gameLoop.trigger('frame', frame);
-            for (var i = $scope.entities.length - 1; i >= 0; i--) {
-                if($scope.entities[i].frame !== undefined){
-                    try{
-                        $scope.entities[i].frame(frame);
-                    } catch(e){
-                        // throw e;
-                        console.log(e);
-                    }
-                }
-            };
-            $scope.$apply();
-            
-            requestAnimFrame(animloop);
-        };
-        animloop();
-
+        
+        $scope.loop = new Entity({
+                            kind: 'loop',
+                            components:[WorldComponent],
+                            world:$scope
+                        });
+        $scope.explore(0,0, gridsize);
+        addPlayer();
+        $scope.loop.start();
+        // $scope.loop.pause();
     }]);
