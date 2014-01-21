@@ -187,14 +187,18 @@ var Entity = function(schematic){
             this.on(key, schematic.events[key].bind(this));
         }
     }
-    for (var i = schematic.components.length - 1; i >= 0; i--) {
-        schematic.components[i](this);
-    };
+    this.loadComponents(schematic.components);
     if(schematic.frame !== undefined){
     //     this.world.gameLoop.on('frame', schematic.frame.bind(this));
       this.frame = schematic.frame.bind(this);
     }
 }
+
+Entity.prototype.loadComponents = function(components) {
+  for (var i = 0; i < components.length; i++) {
+    components[i](this);
+  };
+};
 
 Entity.prototype.on = function(name, callback) {
     if(this._events[name] === undefined){
@@ -246,10 +250,7 @@ Entity.prototype.transition = function(state_name) {
   // console.log(this._events);
   _.extend(this, this.states[state_name]);//that should override the correct things
   if(this.states[state_name].components !== undefined){
-    for (var i = this.states[state_name].components.length - 1; i >= 0; i--) {
-        this.states[state_name].components[i](this);
-        
-    };
+    this.loadComponents(this.states[state_name].components)
   }
   this.trigger('transition', state_name);
 };

@@ -63,7 +63,15 @@ var env_schematics = {
             },
             template:template,
             //order matthers X_x
-            components:[DomRenderer, CollisionComponent, MoveComponent, PushComponent, PullComponent, ControllerComponent, DeathComponent, ExploreComponent],
+            components:[
+                DomRenderer, 
+                MoveComponent,
+                PushComponent,
+                PullComponent,
+                CollisionComponent, 
+                ControllerComponent, 
+                DeathComponent, 
+                ExploreComponent],
             events:{
                 start_move: function(deltas){
                     console.log("move block")
@@ -147,14 +155,25 @@ var env_schematics = {
                 return false
                 
             },
-            components:[DomRenderer, CollisionComponent, DeathComponent, FrameComponent],
+            components:[
+                DomRenderer, 
+                CollisionComponent, 
+                DeathComponent, 
+                FrameComponent
+            ],
             world: _world,
             states: {
                 hatch:{
                     kind: 'monster',
                     classVal: _world.iconPrefix + 'entities-monster',
                     template:template,
-                    components:[DomRenderer, MoveComponent, CollisionComponent, DeathComponent, ExploreComponent, FrameComponent],
+                    components:[
+                        DomRenderer, 
+                        MoveComponent, 
+                        CollisionComponent, 
+                        DeathComponent, 
+                        ExploreComponent, 
+                        FrameComponent],
                     frame: function(frame){
                         // console.log("test");
                         
@@ -256,7 +275,14 @@ var env_schematics = {
                             });
                         }
                     },
-                    components:[DomRenderer, MoveComponent, PushComponent, CollisionComponent, DeathComponent, ExploreComponent, FrameComponent],
+                    components:[
+                        DomRenderer, 
+                        MoveComponent, 
+                        PushComponent, 
+                        CollisionComponent, 
+                        DeathComponent, 
+                        ExploreComponent, 
+                        FrameComponent],
                 }
             }
         }
