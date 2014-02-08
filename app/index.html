@@ -18,6 +18,7 @@
         <!-- build:css(.tmp) styles/main.css -->
         <link rel="stylesheet" href="styles/main.css">
         <!-- endbuild -->
+        <script src="https://cdn.firebase.com/v0/firebase.js"></script>
     </head>
     <body ng-app="beastieApp">
 
@@ -41,25 +42,23 @@
             <div id="board" class="modal fade">
               <div class="modal-dialog">
                 <div class="modal-content">
+                <form role="form" ng-submit="recordScore()">
                   <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <h4 class="modal-title text-center">{{score}}</h4>
                     <h4 class="modal-title text-center">Enter Your Name</h4>
-                    <input type="text" class="modal-title form-control"/>
+                    <input name="name" ng-model="name" type="text" class="modal-title form-control"/>
                   </div>
                   <div class="modal-body">
                     <ul class="list-group">
-                        <li class="list-group-item">name: 123</li>
-                        <li class="list-group-item">name: 123</li>
-                        <li class="list-group-item">name: 123</li>
-                        <li class="list-group-item">name: 123</li>
-                        <li class="list-group-item">name: 123</li>
+                        <li ng-repeat="player in scoreboard" class="list-group-item">{{player.name}}: {{player.score}}</li>
                     </ul>
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Submit Score</button>
+                    <button class="btn btn-primary">Submit Score</button>
                   </div>
+                </form>
                 </div><!-- /.modal-content -->
               </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
@@ -76,6 +75,7 @@
         <script src="bower_components/jquery/jquery.js"></script>
         <script src="bower_components/angular/angular.js"></script>
         <script src="bower_components/hammerjs/hammer.js"></script>
+        <script src="https://cdn.firebase.com/libs/angularfire/0.6.0/angularfire.min.js"></script>
         <!-- build:js scripts/plugins.js -->
         <script src="bower_components/bootstrap-sass/js/bootstrap-affix.js"></script>
         <script src="bower_components/bootstrap-sass/js/bootstrap-alert.js"></script>

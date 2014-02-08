@@ -1,8 +1,12 @@
 'use strict';
 
 angular.module('beastieApp')
-    .controller('MainCtrl', ['$scope', 'beastieEnv', function ($scope, beastieEnv) {
+    .controller('MainCtrl', ['$scope', 'beastieEnv', '$firebase', function ($scope, beastieEnv, $firebase) {
         
+        var highscoreRef = new Firebase("https://highscore.firebaseio.com/beastie");
+        // Automatically syncs everywhere in realtime
+        $scope.scoreboard = $firebase(highscoreRef);
+        // console.log($scope.scoreboard);
         var frame = 0;
         
         var gridsize = 16;
@@ -38,6 +42,13 @@ angular.module('beastieApp')
             $scope.entities.push(player);
         }
         
+
+        $scope.recordScore = function(){
+            console.log(arguments);
+            console.log(this);
+            highscoreRef.push({name: this.name, score: $scope.score});
+            $('#board').modal({show: false});
+        }
 
         $scope.explore = function(x, y, size){
             console.log('exploreing');

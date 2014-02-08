@@ -81,6 +81,7 @@ var env_schematics = {
                 die: function(){
                     this.world.entities = _.without(this.world.entities, this);
                     document.getElementById('entityboard').removeChild(this.el);
+                    this.dead = true;
                 },
                 collided: function(entity){
                     

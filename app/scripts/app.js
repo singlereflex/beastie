@@ -11,5 +11,5 @@ window.requestAnimFrame = (function(){
         };
 })();
 
-angular.module('beastieApp', [])
+angular.module('beastieApp', ["firebase"])
 
