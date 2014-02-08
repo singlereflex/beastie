@@ -11,6 +11,7 @@ angular.module('beastieApp')
         $scope.iconPrefix = 'icon-';
         $scope.entities = [];
         $scope.world = {};
+        $scope.score = 0;
 
         $scope.findEntityByPosition = function(x, y){
             for (var i = $scope.entities.length - 1; i >= 0; i--) {
@@ -29,7 +30,12 @@ angular.module('beastieApp')
                 x = Math.floor(Math.random()*gridsize);
                 y = Math.floor(Math.random()*gridsize);
             }
-            $scope.entities.push(new Entity(env_schematics.player($scope, x, y)));
+            var player = new Entity(env_schematics.player($scope, x, y));
+            player.on('die', function(){
+                $scope.loop.pause();
+                $('#board').modal({show: true});
+            })
+            $scope.entities.push(player);
         }
         
 
@@ -67,9 +73,96 @@ angular.module('beastieApp')
                     _y = Math.floor(Math.random()*size + y);
                 }
 
-                $scope.entities.push(new Entity(env_schematics.egg($scope, _x, _y)));
+                var egg = new Entity(env_schematics.egg($scope, _x, _y));
+
+                egg.on('die', function(){
+                    $scope.$apply(function(){
+                        $scope.score += egg.worth;
+                    });
+                });
+
+                var frame_id = egg.on('frame', function(frame){
+                    // var test = Math.floor(Math.random() * 100);
+                    
+                    // console.log(this);
+                    // console.log(this.age);
+                    // console.log(test);
+                    if (!(frame % gamespeed)) {
+                        this.age++;
+                        if (this.age > 10) {
+                            console.log("hatch");
+                            
+                            this.transition('hatch');
+
+                            return true;
+                            
+                        }
+                    }
+
+                    return false
+                    
+                });
+
+                egg.on('transition:hatch', function hatch(monster){
+                    console.log("test");
+                    monster.remove('frame', frame_id);
+                    frame_id = monster.on('frame', function(frame){
+                        // console.log("test");
+                        
+                        if (!(frame % gamespeed)) {
+                            this.age++;
+                            if (this.age > 20) {
+                                console.log("evolving");
+                                // console.log("test", test);
+                                this.transition('evolve');
+                                return true;
+                            }
+                            var delta = (Math.floor(Math.random() * 3) - 1);
+                            var y = Math.floor(Math.random() * 2)
+                            
+                            console.log((1-(y))*delta, (y)*delta);
+                            this.move((1-(y))*delta, (y)*delta);
+                            // 
+                            
+                            // console.log(test);
+                            
+                            return true;
+                        } 
+                        
+                        return false;
+                    
+                    });
+                });
+                egg.on('transition:evolve', function evolve(monster){
+                    monster.remove('frame', frame_id);
+                    frame_id = monster.on('frame', function(frame){
+                        // console.log("test");
+                        if (!(frame % gamespeed)) {
+                            var delta = (Math.floor(Math.random() * 3) - 1);
+                            var y = Math.floor(Math.random() * 2);
+                            
+
+                            // console.log((1-(y))*delta, (y)*delta);
+                            
+                            // 
+                            var test = Math.floor(Math.random() * 10);
+                            // console.log(test);
+                            if (test == 0) {
+                                // console.log("test", test);
+                                this.lay();
+                                
+                            }
+                            this.move((1-(y))*delta, (y)*delta);
+                            return true;
+                        }
+                    });
+                });
+
+                $scope.entities.push(egg);
             }
         }
+
+
 
         /*
         world should have

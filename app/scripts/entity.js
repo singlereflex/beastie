@@ -26,13 +26,22 @@ function WorldComponent(entity){
     this.running = false;
     this.frame_count = 0;
   }
+  entity.toBeRendered = [];
+  entity.on('frame', function render(frame_count){
+    // console.log(entity.toBeRendered.length);
+    for(var i = 0; i < entity.toBeRendered.length; i++){
+      entity.toBeRendered[i].trigger('frame', frame_count);
+    }
+    
+  });
   
 }
 
 function FrameComponent(entity){
-  entity.loop_id = entity.world.loop.on('frame', entity.frame.bind(entity));//really need a remove thing..
+  entity.world.loop.toBeRendered.push(entity);
+  // entity.loop_id = entity.world.loop.on('frame', entity.frame.bind(entity));//really need a remove thing..
   entity.on('die', function(){
-    entity.world.loop.remove('frame', entity.loop_id);
+    entity.world.loop.toBeRendered = _.without(entity.world.loop.toBeRendered , entity);
   });
 }
 
@@ -219,9 +228,9 @@ Entity.prototype.trigger = function() {
     // console.log(name);
     // console.log(name, callbacks);
     if(callbacks !== undefined){
-      console.log(callbacks);
+      // console.log(callbacks);
         for (var i in callbacks) {
-          console.log(i);
+          // console.log(i);
             callbacks[i].apply(this, args);//should use arguments instead of single argument
         };
     }
@@ -229,7 +238,7 @@ Entity.prototype.trigger = function() {
 
 Entity.prototype.remove = function(event_name, event_id) {
   this._events[event_name][event_id] = null;
-  delete this._events[event_name][event_id] = null;
+  delete this._events[event_name][event_id];
 };
 
 /**
@@ -238,13 +247,15 @@ Entity.prototype.remove = function(event_name, event_id) {
 Entity.prototype.transition = function(state_name) {
   this.state = state_name;
 
-  if(this.states[state_name].frame !== undefined){
-      this.frame = this.states[state_name].frame.bind(this);
-  }
+  // if(this.states[state_name].frame !== undefined){
+  //     this.frame = this.states[state_name].frame.bind(this);
+  // }
   if(this.states[state_name].events !== undefined){
-    this._events = {};
     for(var key in this.states[state_name].events){
-        this.on(key, this.states[state_name].events[key].bind(this));
+        this._events[key] = {};
+        if(this.states[state_name].events[key]){
+          this.on(key, this.states[state_name].events[key].bind(this));
+        }
     }
   }
   // console.log(this._events);
@@ -253,4 +264,5 @@ Entity.prototype.transition = function(state_name) {
     this.loadComponents(this.states[state_name].components)
   }
   this.trigger('transition', state_name);
+  this.trigger('transition:'+state_name, this);
 };
