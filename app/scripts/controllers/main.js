@@ -6,7 +6,7 @@ angular.module('beastieApp')
         var highscoreRef = new Firebase("https://highscore.firebaseio.com/beastie");
         // Automatically syncs everywhere in realtime
         $scope.scoreboard = $firebase(highscoreRef);
-        // console.log($scope.scoreboard);
+        console.log($scope.scoreboard);
         var frame = 0;
         
         var gridsize = 16;

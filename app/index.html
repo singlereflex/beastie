@@ -39,7 +39,7 @@
         <!-- Add your site or application content here -->
         <div ng-controller="MainCtrl" >
             <div class="score">Score: {{score}}</div>
-            <div id="board" class="modal fade">
+            <div id="board" class="modal">
               <div class="modal-dialog">
                 <div class="modal-content">
                 <form role="form" ng-submit="recordScore()">
@@ -51,7 +51,7 @@
                   </div>
                   <div class="modal-body">
                     <ul class="list-group">
-                        <li ng-repeat="player in scoreboard" class="list-group-item">{{player.name}}: {{player.score}}</li>
+                        <li ng-repeat="player in scoreboard | toArray | orderBy:'score':true" ng-show="player.name" class="list-group-item">{{player.name}}: {{player.score}}</li>
                     </ul>
                   </div>
                   <div class="modal-footer">
