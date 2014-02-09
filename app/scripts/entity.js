@@ -8,6 +8,8 @@ function WorldComponent(entity){
         entity.trigger('frame', entity.frame_count);
       } catch(e) {
         console.log(e);
+        console.log(e.stack);
+        // entity.pause()
       }
       if(entity.running){
         requestAnimFrame(animloop);
@@ -30,7 +32,7 @@ function WorldComponent(entity){
   entity.on('frame', function render(frame_count){
     // console.log(entity.toBeRendered.length);
     for(var i = 0; i < entity.toBeRendered.length; i++){
-      entity.toBeRendered[i].trigger('frame', frame_count);
+      this.toBeRendered[i].trigger('frame', frame_count);
     }
     
   });
@@ -195,6 +197,7 @@ function PullComponent(entity){
   entity.shiftDown = false;
   document.body.addEventListener('keydown', function keydown(event){
     if(event.which == 16 && !entity.dead){
+      console.log("test shift");
       event.preventDefault();
       entity.shiftDown = true;
     }
@@ -207,8 +210,10 @@ function PullComponent(entity){
   });
   //subscribe to move event
   entity.on('complete_move', function(deltas) {
+
     var neighbor = entity.world.findEntityByPosition(entity.position.x-(deltas.delta_x*2), entity.position.y-(deltas.delta_y*2));
-    if(neighbor !== undefined && neighbor.kind === "block" && entity.shiftDown){
+    if(entity.shiftDown){
+      console.log(deltas);
       neighbor.move(deltas.delta_x, deltas.delta_y);
     }
   });

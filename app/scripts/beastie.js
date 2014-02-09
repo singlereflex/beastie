@@ -182,9 +182,6 @@ var env_schematics = {
                 evolve:{
                     kind: 'mother',
                     classVal: _world.iconPrefix + 'entities-mother',
-                    lay: function(){
-                        this.world.entities.push(new Entity(env_schematics.egg(this.position.x, this.position.y)));
-                    },
                     template:template,
                     worth: 30,
                     events:{
