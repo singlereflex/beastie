@@ -19,7 +19,7 @@ function WorldComponent(entity){
   }
 
   entity.pause = function(){
-    this.running = false;
+    this.running = !this.running;
   }
 
   entity.stop = function(){
