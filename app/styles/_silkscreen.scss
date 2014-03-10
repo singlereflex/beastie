@@ -1,0 +1,39 @@
+@font-face {
+    font-family: 'Silkscreen';
+    src: url('../fonts/silkscreen_normal_macroman/slkscr-webfont.eot');
+    src: url('../fonts/silkscreen_normal_macroman/slkscr-webfont.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/silkscreen_normal_macroman/slkscr-webfont.woff') format('woff'),
+    url('../fonts/silkscreen_normal_macroman/slkscr-webfont.ttf') format('truetype'),
+    url('../fonts/silkscreen_normal_macroman/slkscr-webfont.svg#silkscreennormal') format('svg');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'Silkscreen';
+    src: url('../fonts/silkscreen_bold_macroman/slkscrb-webfont.eot');
+    src: url('../fonts/silkscreen_bold_macroman/slkscrb-webfont.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/silkscreen_bold_macroman/slkscrb-webfont.woff') format('woff'),
+    url('../fonts/silkscreen_bold_macroman/slkscrb-webfont.ttf') format('truetype'),
+    url('../fonts/silkscreen_bold_macroman/slkscrb-webfont.svg#silkscreennormal') format('svg');
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'Silkscreen Expanded';
+    src: url('../fonts/silkscreenexpanded_normal_macroman/slkscre-webfont.eot');
+    src: url('../fonts/silkscreenexpanded_normal_macroman/slkscre-webfont.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/silkscreenexpanded_normal_macroman/slkscre-webfont.woff') format('woff'),
+    url('../fonts/silkscreenexpanded_normal_macroman/slkscre-webfont.ttf') format('truetype'),
+    url('../fonts/silkscreenexpanded_normal_macroman/slkscre-webfont.svg#silkscreennormal') format('svg');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'Silkscreen Expanded';
+    src: url('../fonts/silkscreenexpanded_bold_macroman/slkscreb-webfont.eot');
+    src: url('../fonts/silkscreenexpanded_bold_macroman/slkscreb-webfont.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/silkscreenexpanded_bold_macroman/slkscreb-webfont.woff') format('woff'),
+    url('../fonts/silkscreenexpanded_bold_macroman/slkscreb-webfont.ttf') format('truetype'),
+    url('../fonts/silkscreenexpanded_bold_macroman/slkscreb-webfont.svg#silkscreennormal') format('svg');
+    font-weight: bold;
+}
