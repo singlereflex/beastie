@@ -63,7 +63,15 @@ var env_schematics = {
             },
             template:template,
             //order matthers X_x
-            components:[DomRenderer, CollisionComponent, MoveComponent, PushComponent, PullComponent, ControllerComponent, DeathComponent, ExploreComponent],
+            components:[
+                DomRenderer, 
+                MoveComponent,
+                PushComponent,
+                PullComponent,
+                CollisionComponent, 
+                ControllerComponent, 
+                DeathComponent, 
+                ExploreComponent],
             events:{
                 start_move: function(deltas){
                     console.log("move block")
@@ -73,6 +81,7 @@ var env_schematics = {
                 die: function(){
                     this.world.entities = _.without(this.world.entities, this);
                     document.getElementById('entityboard').removeChild(this.el);
+                    this.dead = true;
                 },
                 collided: function(entity){
                     
@@ -104,8 +113,11 @@ var env_schematics = {
                 y: y
             },
             template:template,
+            worth: 10,
             events:{
                 die: function(){
+                    // console.log(this.world);
+                    
                     this.world.entities = _.without(this.world.entities, this);
                     document.getElementById('entityboard').removeChild(this.el);
                 },
@@ -126,68 +138,30 @@ var env_schematics = {
                 }
             },
             age: 0,
-            frame: function(frame){
-                // var test = Math.floor(Math.random() * 100);
-                
-                // console.log(this);
-                // console.log(this.age);
-                // console.log(test);
-                if (!(frame % gamespeed)) {
-                    this.age++;
-                    if (this.age > 10) {
-                        console.log("hatch");
-                        
-                        this.transition('hatch');
-
-                        return true;
-                        
-                    }
-                }
-
-                return false
-                
-            },
-            components:[DomRenderer, CollisionComponent, DeathComponent, FrameComponent],
+            components:[
+                DomRenderer, 
+                CollisionComponent, 
+                DeathComponent, 
+                FrameComponent
+            ],
             world: _world,
             states: {
                 hatch:{
                     kind: 'monster',
                     classVal: _world.iconPrefix + 'entities-monster',
                     template:template,
-                    components:[DomRenderer, MoveComponent, CollisionComponent, DeathComponent, ExploreComponent, FrameComponent],
-                    frame: function(frame){
-                        // console.log("test");
-                        
-                        if (!(frame % gamespeed)) {
-                            this.age++;
-                            if (this.age > 20) {
-                                console.log("evolving");
-                                // console.log("test", test);
-                                this.transition('evolve');
-                                return true;
-                            }
-                            var delta = (Math.floor(Math.random() * 3) - 1);
-                            var y = Math.floor(Math.random() * 2)
-                            
-                            // console.log((1-(y))*delta, (y)*delta);
-                            this.move((1-(y))*delta, (y)*delta);
-                            // 
-                            
-                            // console.log(test);
-                            
-                            return true;
-                        } 
-                        
-                        return false;
-                    },
+                    worth: 20,
+                    components:[
+                        DomRenderer, 
+                        MoveComponent, 
+                        CollisionComponent, 
+                        DeathComponent, 
+                        ExploreComponent, 
+                        ],
                     events:{
                         complete_move: function(deltas){
                             console.log("egg move");
                             
-                        },
-                        die: function(){
-                            this.world.entities = _.without(this.world.entities, this);
-                            document.getElementById('entityboard').removeChild(this.el);
                         },
                         collided: function(entity){
                             if(entity.kind === 'player'){
@@ -208,38 +182,11 @@ var env_schematics = {
                 evolve:{
                     kind: 'mother',
                     classVal: _world.iconPrefix + 'entities-mother',
-                    frame: function(frame){
-                        // console.log("test");
-                        if (!(frame % gamespeed)) {
-                            var delta = (Math.floor(Math.random() * 3) - 1);
-                            var y = Math.floor(Math.random() * 2);
-                            
-
-                            // console.log((1-(y))*delta, (y)*delta);
-                            
-                            // 
-                            var test = Math.floor(Math.random() * 10);
-                            // console.log(test);
-                            if (test == 0) {
-                                // console.log("test", test);
-                                this.lay();
-                                
-                            }
-                            this.move((1-(y))*delta, (y)*delta);
-                            return true;
-                        }
-                    },
-                    lay: function(){
-                        this.world.entities.push(new Entity(env_schematics.egg(this.position.x, this.position.y)));
-                    },
                     template:template,
+                    worth: 30,
                     events:{
                         complete_move: function(deltas){
                             
-                        },
-                        die: function(){
-                            this.world.entities = _.without(this.world.entities, this);
-                            document.getElementById('entityboard').removeChild(this.el);
                         },
                         collided: function(entity){
                             if(entity.kind === 'player'){
@@ -256,7 +203,14 @@ var env_schematics = {
                             });
                         }
                     },
-                    components:[DomRenderer, MoveComponent, PushComponent, CollisionComponent, DeathComponent, ExploreComponent, FrameComponent],
+                    components:[
+                        DomRenderer, 
+                        MoveComponent, 
+                        PushComponent, 
+                        CollisionComponent, 
+                        DeathComponent, 
+                        ExploreComponent, 
+                        ],
                 }
             }
         }

@@ -18,8 +18,14 @@
         <!-- build:css(.tmp) styles/main.css -->
         <link rel="stylesheet" href="styles/main.css">
         <!-- endbuild -->
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+        <script src="https://cdn.firebase.com/v0/firebase.js"></script>
     </head>
     <body ng-app="beastieApp">
+
+
+
+
         <!--[if lt IE 7]>
         <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please
             <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.
@@ -33,6 +39,51 @@
 
         <!-- Add your site or application content here -->
         <div ng-controller="MainCtrl" >
+            <div class="score">Score: {{score}}<a href="#" ng-click="loop.pause()"><i ng-show="loop.running" class="fa fa-pause"></i><i ng-hide="loop.running" class="fa fa-play"></i></a></div>
+            
+            <div id="board" class="modal" ng-class="{fade:loop.running}">
+              <div class="modal-dialog">
+                <div ng-show="player.dead" class="modal-content">
+                <form role="form" ng-submit="recordScore()">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title text-center">{{score}}</h4>
+                    <h4 class="modal-title text-center">Enter Your Name</h4>
+                    <input name="name" ng-model="name" type="text" class="modal-title form-control"/>
+                  </div>
+                  <div class="modal-body">
+                    <ul class="list-group">
+                        <li ng-repeat="player in scoreboard | toArray | orderBy:'score':true" ng-show="player.name" class="list-group-item">{{player.name}}: {{player.score}}</li>
+                    </ul>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button class="btn btn-primary">Submit Score</button>
+                  </div>
+                </form>
+                </div><!-- /.modal-content -->
+
+                <!-- normal pause screen -->
+                <div ng-hide="player.dead" class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" ng-click="loop.pause()" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title text-center">{{score}}</h4>
+                      </div>
+                    <div class="modal-body">
+                        <div>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </div>
+                        <button class="btn btn-link" ng-click="loop.pause()"><i ng-show="loop.running" class="fa fa-pause"></i><i ng-hide="loop.running" class="fa fa-play"></i></button>
+                    </div>
+                </div>
+
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
             <div id="game-container">
                 <div id="game-container">
                     <div class="entityboard" id="entityboard">
@@ -46,6 +97,7 @@
         <script src="bower_components/jquery/jquery.js"></script>
         <script src="bower_components/angular/angular.js"></script>
         <script src="bower_components/hammerjs/hammer.js"></script>
+        <script src="https://cdn.firebase.com/libs/angularfire/0.6.0/angularfire.min.js"></script>
         <!-- build:js scripts/plugins.js -->
         <script src="bower_components/bootstrap-sass/js/bootstrap-affix.js"></script>
         <script src="bower_components/bootstrap-sass/js/bootstrap-alert.js"></script>
