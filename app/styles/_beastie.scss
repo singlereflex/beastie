@@ -6,7 +6,8 @@
 	src:url("beastie-a6eab1c797d47b8cae1d9db326322c36.eot");
 	src:url("beastie-a6eab1c797d47b8cae1d9db326322c36.eot?#iefix") format("embedded-opentype"),
 		url("beastie-a6eab1c797d47b8cae1d9db326322c36.woff") format("woff"),
-		url("beastie-a6eab1c797d47b8cae1d9db326322c36.ttf") format("truetype");
+		url("beastie-a6eab1c797d47b8cae1d9db326322c36.ttf") format("truetype"),
+		url("beastie-a6eab1c797d47b8cae1d9db326322c36.svg?#beastie") format("svg");
 	font-weight:normal;
 	font-style:normal;
 }
@@ -70,109 +71,68 @@ li[class*=" icon-"].icon-large:before {
 }
 
 
+
 // Icons
-
 .icon-entities-egg:before {
-	content:"\f100";
+	content:"\e001";
 }
-
-
 .icon-entities-monster:before {
-	content:"\f101";
+	content:"\e002";
 }
-
-
 .icon-entities-mother:before {
-	content:"\f102";
+	content:"\e003";
 }
-
-
 .icon-entities-player:before {
-	content:"\f103";
+	content:"\e004";
 }
-
-
 .icon-environment-block:before {
-	content:"\f104";
+	content:"\e005";
 }
-
-
 .icon-environment-empty:before {
-	content:"\f105";
+	content:"\e006";
 }
-
-
 .icon-environment-wall-e:before {
-	content:"\f106";
+	content:"\e007";
 }
-
-
 .icon-environment-wall-n:before {
-	content:"\f107";
+	content:"\e008";
 }
-
-
 .icon-environment-wall-n-e:before {
-	content:"\f108";
+	content:"\e009";
 }
-
-
 .icon-environment-wall-n-s:before {
-	content:"\f109";
+	content:"\e00a";
 }
-
-
 .icon-environment-wall-n-s-e:before {
-	content:"\f10a";
+	content:"\e00b";
 }
-
-
 .icon-environment-wall-n-s-w:before {
-	content:"\f10b";
+	content:"\e00c";
 }
-
-
 .icon-environment-wall-n-s-w-e:before {
-	content:"\f10c";
+	content:"\e00d";
 }
-
-
 .icon-environment-wall-n-w:before {
-	content:"\f10d";
+	content:"\e00e";
 }
-
-
 .icon-environment-wall-n-w-e:before {
-	content:"\f10e";
+	content:"\e00f";
 }
-
-
 .icon-environment-wall-s:before {
-	content:"\f10f";
+	content:"\e010";
 }
-
-
 .icon-environment-wall-s-e:before {
-	content:"\f110";
+	content:"\e011";
 }
-
-
 .icon-environment-wall-s-w:before {
-	content:"\f111";
+	content:"\e012";
 }
-
-
 .icon-environment-wall-s-w-e:before {
-	content:"\f112";
+	content:"\e013";
 }
-
-
 .icon-environment-wall-w:before {
-	content:"\f113";
+	content:"\e014";
 }
-
-
 .icon-environment-wall-w-e:before {
-	content:"\f114";
+	content:"\e015";
 }
-

@@ -16,7 +16,14 @@ html, body {
 body {
     font-family: "Silkscreen", Helvetica, Arial, sans-serif;
     color: #333;
-    position: relative;
+    .score {
+        color:white;
+    }
+}
+
+.ng-scope {
+    height:100%;
+    width:100%;
 }
 
 #game-container {
