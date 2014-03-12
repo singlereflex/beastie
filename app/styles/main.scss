@@ -14,11 +14,17 @@ html, body {
 }
 
 body {
+    font-size: 16px;
     font-family: "Silkscreen", Helvetica, Arial, sans-serif;
+    font-weight: normal;
     color: #333;
     .score {
         color:white;
     }
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
 }
 
 .ng-scope {
@@ -30,20 +36,15 @@ body {
     position: relative;
     font-size: 16px;
     line-height: 16px;
-    height:100%;
-    width:100%;
     color: #464646;
     text-shadow: 1px 1px 0 #807a77, 2px 2px 20px #000;
+    margin-top: 24px;
     div {
         height: 16px;
         white-space: nowrap;
     }
     .entityboard {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        top: 0;
-        right: 0;
+        position: relative;
         .entity {
             position: absolute;
             width: 16px;
@@ -83,15 +84,16 @@ body {
         background: transparent;
     }
 }
-
-#scoreboard {
+.score {
     position: fixed;
-    display: block;
-    background: rgba(0,0,0,0.5);
+    top: 0;
     left: 0;
     right: 0;
-    top: 0;
-    bottom: 0;
+    height: 24px;
+    background: #000000;
+    z-index: 1;
+    line-height: 24px;
+    padding: 0 8px;
 }
 
 @keyframes blink {

@@ -39,9 +39,9 @@
 
         <!-- Add your site or application content here -->
         <div ng-controller="MainCtrl" >
-            <div class="score">Score: {{score}}<a href="#" ng-click="loop.pause()"><i ng-show="loop.running" class="fa fa-pause"></i><i ng-hide="loop.running" class="fa fa-play"></i></a></div>
+            <div class="score">Score: {{score}} <a href="#" class="pull-right" ng-click="loop.pause()"><i ng-show="loop.running" class="fa fa-pause"></i><i ng-hide="loop.running" class="fa fa-play"></i></a></div>
             
-            <div id="board" class="modal" ng-class="{fade:loop.running}">
+            <div id="board" class="modal ng-cloak" ng-class="{fade:loop.running}">
               <div class="modal-dialog">
                 <div ng-show="player.dead" class="modal-content">
                 <form role="form" ng-submit="recordScore()">
@@ -71,12 +71,14 @@
                       </div>
                     <div class="modal-body">
                         <div>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                            <h2>Highscore</h2>
+                            <ol class="highscore-list">
+                                <li><span class="name">APB</span><span class="score">1,200</span></li>
+                                <li><span class="name">APB</span><span class="score">1,200</span></li>
+                                <li><span class="name">APB</span><span class="score">1,200</span></li>
+                                <li><span class="name">APB</span><span class="score">1,200</span></li>
+                                <li><span class="name">APB</span><span class="score">1,200</span></li>
+                            </ol>
                         </div>
                         <button class="btn btn-link" ng-click="loop.pause()"><i ng-show="loop.running" class="fa fa-pause"></i><i ng-hide="loop.running" class="fa fa-play"></i></button>
                     </div>
@@ -85,21 +87,7 @@
               </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
             <div id="game-container">
-                <div id="game-container">
-                    <div class="entityboard" id="entityboard"></div>
-                    <div class="scoreboard" id="scoreboard">
-                        <div>
-                            <h2>High Scores</h2>
-                            <ul>
-                                <li><span class="username">APB</span><span class="score">22,300</span></li>
-                                <li><span class="username">APB</span><span class="score">12,300</span></li>
-                                <li><span class="username">APB</span><span class="score">5,300</span></li>
-                                <li><span class="username">APB</span><span class="score">2,300</span></li>
-                                <li><span class="username">APB</span><span class="score">1,300</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                <div class="entityboard" id="entityboard"></div>
             </div>
         </div>
 
@@ -107,6 +95,7 @@
         <script src="bower_components/angular/angular.js"></script>
         <script src="bower_components/hammerjs/hammer.js"></script>
         <script src="https://cdn.firebase.com/libs/angularfire/0.6.0/angularfire.min.js"></script>
+
         <!-- build:js scripts/plugins.js -->
         <script src="bower_components/bootstrap-sass/js/bootstrap-affix.js"></script>
         <script src="bower_components/bootstrap-sass/js/bootstrap-alert.js"></script>

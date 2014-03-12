@@ -64,14 +64,15 @@ var env_schematics = {
             template:template,
             //order matthers X_x
             components:[
-                DomRenderer, 
+                DomRenderer,
                 MoveComponent,
                 PushComponent,
                 PullComponent,
-                CollisionComponent, 
-                ControllerComponent, 
-                DeathComponent, 
-                ExploreComponent],
+                CollisionComponent,
+                ControllerComponent,
+                DeathComponent,
+                ExploreComponent
+            ],
             events:{
                 start_move: function(deltas){
                     console.log("move block")
@@ -84,7 +85,6 @@ var env_schematics = {
                     this.dead = true;
                 },
                 collided: function(entity){
-                    
                     if(entity.kind === 'monster' || entity.kind === 'mother'){
                         this.die();
                     } else {
@@ -156,7 +156,7 @@ var env_schematics = {
                         MoveComponent, 
                         CollisionComponent, 
                         DeathComponent, 
-                        ExploreComponent, 
+                        ExploreComponent
                         ],
                     events:{
                         complete_move: function(deltas){
@@ -177,7 +177,7 @@ var env_schematics = {
                                 this.el.style.left = this.position.x+'em';
                             });
                         }
-                    },
+                    }
                 },
                 evolve:{
                     kind: 'mother',
@@ -209,8 +209,8 @@ var env_schematics = {
                         PushComponent, 
                         CollisionComponent, 
                         DeathComponent, 
-                        ExploreComponent, 
-                        ],
+                        ExploreComponent
+                    ]
                 }
             }
         }
