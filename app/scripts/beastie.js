@@ -1,58 +1,60 @@
 // beastie.js
 _.templateSettings = {
-	interpolate: /\{\{(.+?)\}\}/g
+    interpolate: /\{\{(.+?)\}\}/g
 };
 var gamespeed = 45;
 var template = _.template('<i class="{{ entity.classVal }}"></i>');
 var env_schematics = {
-    block: function(_world){
+    block: function (_world) {
         return {
             kind: 'block',
             id: 'environment-block',
             push: true,
             heavy: true,
             walk: false,
-            template:template,
+            template: template,
             components: [DomRenderer, MoveComponent, CollisionComponent],
-            events:{
-                complete_move: function(deltas){
+            events: {
+                complete_move: function (deltas) {
                     // console.log(this.position);
                     //$scope.$apply();
                 },
-                start_move: function(deltas){
-                	console.log("move block")
+                start_move: function (deltas) {
+                    console.log("move block")
                     // console.log(this.position);
                     //$scope.$apply();
                 },
-                collided: function(entity){
-                    if(entity.kind === "block"){
-                        throw "hit a block";
-                    }
-                    if(entity.kind !== 'block'){
-                        console.log('monster');
-                        var delta_x = entity.position.x - this.position.x;
-                        var delta_y = entity.position.y - this.position.y;
-                        var neighbor = this.world.findEntityByPosition(entity.position.x+delta_x, entity.position.y+delta_y);
-                        if(neighbor !== undefined && neighbor.kind === 'block'){
-                            entity.die();
-                        } else {
-                            throw "chouldn't kill the monster";
+                collided: function (entity) {
+                    if (entity) {
+                        if (entity.kind === "block") {
+                            throw "hit a block";
                         }
-                        
+                        if (entity.kind !== 'block') {
+                            console.log('monster');
+                            var delta_x = entity.position.x - this.position.x;
+                            var delta_y = entity.position.y - this.position.y;
+                            var neighbor = this.world.findEntityByPosition(entity.position.x + delta_x, entity.position.y + delta_y);
+                            if (neighbor !== undefined && neighbor.kind === 'block') {
+                                entity.die();
+                            } else {
+                                throw "chouldn't kill the monster";
+                            }
+
+                        }
                     }
                 },
-                rendered: function(el){
+                rendered: function (el) {
                     this.el = document.getElementById('entityboard').appendChild(el);
-                    this.on('complete_move', function(deltas){
-                        this.el.style.top = this.position.y+'em';
-                        this.el.style.left = this.position.x+'em';
+                    this.on('complete_move', function (deltas) {
+                        this.el.style.top = this.position.y + 'em';
+                        this.el.style.left = this.position.x + 'em';
                     });
                 }
             },
             world: _world
         }
     },
-    player: function(_world, x, y){
+    player: function (_world, x, y) {
         return {
             kind: 'player',
             classVal: _world.iconPrefix + 'entities-player',
@@ -61,9 +63,9 @@ var env_schematics = {
                 x: x,
                 y: y
             },
-            template:template,
+            template: template,
             //order matthers X_x
-            components:[
+            components: [
                 DomRenderer,
                 MoveComponent,
                 PushComponent,
@@ -73,37 +75,37 @@ var env_schematics = {
                 DeathComponent,
                 ExploreComponent
             ],
-            events:{
-                start_move: function(deltas){
+            events: {
+                start_move: function (deltas) {
                     console.log("move block")
                     // console.log(this.position);
                     //$scope.$apply();
                 },
-                die: function(){
+                die: function () {
                     this.world.entities = _.without(this.world.entities, this);
                     document.getElementById('entityboard').removeChild(this.el);
                     this.dead = true;
                 },
-                collided: function(entity){
-                    if(entity.kind === 'monster' || entity.kind === 'mother'){
+                collided: function (entity) {
+                    if (entity.kind === 'monster' || entity.kind === 'mother') {
                         this.die();
                     } else {
                         console.log("hit a block");
                     }
                 },
-                rendered: function(el){
+                rendered: function (el) {
 
                     this.el = document.getElementById('entityboard').appendChild(el);
-                    this.on('complete_move', function(deltas){
-                        this.el.style.top = this.position.y+'em';
-                        this.el.style.left = this.position.x+'em';
+                    this.on('complete_move', function (deltas) {
+                        this.el.style.top = this.position.y + 'em';
+                        this.el.style.left = this.position.x + 'em';
                     });
                 }
             },
             world: _world
         }
     },
-    egg: function(_world, x, y){
+    egg: function (_world, x, y) {
         return {
             kind: 'egg',
             classVal: _world.iconPrefix + 'entities-egg',
@@ -112,103 +114,103 @@ var env_schematics = {
                 x: x,
                 y: y
             },
-            template:template,
+            template: template,
             worth: 10,
-            events:{
-                die: function(){
+            events: {
+                die: function () {
                     // console.log(this.world);
-                    
+
                     this.world.entities = _.without(this.world.entities, this);
                     document.getElementById('entityboard').removeChild(this.el);
                 },
-                collided: function(entity){
+                collided: function (entity) {
                     // console.log("collision")
                     // console.log(entity);
-                    if(entity.kind === 'player'){
+                    if (entity.kind === 'player') {
                         entity.die();
                     }
                 },
-                rendered: function(el){
+                rendered: function (el) {
 
                     this.el = document.getElementById('entityboard').appendChild(el);
-                    this.on('complete_move', function(deltas){
-                        this.el.style.top = this.position.y+'em';
-                        this.el.style.left = this.position.x+'em';
+                    this.on('complete_move', function (deltas) {
+                        this.el.style.top = this.position.y + 'em';
+                        this.el.style.left = this.position.x + 'em';
                     });
                 }
             },
             age: 0,
-            components:[
-                DomRenderer, 
-                CollisionComponent, 
-                DeathComponent, 
+            components: [
+                DomRenderer,
+                CollisionComponent,
+                DeathComponent,
                 FrameComponent
             ],
             world: _world,
             states: {
-                hatch:{
+                hatch: {
                     kind: 'monster',
                     classVal: _world.iconPrefix + 'entities-monster',
-                    template:template,
+                    template: template,
                     worth: 20,
-                    components:[
-                        DomRenderer, 
-                        MoveComponent, 
-                        CollisionComponent, 
-                        DeathComponent, 
+                    components: [
+                        DomRenderer,
+                        MoveComponent,
+                        CollisionComponent,
+                        DeathComponent,
                         ExploreComponent
-                        ],
-                    events:{
-                        complete_move: function(deltas){
+                    ],
+                    events: {
+                        complete_move: function (deltas) {
                             console.log("egg move");
-                            
+
                         },
-                        collided: function(entity){
-                            if(entity.kind === 'player'){
+                        collided: function (entity) {
+                            if (entity.kind === 'player') {
                                 entity.die();
                             } else {
                                 throw "hit a block";
                             }
                         },
-                        rendered: function(el){
+                        rendered: function (el) {
                             this.el = document.getElementById('entityboard').appendChild(el);
-                            this.on('complete_move', function(deltas){
-                                this.el.style.top = this.position.y+'em';
-                                this.el.style.left = this.position.x+'em';
+                            this.on('complete_move', function (deltas) {
+                                this.el.style.top = this.position.y + 'em';
+                                this.el.style.left = this.position.x + 'em';
                             });
                         }
                     }
                 },
-                evolve:{
+                evolve: {
                     kind: 'mother',
                     classVal: _world.iconPrefix + 'entities-mother',
-                    template:template,
+                    template: template,
                     worth: 30,
-                    events:{
-                        complete_move: function(deltas){
-                            
+                    events: {
+                        complete_move: function (deltas) {
+
                         },
-                        collided: function(entity){
-                            if(entity.kind === 'player'){
+                        collided: function (entity) {
+                            if (entity.kind === 'player') {
                                 entity.die();
                             } else {
                                 throw "hit a block"
                             }
                         },
-                        rendered: function(el){
+                        rendered: function (el) {
                             this.el = document.getElementById('entityboard').appendChild(el);
-                            this.on('complete_move', function(deltas){
-                                this.el.style.top = this.position.y+'em';
-                                this.el.style.left = this.position.x+'em';
+                            this.on('complete_move', function (deltas) {
+                                this.el.style.top = this.position.y + 'em';
+                                this.el.style.left = this.position.x + 'em';
                             });
                         }
                     },
-                    components:[
-                        DomRenderer, 
-                        MoveComponent, 
-                        PushComponent, 
-                        CollisionComponent, 
-                        DeathComponent, 
+                    components: [
+                        DomRenderer,
+                        MoveComponent,
+                        PushComponent,
+                        CollisionComponent,
+                        DeathComponent,
                         ExploreComponent
                     ]
                 }

@@ -1,10 +1,9 @@
 <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" ng-click="loop.pause()" aria-hidden="true">&times;</button>
-    <h4 class="modal-title text-center">{{score}}</h4>
+    <h2>Paused</h2>
 </div>
 <div class="modal-body">
     <div>
-        <h2>Highscore</h2>
+        <h5>Highscore</h5>
         <ol class="highscore-list">
             <li><span class="name">APB</span><span class="score">1,200</span></li>
             <li><span class="name">APB</span><span class="score">1,200</span></li>
@@ -13,5 +12,7 @@
             <li><span class="name">APB</span><span class="score">1,200</span></li>
         </ol>
     </div>
-    <button class="btn btn-link" ng-click="loop.pause()"><i ng-show="loop.running" class="fa fa-pause"></i><i ng-hide="loop.running" class="fa fa-play"></i></button>
+</div>
+<div class="modal-footer">
+    <button class="btn" ng-click="ok()"><i class="fa fa-play"></i></button>
 </div>

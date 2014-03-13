@@ -11,7 +11,7 @@ window.requestAnimFrame = (function(){
         };
 })();
 
-angular.module('beastieApp', ["firebase"])
+angular.module('beastieApp', ["firebase", "ui.bootstrap"])
 
 angular.module('beastieApp').filter('toArray', function() { return function(obj) {
     if (!(obj instanceof Object)) return obj;

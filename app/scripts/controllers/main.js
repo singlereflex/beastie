@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('beastieApp')
-    .controller('MainCtrl', ['$scope', 'beastieEnv', '$firebase', function ($scope, beastieEnv, $firebase) {
+    .controller('MainCtrl', ['$scope', 'beastieEnv', '$firebase', '$modal', '$log', function ($scope, beastieEnv, $firebase, $modal, $log) {
 
         var highScoreRef = new Firebase("https://highscore.firebaseio.com/beastie");
         // Automatically syncs everywhere in realtime
@@ -166,14 +166,28 @@ angular.module('beastieApp')
          }
          */
 
-
         $scope.loop = new Entity({
             kind: 'loop',
             components: [WorldComponent],
             world: $scope
         });
+
+        $scope.pauseGame = function() {
+            $scope.loop.pause();
+
+            var modalInstance = $modal.open({
+                templateUrl: 'views/modal_score_list.html',
+                controller: 'HighscoreModalCtrl'
+            });
+
+            modalInstance.result.then(function (selectedItem) {
+                $log.info(selectedItem);
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+        };
+
         $scope.explore(0, 0, gridsize);
         addPlayer();
         $scope.loop.start();
-        // $scope.loop.pause();
     }]);
