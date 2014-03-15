@@ -18,8 +18,14 @@
         <!-- build:css(.tmp) styles/main.css -->
         <link rel="stylesheet" href="styles/main.css">
         <!-- endbuild -->
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+        <script src="https://cdn.firebase.com/v0/firebase.js"></script>
     </head>
     <body ng-app="beastieApp">
+
+
+
+
         <!--[if lt IE 7]>
         <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please
             <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.
@@ -32,20 +38,18 @@
         <![endif]-->
 
         <!-- Add your site or application content here -->
-        <div ng-controller="MainCtrl" >
+        <div ng-controller="MainCtrl">
+            <div id="top-nav" ng-include="'views/top-nav.html'"></div>
             <div id="game-container">
-                <div id="game-container">
-                    <div class="entityboard" id="entityboard">
-                        
-                    </div>
-                </div>
-
+                <div class="entityboard" id="entityboard"></div>
             </div>
         </div>
 
         <script src="bower_components/jquery/jquery.js"></script>
         <script src="bower_components/angular/angular.js"></script>
         <script src="bower_components/hammerjs/hammer.js"></script>
+        <script src="https://cdn.firebase.com/libs/angularfire/0.6.0/angularfire.min.js"></script>
+
         <!-- build:js scripts/plugins.js -->
         <script src="bower_components/bootstrap-sass/js/bootstrap-affix.js"></script>
         <script src="bower_components/bootstrap-sass/js/bootstrap-alert.js"></script>
@@ -61,6 +65,7 @@
         <script src="bower_components/bootstrap-sass/js/bootstrap-collapse.js"></script>
         <script src="bower_components/bootstrap-sass/js/bootstrap-tab.js"></script>
 
+        <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
         <script src="bower_components/underscore/underscore.js"></script>
         <!-- endbuild -->
 
@@ -77,6 +82,7 @@
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/services/beastieEnv.js"></script>
         <script src="scripts/services/beastieEnt.js"></script>
+        <script src="scripts/controllers/highscoreModal.js"></script>
         <!-- endbuild -->
     </body>
 </html>

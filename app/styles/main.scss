@@ -2,6 +2,7 @@ $iconSpritePath: "../images/glyphicons-halflings.png";
 $iconWhiteSpritePath: "../images/glyphicons-halflings-white.png";
 
 @import "bootstrap-sass/lib/bootstrap";
+@import "silkscreen";
 @import "beastie";
 
 /* Put your CSS here */
@@ -13,28 +14,32 @@ html, body {
 }
 
 body {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-family: "Silkscreen", Helvetica, Arial, sans-serif;
+    font-weight: normal;
     color: #333;
+    .score {
+        color:white;
+    }
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
 }
 
 #game-container {
     position: relative;
     font-size: 16px;
     line-height: 16px;
-    height:100%;
-    width:100%;
     color: #464646;
     text-shadow: 1px 1px 0 #807a77, 2px 2px 20px #000;
+    margin-top: 24px;
     div {
         height: 16px;
         white-space: nowrap;
     }
     .entityboard {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        top: 0;
-        right: 0;
+        position: relative;
         .entity {
             position: absolute;
             width: 16px;
@@ -73,6 +78,17 @@ body {
         line-height: 16px;
         background: transparent;
     }
+}
+#top-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 24px;
+    background: #000000;
+    z-index: 1;
+    line-height: 24px;
+    padding: 0 8px;
 }
 
 @keyframes blink {
