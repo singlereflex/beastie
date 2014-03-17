@@ -5,11 +5,7 @@
     <div>
         <h5>Highscore</h5>
         <ol class="highscore-list">
-            <li><span class="name">APB</span><span class="score">1,200</span></li>
-            <li><span class="name">APB</span><span class="score">1,200</span></li>
-            <li><span class="name">APB</span><span class="score">1,200</span></li>
-            <li><span class="name">APB</span><span class="score">1,200</span></li>
-            <li><span class="name">APB</span><span class="score">1,200</span></li>
+            <li ng-repeat="player in scoreboard | toArray | orderBy:'score':true" ng-show="player.name"><span class="name">{{player.name}}</span><span class="score">{{player.score}}</span></li>
         </ol>
     </div>
 </div>

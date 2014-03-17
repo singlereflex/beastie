@@ -143,7 +143,8 @@ function ControllerComponent(entity) {
 function CollisionComponent(entity) {
     entity.on('start_move', function (deltas) {
         var collided = entity.world.findEntityByPosition(entity.position.x + deltas.delta_x, entity.position.y + deltas.delta_y);
-        if (collided !== undefined) {
+        
+        if (collided) {
             entity.trigger('collided', collided);
         }
     });
