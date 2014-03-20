@@ -34,7 +34,7 @@ angular.module('beastieApp')
 
             var player = new Entity(env_schematics.player($scope, x, y));
             player.on('die', function () {
-                $scope.loop.pause();
+                $scope.endGame();
             });
             player.on('complete_move', function (deltas) {
                 window.scrollBy(deltas.delta_x * 16, deltas.delta_y * 16);
@@ -42,11 +42,6 @@ angular.module('beastieApp')
 
             $scope.entities.push(player);
         }
-
-        $scope.recordScore = function () {
-            highScoreRef.push({name: this.name, score: $scope.score});
-            $('#board').modal({show: false});
-        };
 
         function placeEgg($scope, _x, _y) {
             var egg = new Entity(env_schematics.egg($scope, _x, _y));
@@ -57,7 +52,7 @@ angular.module('beastieApp')
                 });
             });
 
-            var frame_id = egg.on('frame', function (frame) {
+            egg.frame_id = egg.on('frame', function (frame) {
                 if (!(frame % gamespeed)) {
                     this.age++;
                     if (this.age > 10) {
@@ -74,8 +69,8 @@ angular.module('beastieApp')
             });
 
             egg.on('transition:hatch', function hatch(monster) {
-                monster.remove('frame', frame_id);
-                frame_id = monster.on('frame', function (frame) {
+                monster.remove('frame', monster.frame_id);
+                monster.frame_id = monster.on('frame', function (frame) {
 
                     if (!(frame % gamespeed)) {
                         this.age++;
@@ -95,12 +90,12 @@ angular.module('beastieApp')
                 });
             });
             egg.on('transition:evolve', function evolve(monster) {
-                monster.remove('frame', frame_id);
+                monster.remove('frame', monster.frame_id);
                 monster.lay = function () {
                     var newEgg = placeEgg($scope, this.position.x, this.position.y);
                     this.world.entities.push(newEgg);
                 };
-                frame_id = monster.on('frame', function (frame) {
+                monster.frame_id = monster.on('frame', function (frame) {
                     if (!(frame % gamespeed)) {
                         var delta = (Math.floor(Math.random() * 3) - 1);
                         var y = Math.floor(Math.random() * 2);
@@ -177,17 +172,42 @@ angular.module('beastieApp')
 
             var modalInstance = $modal.open({
                 templateUrl: 'views/modal_score_list.html',
-                controller: 'HighscoreModalCtrl'
+                controller: 'HighscoreModalCtrl',
+                scope: $scope
             });
 
             modalInstance.result.then(function (selectedItem) {
                 $log.info(selectedItem);
+                $scope.loop.start();
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());
+                $scope.loop.start();
             });
+        };
+
+        $scope.endGame = function() {
+            $scope.loop.stop();
+
+            var modalInstance = $modal.open({
+                templateUrl: 'views/modal_score_submit.html',
+                controller: 'HighscoreModalCtrl',
+                scope: $scope
+            });
+
+            modalInstance.result.then(function (name) {
+                $log.info(name);
+                highScoreRef.push({name: name, score: $scope.score});
+                location.reload();
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+                location.reload();
+            });
+
         };
 
         $scope.explore(0, 0, gridsize);
         addPlayer();
         $scope.loop.start();
+
+
     }]);
