@@ -13,13 +13,81 @@ html, body {
     width:100%;
 }
 
+input, textarea, select, .form-control {
+    font-family: "Silkscreen", Helvetica, Arial, sans-serif;
+    border-radius: 0 !important;
+    border: 1px solid #B1D6AC !important;
+    color: #B1D6AC !important;
+    background: #000 !important;
+}
+
 body {
     font-size: 16px;
     font-family: "Silkscreen", Helvetica, Arial, sans-serif;
     font-weight: normal;
     color: #333;
-    .score {
-        color:white;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    .modal {
+        border-radius: 0;
+        background: #202025;
+        color: #B1D6AC;
+        border: 1px solid #B1D6AC;
+        .modal-header {
+            box-shadow: none;
+            border: none;
+            .close {
+                margin-top: 2px;
+                color: #B1D6AC;
+                opacity: 1;
+                text-shadow: none;
+            }
+        }
+        .modal-footer {
+            text-align: center;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+        }
+    }
+    .modal-backdrop {
+        background: #002015;
+    }
+    .highscore-list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: block;
+        font-size: 16px;
+        line-height: 24px;
+        margin: 0 10px;
+        li {
+            overflow: hidden;
+            margin: 10px 0;
+            width: 100%;
+            span {
+                display: table-cell;
+            }
+            .name {
+            }
+            .separator {
+                width: 100%;
+                vertical-align: text-bottom;
+                &:after {
+                    content: "";
+                    border-top: 2px dotted #B1D6AC;
+                    display: block;
+                    margin: 0 10px;
+                }
+            }
+            .score {
+                text-align: right;
+            }
+        }
     }
 }
 
@@ -89,6 +157,10 @@ body {
     z-index: 1;
     line-height: 24px;
     padding: 0 8px;
+    .score {
+        float: left;
+        color: #ffffff;
+    }
 }
 
 @keyframes blink {
