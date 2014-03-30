@@ -1,7 +1,16 @@
 'use strict';
-
+document.body.style.width = '2048em';
+document.body.style.height = '2048em';
+function center(el){
+    $('html,body').animate({
+        scrollTop: $(el).offset().top - ( $(window).height() - $(this).outerHeight(true) ) / 2,
+        scrollLeft: $(el).offset().left - ( $(window).width() - $(this).outerWidth(true) ) / 2,
+    }, 200);
+}
 angular.module('beastieApp')
     .controller('MainCtrl', ['$scope', 'beastieEnv', '$firebase', '$modal', '$log', function ($scope, beastieEnv, $firebase, $modal, $log) {
+
+        
 
         var highScoreRef = new Firebase("https://highscore.firebaseio.com/beastie");
         // Automatically syncs everywhere in realtime
@@ -24,23 +33,29 @@ angular.module('beastieApp')
         };
 
         function addPlayer() {
-            var x = Math.floor(Math.random() * gridsize);
-            var y = Math.floor(Math.random() * gridsize);
+            var x = 1024;//Math.floor(Math.random() * gridsize);
+            var y = 1024;//Math.floor(Math.random() * gridsize);
 
-            while ($scope.findEntityByPosition(x, y) !== false) {
-                x = Math.floor(Math.random() * gridsize);
-                y = Math.floor(Math.random() * gridsize);
-            }
+            // while ($scope.findEntityByPosition(x, y) !== false) {
+            //     x = Math.floor(Math.random() * gridsize);
+            //     y = Math.floor(Math.random() * gridsize);
+            // }
 
             var player = new Entity(env_schematics.player($scope, x, y));
             player.on('die', function () {
                 $scope.endGame();
             });
             player.on('complete_move', function (deltas) {
-                window.scrollBy(deltas.delta_x * 16, deltas.delta_y * 16);
+                // setTimeout(function(){center(player.el);}, 100);
+                // window.scrollBy(deltas.delta_x * 16, deltas.delta_y * 16);
+                $('html,body').animate({
+                    scrollTop: document.body.scrollTop + deltas.delta_y * 16,
+                    scrollLeft: document.body.scrollLeft + deltas.delta_x * 16,
+                }, 200);
             });
 
             $scope.entities.push(player);
+            center(player.el);
         }
 
         function placeEgg($scope, _x, _y) {
@@ -204,9 +219,8 @@ angular.module('beastieApp')
             });
 
         };
-
-        $scope.explore(0, 0, gridsize);
         addPlayer();
+        $scope.explore(1024-8, 1024-8, gridsize);
         $scope.loop.start();
 
 

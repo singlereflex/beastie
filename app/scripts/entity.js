@@ -87,6 +87,7 @@ function ControllerComponent(entity) {
     }, false);
 
     document.body.addEventListener('keyup', function keyUp(event) {
+        console.log(event.which);
         if (!entity.dead) {
             var newX = 0, newY = 0;
             switch (event.which) {
@@ -113,6 +114,10 @@ function ControllerComponent(entity) {
             case 87:
                 event.preventDefault();
                 entity.move(0, -1);
+                break;
+            case 32:
+                event.preventDefault();
+                center(entity.el);
                 break;
             }
         }
