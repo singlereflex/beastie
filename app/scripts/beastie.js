@@ -2,7 +2,7 @@
 _.templateSettings = {
     interpolate: /\{\{(.+?)\}\}/g
 };
-var gamespeed = 45;
+
 var template = _.template('<i class="{{ entity.classVal }}"></i>');
 var env_schematics = {
     block: function (_world) {
