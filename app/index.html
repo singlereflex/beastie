@@ -39,12 +39,18 @@
 
         <!-- Add your site or application content here -->
         <div ng-controller="MainCtrl">
-            <div id="top-nav" ng-include="'views/top-nav.html'"></div>
+            <div id="top-nav">
+                <div class="score">Score: {{score}}</div>
+                <a href="#" class="pull-right" ng-click="pauseGame()">
+                    <i ng-class="{'fa-pause': loop.running, 'fa-play': !loop.running}" ng-show="loop.running" class="fa"></i>
+                </a>
+            </div>
             <div id="game-container">
                 <div class="entityboard" id="entityboard"></div>
             </div>
         </div>
 
+        <script src="bower_components/dat.gui/dat.gui.js"></script>
         <script src="bower_components/jquery/jquery.js"></script>
         <script src="bower_components/angular/angular.js"></script>
         <script src="bower_components/hammerjs/hammer.js"></script>

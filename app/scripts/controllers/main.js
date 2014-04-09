@@ -68,7 +68,7 @@ angular.module('beastieApp')
             });
 
             egg.frame_id = egg.on('frame', function (frame) {
-                if (!(frame % gamespeed)) {
+                if (!(frame % settings.gamespeed)) {
                     this.age++;
                     if (this.age > 10) {
 
@@ -87,16 +87,13 @@ angular.module('beastieApp')
                 monster.remove('frame', monster.frame_id);
                 monster.frame_id = monster.on('frame', function (frame) {
 
-                    if (!(frame % gamespeed)) {
+                    if (!(frame % settings.gamespeed)) {
                         this.age++;
                         if (this.age > 20) {
                             this.transition('evolve');
                             return true;
                         }
-                        var delta = (Math.floor(Math.random() * 3) - 1);
-                        var y = Math.floor(Math.random() * 2);
-                        this.move((1 - (y)) * delta, (y) * delta);
-
+                        beast_move(this);
                         return true;
                     }
 
@@ -111,14 +108,13 @@ angular.module('beastieApp')
                     this.world.entities.push(newEgg);
                 };
                 monster.frame_id = monster.on('frame', function (frame) {
-                    if (!(frame % gamespeed)) {
-                        var delta = (Math.floor(Math.random() * 3) - 1);
-                        var y = Math.floor(Math.random() * 2);
+                    if (!(frame % settings.gamespeed)) {
+                        //chance to lay
                         var test = Math.floor(Math.random() * 10);
                         if (test == 0) {
                             this.lay();
                         }
-                        this.move((1 - (y)) * delta, (y) * delta);
+                        beast_move(this);
                         return true;
                     } else {
                         return false;
