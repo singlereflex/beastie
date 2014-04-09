@@ -149,8 +149,10 @@ function CollisionComponent(entity) {
     entity.on('start_move', function (deltas) {
         var collided = entity.world.findEntityByPosition(entity.position.x + deltas.delta_x, entity.position.y + deltas.delta_y);
         
-        if (collided) {
-            entity.trigger('collided', collided);
+        if (collided.length > 0) {
+            for(var i = 0; i < collided.length; i++){
+                entity.trigger('collided', collided[i]);
+            }
         }
     });
 }
@@ -181,7 +183,7 @@ function MoveComponent(entity) {
 function PushComponent(entity) {
     //subscribe to move event
     entity.on('start_move', function (deltas) {
-        var neighbor = entity.world.findEntityByPosition(entity.position.x + deltas.delta_x, entity.position.y + deltas.delta_y);
+        var neighbor = entity.world.findEntityByPosition(entity.position.x + deltas.delta_x, entity.position.y + deltas.delta_y)[0];
         if (neighbor !== undefined && neighbor.kind === "block") {
             neighbor.move(deltas.delta_x, deltas.delta_y);
         }
@@ -208,7 +210,7 @@ function PullComponent(entity) {
 
         var neighbor = entity.world.findEntityByPosition(entity.position.x - (deltas.delta_x * 2), entity.position.y - (deltas.delta_y * 2));
         if (entity.shiftDown) {
-            neighbor.move(deltas.delta_x, deltas.delta_y);
+            neighbor[0].move(deltas.delta_x, deltas.delta_y);
         }
     });
 }

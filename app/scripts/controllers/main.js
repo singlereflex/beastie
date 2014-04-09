@@ -24,12 +24,13 @@ angular.module('beastieApp')
         $scope.score = 0;
 
         $scope.findEntityByPosition = function (x, y) {
+            var collisions = [];
             for (var i = $scope.entities.length - 1; i >= 0; i--) {
                 if ($scope.entities[i].position.x == x && $scope.entities[i].position.y == y) {
-                    return $scope.entities[i];
+                    collisions.push($scope.entities[i]);
                 }
             }
-            return false;
+            return collisions;
         };
 
         function addPlayer() {
