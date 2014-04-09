@@ -112,7 +112,7 @@ angular.module('beastieApp')
                     if (!(frame % settings.gamespeed)) {
                         //chance to lay
                         var test = Math.floor(Math.random() * 10);
-                        if (test == 0) {
+                        if (test == 0 && $scope.findEntityByPosition(this.position.x, this.position.y).length < 2) {
                             this.lay();
                         }
                         beast_move(this);
@@ -131,7 +131,7 @@ angular.module('beastieApp')
                 for (var e = y; e < y + size; e++) {
                     if ($scope.world[i + "/" + e] === undefined) {
                         $scope.world[i + "/" + e] = true;
-                        if (Math.floor(Math.random() * 2) > 0 && $scope.findEntityByPosition(i, e) === false) {
+                        if (Math.floor(Math.random() * 2) > 0 && $scope.findEntityByPosition(i, e).length < 1) {
                             var blocktype = env_schematics.block($scope);
                             blocktype.position = {
                                 x: i,
@@ -152,7 +152,7 @@ angular.module('beastieApp')
                 var _x = Math.floor(Math.random() * size + x);
                 var _y = Math.floor(Math.random() * size + y);
 
-                while ($scope.findEntityByPosition(_x, _y) !== false) {
+                while ($scope.findEntityByPosition(_x, _y).length > 0) {
                     _x = Math.floor(Math.random() * size + x);
                     _y = Math.floor(Math.random() * size + y);
                 }

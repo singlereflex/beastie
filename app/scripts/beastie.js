@@ -33,7 +33,7 @@ var env_schematics = {
                             console.log('monster');
                             var delta_x = entity.position.x - this.position.x;
                             var delta_y = entity.position.y - this.position.y;
-                            var neighbor = this.world.findEntityByPosition(entity.position.x + delta_x, entity.position.y + delta_y);
+                            var neighbor = this.world.findEntityByPosition(entity.position.x + delta_x, entity.position.y + delta_y)[0];
                             if (neighbor !== undefined && neighbor.kind === 'block') {
                                 entity.die();
                             } else {
