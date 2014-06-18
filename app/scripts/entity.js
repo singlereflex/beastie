@@ -123,32 +123,55 @@ function ControllerComponent(entity) {
         }
     }, false);
 
-    Hammer(document).on("dragleft", function (e) {
-        // e.preventDefault();
-        // alert("hammer left");
-        entity.move(-1, 0);
-    });
-    Hammer(document).on("dragup", function (e) {
-        // e.preventDefault();
-        // alert("hammer up");
-        entity.move(0, -1);
-    });
-    Hammer(document).on("dragdown", function (e) {
-        // e.preventDefault();
-        // alert("hammer down");
-        entity.move(0, 1);
-    });
-    Hammer(document).on("dragright", function (e) {
-        // e.preventDefault();
-        // alert("hammer right");
-        entity.move(1, 0);
-    });
+
+    document.body.addEventListener('click', function dblClick(event){
+      event.preventDefault();
+      var x = 0, y = 0;
+      if(Math.abs(entity.el.offsetLeft - event.pageX) > Math.abs(entity.el.offsetTop - event.pageY)){
+        if(0 < entity.el.offsetLeft - event.pageX){
+          x = -1
+        } else if(0 > entity.el.offsetLeft - event.pageX){
+          x = 1;
+        }
+      } else {
+        if(0 < entity.el.offsetTop - event.pageY){
+          y = -1
+        } else if(0 > entity.el.offsetTop - event.pageY){
+          y = 1;
+        }
+      }
+      entity.move(x, y);
+
+      // event.x -
+      // event.y -
+    }, false)
+
+    // Hammer(document).on("dragleft", function (e) {
+    //     // e.preventDefault();
+    //     // alert("hammer left");
+    //     entity.move(-1, 0);
+    // });
+    // Hammer(document).on("dragup", function (e) {
+    //     // e.preventDefault();
+    //     // alert("hammer up");
+    //     entity.move(0, -1);
+    // });
+    // Hammer(document).on("dragdown", function (e) {
+    //     // e.preventDefault();
+    //     // alert("hammer down");
+    //     entity.move(0, 1);
+    // });
+    // Hammer(document).on("dragright", function (e) {
+    //     // e.preventDefault();
+    //     // alert("hammer right");
+    //     entity.move(1, 0);
+    // });
 }
 
 function CollisionComponent(entity) {
     entity.on('start_move', function (deltas) {
         var collided = entity.world.findEntityByPosition(entity.position.x + deltas.delta_x, entity.position.y + deltas.delta_y);
-        
+
         if (collided.length > 0) {
             for(var i = 0; i < collided.length; i++){
                 entity.trigger('collided', collided[i]);
