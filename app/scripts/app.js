@@ -1,7 +1,7 @@
 'use strict';
 
 //globals!
-var music = true;
+var music = false;
 var settings = {
     gamespeed: 45,
     series: 12,
@@ -16,15 +16,15 @@ var settings = {
     }
 }
 
-var gui = new dat.GUI({ autoPlace: false });
-var customContainer = document.getElementById('top-nav');
-customContainer.appendChild(gui.domElement);
-
-  gui.add(settings, 'gamespeed');
-  gui.add(settings, 'series');
-  gui.add(settings, 'cutoff', 100, 1000);
-  gui.add(settings, 'q', 0, 20);
-  gui.add(settings, 'test');
+// var gui = new dat.GUI({ autoPlace: false });
+// var customContainer = document.getElementById('top-nav');
+// customContainer.appendChild(gui.domElement);
+//
+//   gui.add(settings, 'gamespeed');
+//   gui.add(settings, 'series');
+//   gui.add(settings, 'cutoff', 100, 1000);
+//   gui.add(settings, 'q', 0, 20);
+//   gui.add(settings, 'test');
 
 var beast_move = function(beast){
     var delta = (Math.floor(Math.random() * 3) - 1);
@@ -56,10 +56,10 @@ synth = T("lpf" , {cutoff:settings.cutoff, Q:settings.q}, synth);
 settings.music = T("interval", {interval:msec * settings.gamespeed}, function() {
   var root = pattern.next();
   chords.forEach(function(i) {
-    gen.noteOn(scale.wrapAt(root + i) +60, 80); 
+    gen.noteOn(scale.wrapAt(root + i) +60, 80);
   });
   pan.pos.value = Math.random() * 2 - 1;
-}).set({buddies:synth}).start();
+}).set({buddies:synth});
 
 
 
@@ -83,4 +83,3 @@ angular.module('beastieApp').filter('toArray', function() { return function(obj)
         return Object.defineProperty(val, '$key', {__proto__: null, value: key});
     });
 }});
-

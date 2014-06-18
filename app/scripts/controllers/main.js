@@ -10,7 +10,17 @@ function center(el){
 angular.module('beastieApp')
     .controller('MainCtrl', ['$scope', 'beastieEnv', '$firebase', '$modal', '$log', function ($scope, beastieEnv, $firebase, $modal, $log) {
 
-        
+        $scope.music = music;
+        $scope.pauseMusic = function(){
+          if(!music){
+              settings.music.start();
+          } else {
+              settings.music.stop();
+          }
+          music = !music;
+          $scope.music = music;
+
+        }
 
         var highScoreRef = new Firebase("https://highscore.firebaseio.com/beastie");
         // Automatically syncs everywhere in realtime

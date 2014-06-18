@@ -41,7 +41,10 @@
         <div ng-controller="MainCtrl">
             <div id="top-nav">
                 <div class="score">Score: {{score}}</div>
-                <a href="#" class="pull-right" ng-click="pauseGame()">
+                <a href="#" class="pull-right btn btn-link" ng-click="pauseMusic()">
+                    <i ng-class="{'fa-volume-off': !music, 'fa-volume-up': music}" class="fa"></i>
+                </a>
+                <a href="#" class="pull-right btn btn-link" ng-click="pauseGame()">
                     <i ng-class="{'fa-pause': loop.running, 'fa-play': !loop.running}" ng-show="loop.running" class="fa"></i>
                 </a>
             </div>
