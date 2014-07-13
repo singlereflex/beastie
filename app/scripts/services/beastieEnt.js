@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-angular.module('beastieApp')
-    .constant('beastieEnt', {
+angular.module("beastieApp")
+    .constant("beastieEnt", {
         player: {
             id: "entities-player"
         },

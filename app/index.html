@@ -23,9 +23,6 @@
     </head>
     <body ng-app="beastieApp">
 
-
-
-
         <!--[if lt IE 7]>
         <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please
             <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.
@@ -38,12 +35,17 @@
         <![endif]-->
 
         <!-- Add your site or application content here -->
-        <div ng-controller="MainCtrl">
-            <div id="top-nav" ng-include="'views/top-nav.html'"></div>
-            <div id="game-container">
-                <div class="entityboard" id="entityboard"></div>
+        <div class="ui-container" ui-view></div>
+
+        <script type="text/ng-template" id="entities.html">
+            <div ng-model="entity" class="entity {{ entity.kind }}" ng-style="{
+                    'left': entity.position.x + 'em',
+                    'top': entity.position.y + 'em',
+                    'z-index' : entity.position.z
+                }" ng-repeat="entity in entities">
+                <i class="{{ entity.classVal }}"></i>
             </div>
-        </div>
+        </script>
 
         <script src="bower_components/jquery/jquery.js"></script>
         <script src="bower_components/angular/angular.js"></script>
@@ -51,21 +53,6 @@
         <script src="https://cdn.firebase.com/libs/angularfire/0.6.0/angularfire.min.js"></script>
 
         <!-- build:js scripts/plugins.js -->
-        <script src="bower_components/bootstrap-sass/js/bootstrap-affix.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-alert.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-dropdown.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-tooltip.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-modal.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-transition.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-button.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-popover.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-typeahead.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-carousel.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-scrollspy.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-collapse.js"></script>
-        <script src="bower_components/bootstrap-sass/js/bootstrap-tab.js"></script>
-
-        <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
         <script src="bower_components/underscore/underscore.js"></script>
         <!-- endbuild -->
 
@@ -73,16 +60,23 @@
         <script src="bower_components/angular-resource/angular-resource.js"></script>
         <script src="bower_components/angular-cookies/angular-cookies.js"></script>
         <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+        <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
         <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/entity.js"></script>
         <script src="scripts/beastie.js"></script>
         <script src="scripts/app.js"></script>
-        <script src="scripts/controllers/main.js"></script>
+        <script src="scripts/controllers/game.js"></script>
         <script src="scripts/services/beastieEnv.js"></script>
         <script src="scripts/services/beastieEnt.js"></script>
-        <script src="scripts/controllers/highscoreModal.js"></script>
+        <script src="scripts/controllers/highscore.js"></script>
+        <script src="scripts/controllers/menu.js"></script>
+        <script src="scripts/directives/menu-options.js"></script>
+        <script src="scripts/directives/move-example.js"></script>
+        <script src="scripts/controllers/instructions.js"></script>
+        <script src="scripts/directives/kill-example.js"></script>
+        <script src="scripts/directives/pull-example.js"></script>
         <!-- endbuild -->
     </body>
 </html>
