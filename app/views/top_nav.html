@@ -1,4 +1,7 @@
 <div class="score">Score: {{score}}</div>
+<a href="#" class="pull-right btn btn-link" ng-click="pauseMusic($event)">
+    <i ng-class="{'fa-volume-off': !music, 'fa-volume-up': music}" class="fa"></i>
+</a>
 <a ui-sref="game.paused" class="pull-right" ng-click="pauseGame()">
     <i ng-class="{'fa-pause': loop.running, 'fa-play': !loop.running}" ng-show="loop.running" class="fa"></i>
 </a>

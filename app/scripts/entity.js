@@ -1,12 +1,10 @@
-"use strict";
-
-window.WorldComponent = function (entity) {
-    entity.frameCount = 0;
+function WorldComponent(entity) {
+    entity.frame_count = 0;
     entity.running = false;
     function animloop() {
-        entity.frameCount++;
+        entity.frame_count++;
         try {
-            entity.trigger("frame", entity.frameCount);
+            entity.trigger('frame', entity.frame_count);
         } catch (e) {
             // entity.pause()
         }
@@ -14,7 +12,6 @@ window.WorldComponent = function (entity) {
             requestAnimFrame(animloop);
         }
     }
-
     entity.start = function () {
         this.running = true;
         animloop();
@@ -24,68 +21,61 @@ window.WorldComponent = function (entity) {
     };
     entity.stop = function () {
         this.running = false;
-        this.frameCount = 0;
+        this.frame_count = 0;
     };
     entity.toBeRendered = [];
-    entity.on("frame", function render(frameCount) {
+    entity.on('frame', function render(frame_count) {
         for (var i = 0; i < entity.toBeRendered.length; i++) {
-            this.toBeRendered[i].trigger("frame", frameCount);
+            this.toBeRendered[i].trigger('frame', frame_count);
         }
     });
-};
+}
 
-window.FrameComponent = function (entity) {
+function FrameComponent(entity) {
     entity.world.loop.toBeRendered.push(entity);
-    // entity.loop_id = entity.world.loop.on("frame", entity.frame.bind(entity));//really need a remove thing..
-    entity.on("die", function () {
+    // entity.loop_id = entity.world.loop.on('frame', entity.frame.bind(entity));//really need a remove thing..
+    entity.on('die', function () {
         entity.world.loop.toBeRendered = _.without(entity.world.loop.toBeRendered, entity);
     });
-};
+}
 
-window.DomRenderer = function (entity) {
+function DomRenderer(entity) {
     if (entity.el !== undefined) {
-        document.getElementById("entityboard").removeChild(entity.el);
+        document.getElementById('entityboard').removeChild(entity.el);
     }
-    var div = document.createElement("div");
+    var div = document.createElement('div');
     div.innerHTML = entity.template({entity: entity});
     entity.el = div;
     div.className = "entity " + entity.kind;
-    div.style.left = entity.position.x + "em";
-    div.style.top = entity.position.y + "em";
-    if (entity.kind === "block") {
-        div.style.zIndex = parseInt(Math.random() * 3).toString();
-    }
-    entity.trigger("rendered", entity.el);
-};
+    div.style.left = entity.position.x + 'em';
+    div.style.top = entity.position.y + 'em';
+    entity.trigger('rendered', entity.el);
+}
 
-window.ControllerComponent = function (entity) {
+function ControllerComponent(entity) {
     //requires the MoveComponent
-    document.body.addEventListener("keydown", function keydown(event) {
+    document.body.addEventListener('keydown', function keydown(event) {
         if (!entity.dead) {
             switch (event.which) {
-
-            //left
+                //left
             case 37:
             case 65:
                 event.preventDefault();
                 // entity.move(-1, 0);
                 break;
-
-            //down
+                //down
             case 40:
             case 83:
                 event.preventDefault();
                 // entity.move(0, 1);
+                //right
                 break;
-
-            //right
             case 39:
             case 68:
                 event.preventDefault();
                 // entity.move(1, 0);
                 break;
-
-            //up
+                //up
             case 38:
             case 87:
                 event.preventDefault();
@@ -96,9 +86,10 @@ window.ControllerComponent = function (entity) {
 
     }, false);
 
-    document.body.addEventListener("keyup", function keyUp(event) {
+    document.body.addEventListener('keyup', function keyUp(event) {
+        console.log(event.which);
         if (!entity.dead) {
-            //var newX = 0, newY = 0;
+            var newX = 0, newY = 0;
             switch (event.which) {
                 //left
             case 37:
@@ -124,114 +115,134 @@ window.ControllerComponent = function (entity) {
                 event.preventDefault();
                 entity.move(0, -1);
                 break;
+            case 32:
+                event.preventDefault();
+                center(entity.el);
+                break;
             }
         }
     }, false);
 
-    var hammer = new Hammer(document);
 
-    hammer.on("dragleft", function (e) {
-        console.log(e);
-        // e.preventDefault();
-        // alert("hammer left");
-        entity.move(-1, 0);
-    });
+    document.body.addEventListener('click', function dblClick(event){
+      event.preventDefault();
+      var x = 0, y = 0;
+      if(Math.abs(entity.el.offsetLeft - event.pageX) > Math.abs(entity.el.offsetTop - event.pageY)){
+        if(0 < entity.el.offsetLeft - event.pageX){
+          x = -1
+        } else if(0 > entity.el.offsetLeft - event.pageX){
+          x = 1;
+        }
+      } else {
+        if(0 < entity.el.offsetTop - event.pageY){
+          y = -1
+        } else if(0 > entity.el.offsetTop - event.pageY){
+          y = 1;
+        }
+      }
+      entity.move(x, y);
 
-    hammer.on("dragup", function (e) {
-        console.log(e);
-        // e.preventDefault();
-        // alert("hammer up");
-        entity.move(0, -1);
-    });
+      // event.x -
+      // event.y -
+    }, false)
 
-    hammer.on("dragdown", function (e) {
-        console.log(e);
-        // e.preventDefault();
-        // alert("hammer down");
-        entity.move(0, 1);
-    });
+    // Hammer(document).on("dragleft", function (e) {
+    //     // e.preventDefault();
+    //     // alert("hammer left");
+    //     entity.move(-1, 0);
+    // });
+    // Hammer(document).on("dragup", function (e) {
+    //     // e.preventDefault();
+    //     // alert("hammer up");
+    //     entity.move(0, -1);
+    // });
+    // Hammer(document).on("dragdown", function (e) {
+    //     // e.preventDefault();
+    //     // alert("hammer down");
+    //     entity.move(0, 1);
+    // });
+    // Hammer(document).on("dragright", function (e) {
+    //     // e.preventDefault();
+    //     // alert("hammer right");
+    //     entity.move(1, 0);
+    // });
+}
 
-    hammer.on("dragright", function (e) {
-        console.log(e);
-        // e.preventDefault();
-        // alert("hammer right");
-        entity.move(1, 0);
-    });
-};
+function CollisionComponent(entity) {
+    entity.on('start_move', function (deltas) {
+        var collided = entity.world.findEntityByPosition(entity.position.x + deltas.delta_x, entity.position.y + deltas.delta_y);
 
-window.CollisionComponent = function (entity) {
-    entity.on("moveStart", function (deltas) {
-        var collided = entity.world.findEntityByPosition(entity.position.x + deltas.x, entity.position.y + deltas.y);
-
-        if (collided) {
-            entity.trigger("collided", collided);
+        if (collided.length > 0) {
+            for(var i = 0; i < collided.length; i++){
+                entity.trigger('collided', collided[i]);
+            }
         }
     });
-};
+}
 
-window.ExploreComponent = function (entity) {
-    entity.on("moveComplete", function () {
+function ExploreComponent(entity) {
+    entity.on('complete_move', function () {
         if (entity.world.world[entity.position.x + "/" + entity.position.y] === undefined) {
             entity.world.explore(entity.position.x - 8, entity.position.y - 8, 16);
         }
     });
-};
+}
 
-window.MoveComponent = function (entity) {
-    entity.move = function (deltaX, deltaY) {
-        entity.trigger("moveStart", {x: deltaX, y: deltaY});
-        if (entity.position.x + deltaX < 0 || entity.position.y + deltaY < 0) {
+function MoveComponent(entity) {
+    entity.move = function (delta_x, delta_y) {
+        entity.trigger('start_move', {delta_x: delta_x, delta_y: delta_y});
+        if (entity.position.x + delta_x < 0 || entity.position.y + delta_y < 0) {
             throw "stay on the board please";
         }
 
-        entity.position.x += deltaX;
-        entity.position.y += deltaY;
+        entity.position.x += delta_x;
+        entity.position.y += delta_y;
 
-        entity.trigger("moveComplete", {x: deltaX, y: deltaY});
+        entity.trigger('complete_move', {delta_x: delta_x, delta_y: delta_y});
 
-    };
-};
+    }
+}
 
-window.PushComponent = function (entity) {
+function PushComponent(entity) {
     //subscribe to move event
-    entity.on("moveStart", function (deltas) {
-        var neighbor = entity.world.findEntityByPosition(entity.position.x + deltas.x, entity.position.y + deltas.y);
+    entity.on('start_move', function (deltas) {
+        var neighbor = entity.world.findEntityByPosition(entity.position.x + deltas.delta_x, entity.position.y + deltas.delta_y)[0];
         if (neighbor !== undefined && neighbor.kind === "block") {
-            neighbor.move(deltas.x, deltas.y);
+            neighbor.move(deltas.delta_x, deltas.delta_y);
         }
     });
-};
+}
 
-window.PullComponent = function (entity) {
+function PullComponent(entity) {
 
     entity.shiftDown = false;
-    document.body.addEventListener("keydown", function keydown(event) {
-        if (event.which === 16 && !entity.dead) {
+    document.body.addEventListener('keydown', function keydown(event) {
+        if (event.which == 16 && !entity.dead) {
             event.preventDefault();
             entity.shiftDown = true;
         }
     }, false);
-    document.body.addEventListener("keyup", function keyup(event) {
-        if (event.which === 16 && !entity.dead) {
+    document.body.addEventListener('keyup', function keyup(event) {
+        if (event.which == 16 && !entity.dead) {
             event.preventDefault();
             entity.shiftDown = false;
         }
     });
     //subscribe to move event
-    entity.on("moveComplete", function (deltas) {
+    entity.on('complete_move', function (deltas) {
 
-        var neighbor = entity.world.findEntityByPosition(entity.position.x - (deltas.x * 2), entity.position.y - (deltas.y * 2));
+        var neighbor = entity.world.findEntityByPosition(entity.position.x - (deltas.delta_x * 2), entity.position.y - (deltas.delta_y * 2));
         if (entity.shiftDown) {
-            neighbor.move(deltas.x, deltas.y);
+            neighbor[0].move(deltas.delta_x, deltas.delta_y);
         }
     });
-};
+}
 
-window.DeathComponent = function (entity) {
+function DeathComponent(entity) {
     entity.die = function () {
-        entity.trigger("die");
-    };
-};
+        entity.trigger('die');
+    }
+}
 
 var Entity = function (schematic) {
     this._events = {};
@@ -239,14 +250,12 @@ var Entity = function (schematic) {
     this.schematic = schematic;
     if (schematic.events !== undefined) {
         for (var key in schematic.events) {
-            if (schematic.events.hasOwnProperty(key)) {
-                this.on(key, schematic.events[key].bind(this));
-            }
+            if (schematic.events.hasOwnProperty(key)) this.on(key, schematic.events[key].bind(this));
         }
     }
     this.loadComponents(schematic.components);
     if (schematic.frame !== undefined) {
-        //     this.world.gameLoop.on("frame", schematic.frame.bind(this));
+        //     this.world.gameLoop.on('frame', schematic.frame.bind(this));
         this.frame = schematic.frame.bind(this);
     }
 };
@@ -261,9 +270,9 @@ Entity.prototype.on = function (name, callback) {
     if (this._events[name] === undefined) {
         this._events[name] = {};
     }
-    var eventId = name + _.size(this._events[name]);
-    this._events[name][eventId] = callback;
-    return eventId;
+    var event_id = name + _.size(this._events[name]);
+    this._events[name][event_id] = callback;
+    return event_id;
 };
 
 Entity.prototype.trigger = function () {
@@ -272,42 +281,40 @@ Entity.prototype.trigger = function () {
     var callbacks = this._events[name];
     if (callbacks !== undefined) {
         for (var i in callbacks) {
-            if (callbacks.hasOwnProperty(i)) {
-                callbacks[i].apply(this, args);
-            } //should use arguments instead of single argument
+            if (callbacks.hasOwnProperty(i)) callbacks[i].apply(this, args);//should use arguments instead of single argument
         }
     }
 };
 
-Entity.prototype.remove = function (name, id) {
-    this._events[name][id] = null;
-    delete this._events[name][id];
+Entity.prototype.remove = function (event_name, event_id) {
+    this._events[event_name][event_id] = null;
+    delete this._events[event_name][event_id];
 };
 
 /**
  * @todo move this to a component
  */
-Entity.prototype.transition = function (stateName) {
-    this.state = stateName;
+Entity.prototype.transition = function (state_name) {
+    this.state = state_name;
 
     // if(this.states[state_name].frame !== undefined){
     //     this.frame = this.states[state_name].frame.bind(this);
     // }
-    if (this.states[stateName].events !== undefined) {
-        for (var key in this.states[stateName].events) {
-            if (this.states[stateName].events.hasOwnProperty(key)) {
+    if (this.states[state_name].events !== undefined) {
+        for (var key in this.states[state_name].events) {
+            if (this.states[state_name].events.hasOwnProperty(key)) {
                 this._events[key] = {};
-                if (this.states[stateName].events[key]) {
-                    this.on(key, this.states[stateName].events[key].bind(this));
+                if (this.states[state_name].events[key]) {
+                    this.on(key, this.states[state_name].events[key].bind(this));
                 }
 
             }
         }
     }
-    _.extend(this, this.states[stateName]);//that should override the correct things
-    if (this.states[stateName].components !== undefined) {
-        this.loadComponents(this.states[stateName].components);
+    _.extend(this, this.states[state_name]);//that should override the correct things
+    if (this.states[state_name].components !== undefined) {
+        this.loadComponents(this.states[state_name].components)
     }
-    this.trigger("transition", stateName);
-    this.trigger("transition:" + stateName, this);
+    this.trigger('transition', state_name);
+    this.trigger('transition:' + state_name, this);
 };
