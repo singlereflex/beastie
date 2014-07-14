@@ -2,7 +2,7 @@
 _.templateSettings = {
     interpolate: /\{\{(.+?)\}\}/g
 };
-var gamespeed = 45;
+
 var template = _.template('<i class="{{ entity.classVal }}"></i>');
 var env_schematics = {
     block: function (_world) {
@@ -33,7 +33,7 @@ var env_schematics = {
                             console.log('monster');
                             var delta_x = entity.position.x - this.position.x;
                             var delta_y = entity.position.y - this.position.y;
-                            var neighbor = this.world.findEntityByPosition(entity.position.x + delta_x, entity.position.y + delta_y);
+                            var neighbor = this.world.findEntityByPosition(entity.position.x + delta_x, entity.position.y + delta_y)[0];
                             if (neighbor !== undefined && neighbor.kind === 'block') {
                                 entity.die();
                             } else {
@@ -97,8 +97,10 @@ var env_schematics = {
 
                     this.el = document.getElementById('entityboard').appendChild(el);
                     this.on('complete_move', function (deltas) {
+                        
                         this.el.style.top = this.position.y + 'em';
                         this.el.style.left = this.position.x + 'em';
+
                     });
                 }
             },

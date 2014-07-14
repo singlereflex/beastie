@@ -87,6 +87,7 @@ function ControllerComponent(entity) {
     }, false);
 
     document.body.addEventListener('keyup', function keyUp(event) {
+        console.log(event.which);
         if (!entity.dead) {
             var newX = 0, newY = 0;
             switch (event.which) {
@@ -114,38 +115,67 @@ function ControllerComponent(entity) {
                 event.preventDefault();
                 entity.move(0, -1);
                 break;
+            case 32:
+                event.preventDefault();
+                center(entity.el);
+                break;
             }
         }
     }, false);
 
-    Hammer(document).on("dragleft", function (e) {
-        // e.preventDefault();
-        // alert("hammer left");
-        entity.move(-1, 0);
-    });
-    Hammer(document).on("dragup", function (e) {
-        // e.preventDefault();
-        // alert("hammer up");
-        entity.move(0, -1);
-    });
-    Hammer(document).on("dragdown", function (e) {
-        // e.preventDefault();
-        // alert("hammer down");
-        entity.move(0, 1);
-    });
-    Hammer(document).on("dragright", function (e) {
-        // e.preventDefault();
-        // alert("hammer right");
-        entity.move(1, 0);
-    });
+
+    document.body.addEventListener('click', function dblClick(event){
+      event.preventDefault();
+      var x = 0, y = 0;
+      if(Math.abs(entity.el.offsetLeft - event.pageX) > Math.abs(entity.el.offsetTop - event.pageY)){
+        if(0 < entity.el.offsetLeft - event.pageX){
+          x = -1
+        } else if(0 > entity.el.offsetLeft - event.pageX){
+          x = 1;
+        }
+      } else {
+        if(0 < entity.el.offsetTop - event.pageY){
+          y = -1
+        } else if(0 > entity.el.offsetTop - event.pageY){
+          y = 1;
+        }
+      }
+      entity.move(x, y);
+
+      // event.x -
+      // event.y -
+    }, false)
+
+    // Hammer(document).on("dragleft", function (e) {
+    //     // e.preventDefault();
+    //     // alert("hammer left");
+    //     entity.move(-1, 0);
+    // });
+    // Hammer(document).on("dragup", function (e) {
+    //     // e.preventDefault();
+    //     // alert("hammer up");
+    //     entity.move(0, -1);
+    // });
+    // Hammer(document).on("dragdown", function (e) {
+    //     // e.preventDefault();
+    //     // alert("hammer down");
+    //     entity.move(0, 1);
+    // });
+    // Hammer(document).on("dragright", function (e) {
+    //     // e.preventDefault();
+    //     // alert("hammer right");
+    //     entity.move(1, 0);
+    // });
 }
 
 function CollisionComponent(entity) {
     entity.on('start_move', function (deltas) {
         var collided = entity.world.findEntityByPosition(entity.position.x + deltas.delta_x, entity.position.y + deltas.delta_y);
-        
-        if (collided) {
-            entity.trigger('collided', collided);
+
+        if (collided.length > 0) {
+            for(var i = 0; i < collided.length; i++){
+                entity.trigger('collided', collided[i]);
+            }
         }
     });
 }
@@ -176,7 +206,7 @@ function MoveComponent(entity) {
 function PushComponent(entity) {
     //subscribe to move event
     entity.on('start_move', function (deltas) {
-        var neighbor = entity.world.findEntityByPosition(entity.position.x + deltas.delta_x, entity.position.y + deltas.delta_y);
+        var neighbor = entity.world.findEntityByPosition(entity.position.x + deltas.delta_x, entity.position.y + deltas.delta_y)[0];
         if (neighbor !== undefined && neighbor.kind === "block") {
             neighbor.move(deltas.delta_x, deltas.delta_y);
         }
@@ -203,7 +233,7 @@ function PullComponent(entity) {
 
         var neighbor = entity.world.findEntityByPosition(entity.position.x - (deltas.delta_x * 2), entity.position.y - (deltas.delta_y * 2));
         if (entity.shiftDown) {
-            neighbor.move(deltas.delta_x, deltas.delta_y);
+            neighbor[0].move(deltas.delta_x, deltas.delta_y);
         }
     });
 }
