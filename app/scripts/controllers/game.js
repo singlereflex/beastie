@@ -1,6 +1,6 @@
 'use strict';
-document.body.style.width = '2048em';
-document.body.style.height = '2048em';
+// document.body.style.width = '2048em';
+// document.body.style.height = '2048em';
 function center(el){
     $('html,body').animate({
         scrollTop: $(el).offset().top - ( $(window).height() - $(this).outerHeight(true) ) / 2,
@@ -8,10 +8,11 @@ function center(el){
     }, 200);
 }
 angular.module('beastieApp')
-    .controller('MainCtrl', ['$scope', 'beastieEnv', '$firebase', '$modal', '$log', function ($scope, beastieEnv, $firebase, $modal, $log) {
+    .controller('GameCtrl', ['$scope', 'beastieEnv', '$firebase', '$log', function ($scope, beastieEnv, $firebase, $log) {
 
         $scope.music = music;
-        $scope.pauseMusic = function(){
+        $scope.pauseMusic = function(event){
+          event.preventDefault();
           if(!music){
               settings.music.start();
           } else {
@@ -23,12 +24,12 @@ angular.module('beastieApp')
         }
 
         var highScoreRef = new Firebase("https://highscore.firebaseio.com/beastie");
-        // Automatically syncs everywhere in realtime
+        // Automatically syncs everywhere in real time.
         $scope.scoreboard = $firebase(highScoreRef);
 
         var gridsize = 16;
         $scope.cellsize = 16;
-        $scope.iconPrefix = 'icon-';
+        $scope.iconPrefix = "icon-";
         $scope.entities = [];
         $scope.world = {};
         $scope.score = 0;
@@ -53,7 +54,7 @@ angular.module('beastieApp')
             // }
 
             var player = new Entity(env_schematics.player($scope, x, y));
-            player.on('die', function () {
+            player.on("die", function () {
                 $scope.endGame();
             });
             player.on('complete_move', function (deltas) {
@@ -72,36 +73,38 @@ angular.module('beastieApp')
         function placeEgg($scope, _x, _y) {
             var egg = new Entity(env_schematics.egg($scope, _x, _y));
 
-            egg.on('die', function () {
+            egg.on("die", function () {
                 $scope.$apply(function () {
                     $scope.score += egg.worth;
                 });
             });
 
-            egg.frame_id = egg.on('frame', function (frame) {
-                if (!(frame % settings.gamespeed)) {
+            egg.frameId = egg.on("frame", function (frame) {
+
+                if (frame % gameSpeed === 0) {
                     this.age++;
                     if (this.age > 10) {
-
-                        this.transition('hatch');
+                        console.log("should hatch");
+                        this.transition("hatch");
 
                         return true;
 
                     }
                 }
 
-                return false
+                return false;
 
             });
 
-            egg.on('transition:hatch', function hatch(monster) {
-                monster.remove('frame', monster.frame_id);
-                monster.frame_id = monster.on('frame', function (frame) {
+            egg.on("transition:hatch", function hatch(monster) {
+                monster.remove("frame", monster.frameId);
+                console.log("hatch");
+                monster.frameId = monster.on("frame", function (frame) {
 
-                    if (!(frame % settings.gamespeed)) {
+                    if (frame % gameSpeed === 0) {
                         this.age++;
                         if (this.age > 20) {
-                            this.transition('evolve');
+                            this.transition("evolve");
                             return true;
                         }
                         beast_move(this);
@@ -112,8 +115,8 @@ angular.module('beastieApp')
 
                 });
             });
-            egg.on('transition:evolve', function evolve(monster) {
-                monster.remove('frame', monster.frame_id);
+            egg.on("transition:evolve", function evolve(monster) {
+                monster.remove("frame", monster.frameId);
                 monster.lay = function () {
                     var newEgg = placeEgg($scope, this.position.x, this.position.y);
                     this.world.entities.push(newEgg);
@@ -145,7 +148,8 @@ angular.module('beastieApp')
                             var blocktype = env_schematics.block($scope);
                             blocktype.position = {
                                 x: i,
-                                y: e
+                                y: e,
+                                z: parseInt(Math.random()*100, 10)
                             };
                             if (blocktype.id) {
                                 blocktype.classVal = $scope.iconPrefix + blocktype.id;
@@ -184,46 +188,32 @@ angular.module('beastieApp')
          */
 
         $scope.loop = new Entity({
-            kind: 'loop',
+            kind: "loop",
             components: [WorldComponent],
             world: $scope
         });
 
         $scope.pauseGame = function() {
             $scope.loop.pause();
-
-            var modalInstance = $modal.open({
-                templateUrl: 'views/modal_score_list.html',
-                controller: 'HighscoreModalCtrl',
-                scope: $scope
-            });
-
-            modalInstance.result.then(function (selectedItem) {
-                $log.info(selectedItem);
-                $scope.loop.start();
-            }, function () {
-                $log.info('Modal dismissed at: ' + new Date());
-                $scope.loop.start();
-            });
         };
 
         $scope.endGame = function() {
             $scope.loop.stop();
 
-            var modalInstance = $modal.open({
-                templateUrl: 'views/modal_score_submit.html',
-                controller: 'HighscoreModalCtrl',
-                scope: $scope
-            });
-
-            modalInstance.result.then(function (name) {
-                $log.info(name);
-                highScoreRef.push({name: name, score: $scope.score});
-                location.reload();
-            }, function () {
-                $log.info('Modal dismissed at: ' + new Date());
-                location.reload();
-            });
+//            var modalInstance = $modal.open({
+//                templateUrl: "views/modal_score_submit.html",
+//                controller: "HighscoreModalCtrl",
+//                scope: $scope
+//            });
+//
+//            modalInstance.result.then(function (name) {
+//                $log.info(name);
+//                highScoreRef.push({name: name, score: $scope.score});
+//                location.reload();
+//            }, function () {
+//                $log.info("Modal dismissed at: " + new Date());
+//                location.reload();
+//            });
 
         };
         addPlayer();

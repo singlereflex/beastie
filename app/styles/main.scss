@@ -32,57 +32,36 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    .modal {
-        border-radius: 0;
-        background: #202025;
-        color: #B1D6AC;
-        border: 1px solid #B1D6AC;
-        .modal-header {
-            box-shadow: none;
-            border: none;
-            .close {
-                margin-top: 2px;
-                color: #B1D6AC;
-                opacity: 1;
-                text-shadow: none;
-            }
-        }
-        .modal-footer {
-            text-align: center;
-            background: transparent;
-            border: none;
-            box-shadow: none;
-        }
-    }
-    .modal-backdrop {
-        background: #002015;
-    }
+}
+
+.highscore-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    color: #ffffff;
     .highscore-list {
-        margin: 0;
         padding: 0;
         list-style: none;
-        display: block;
-        font-size: 16px;
-        line-height: 24px;
+        display: table;
         margin: 0 10px;
+        width: 300px;
+        color: #ffffff;
+        border-top: 1px solid #FFF;
+        padding-top: 20px;
+        padding-bottom: 20px;
         li {
             overflow: hidden;
             margin: 10px 0;
+            font-size: 22px;
+            line-height: 32px;
             width: 100%;
+            display: table-row;
             span {
                 display: table-cell;
             }
             .name {
-            }
-            .separator {
-                width: 100%;
-                vertical-align: text-bottom;
-                &:after {
-                    content: "";
-                    border-top: 2px dotted #B1D6AC;
-                    display: block;
-                    margin: 0 10px;
-                }
             }
             .score {
                 text-align: right;
@@ -91,54 +70,67 @@ body {
     }
 }
 
+.ui-container {
+    height: 100%;
+}
+
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
     display: none !important;
 }
 
 #game-container {
-    position: relative;
-    font-size: 16px;
-    line-height: 16px;
-    color: #464646;
-    text-shadow: 1px 1px 0 #807a77, 2px 2px 20px #000;
+    height: 2048em;
+    width: 2048em;
     margin-top: 24px;
     div {
         height: 16px;
         white-space: nowrap;
     }
-    .entityboard {
-        position: relative;
-        .entity {
-            position: absolute;
-            width: 16px;
-            height: 16px;
-            transition: top 0.1s ease, left 0.1s ease;
-            text-shadow: none;
+    &.main-menu {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        margin: 0;
+        .entityboard {
+            margin: 0 auto;
         }
-        .entity.block{
-            text-shadow: 1px 1px 0 #807a77, 2px 2px 20px #000;
-        }
-        .entity.player {
-            color: #00a0ff;
-            -webkit-animation: blink 0.01s infinite ease alternate;
-            text-shadow: 0 0 8px #00a0ff;
-        }
-        .entity.monster {
-            color: #ff4823;
-            -webkit-animation: blink 0.01s infinite ease alternate;
-            text-shadow: 0 0 8px #ff4823;
-        }
-        .entity.mother {
-            color: #ff7b00;
-            -webkit-animation: blink 0.01s infinite ease alternate;
-            text-shadow: 0 0 3px #ff7b00;
-        }
-        .entity.egg {
-            color: #ffbf92;
-            -webkit-animation: blink 0.01s infinite linear alternate;
+        .menu-options {
+            list-style: none;
+            display: block;
+            margin: 40px auto 0;
+            padding: 0;
+            font-size: 2em;
+            text-align: center;
+            a {
+                line-height: 45px;
+                color: #464646;
+                transition: text-shadow 0.4s, color 0.4s;
+            }
+            .active a {
+                color: #00a0ff;
+                -webkit-animation: blink 0.01s infinite ease alternate;
+                text-shadow: 0 0 8px #00a0ff;
+                font-size: 1.2em;
+                position: relative;
+            }
+            .active a:hover, a:hover {
+                color: #ffffff;
+                text-decoration: none;
+            }
         }
     }
+}
 
+.entityboard {
+    color: #464646;
+    text-shadow: 1px 1px 0 #807a77, 2px 2px 20px #000;
+    position: relative;
+    font-size: 16px;
+    line-height: 16px;
+    display: block;
     i {
         margin: 0;
         width: 16px;
@@ -146,7 +138,43 @@ body {
         line-height: 16px;
         background: transparent;
     }
+    .entity {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        transition: top 0.1s ease, left 0.1s ease;
+        text-shadow: none;
+    }
+    .entity.block{
+        text-shadow: 1px 1px 0 rgba(128, 122, 119, 0.38), 2px 2px 20px rgba(0, 0, 0, 0.50);
+    }
+    .entity.player {
+        color: #00a0ff;
+        -webkit-animation: blink 0.01s infinite ease alternate;
+        text-shadow: 0 0 8px #00a0ff;
+    }
+    .entity.monster {
+        color: #ff4823;
+        -webkit-animation: blink 0.01s infinite ease alternate;
+        text-shadow: 0 0 8px #ff4823;
+    }
+    .entity.mother {
+        color: #ff7b00;
+        -webkit-animation: blink 0.01s infinite ease alternate;
+        text-shadow: 0 0 3px #ff7b00;
+    }
+    .entity.egg {
+        color: #ffbf92;
+        -webkit-animation: blink 0.01s infinite linear alternate;
+    }
+    &.example-box {
+        box-shadow: inset 0 0 10px 2px #333;
+        width: 4em;
+        height: 4em;
+        overflow: hidden;
+    }
 }
+
 #top-nav {
     position: fixed;
     top: 0;
@@ -154,7 +182,7 @@ body {
     right: 0;
     height: 24px;
     background: #000000;
-    z-index: 1;
+    z-index: 100;
     line-height: 24px;
     padding: 0 8px;
     .score {
@@ -163,6 +191,82 @@ body {
     }
 }
 
+.modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 101;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: white;
+}
+
+.btn-default {
+    background: #000000;
+    border: 1px solid #FFF;
+    color: #ffffff;
+    text-shadow: none;
+}
+
 @keyframes blink {
     0% { opacity: 0.7 } 100% { opacity: 1 }
+}
+
+/**
+ * KEYS.css
+ *
+ * A simple stylesheet for rendering beautiful keyboard-style elements.
+ *
+ * Author:  Michael Hüneburg
+ * Website: http://michaelhue.com/keyscss
+ * License: MIT License (see LICENSE.txt)
+ */
+
+/* Base style, essential for every key. */
+kbd, .key {
+    display: inline;
+    display: inline-block;
+    min-width: 1em;
+    padding: .2em .3em;
+    margin: 0.2em 0.2em;
+    font: normal .85em/1 "Lucida Grande", Lucida, Arial, sans-serif;
+    text-align: center;
+    text-decoration: none;
+    -moz-border-radius: .3em;
+    -webkit-border-radius: .3em;
+    border-radius: .3em;
+    border: none;
+    cursor: default;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    background: rgb(250, 250, 250);
+    background: -moz-linear-gradient(top, rgb(210, 210, 210), rgb(255, 255, 255));
+    background: -webkit-gradient(linear, left top, left bottom, from(rgb(210, 210, 210)), to(rgb(255, 255, 255)));
+    color:  rgb(50, 50, 50);
+    text-shadow: 0 0 2px rgb(255, 255, 255);
+    -moz-box-shadow: inset 0 0 1px rgb(255, 255, 255), inset 0 0 .4em rgb(200, 200, 200), 0 .1em 0 rgb(130, 130, 130), 0 .11em 0 rgba(0, 0, 0, .4), 0 .1em .11em rgba(0, 0, 0, .9);
+    -webkit-box-shadow: inset 0 0 1px rgb(255, 255, 255), inset 0 0 .4em rgb(200, 200, 200), 0 .1em 0 rgb(130, 130, 130), 0 .11em 0 rgba(0, 0, 0, .4), 0 .1em .11em rgba(0, 0, 0, .9);
+    box-shadow: inset 0 0 1px rgb(255, 255, 255), inset 0 0 .4em rgb(200, 200, 200), 0 .1em 0 rgb(130, 130, 130), 0 .11em 0 rgba(0, 0, 0, .4), 0 .1em .11em rgba(0, 0, 0, .9);
+}
+kbd[title], .key[title] {
+    cursor: help;
+}
+
+.help-container {
+    color: #FFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    .media {
+        width: 400px;
+        margin: 15px auto;
+    }
 }
