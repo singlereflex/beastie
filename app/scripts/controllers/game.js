@@ -1,27 +1,27 @@
-'use strict';
-// document.body.style.width = '2048em';
-// document.body.style.height = '2048em';
-function center(el){
-    $('html,body').animate({
+"use strict";
+// document.body.style.width = "2048em";
+// document.body.style.height = "2048em";
+function center(el) {
+    $("html,body").animate({
         scrollTop: $(el).offset().top - ( $(window).height() - $(this).outerHeight(true) ) / 2,
-        scrollLeft: $(el).offset().left - ( $(window).width() - $(this).outerWidth(true) ) / 2,
+        scrollLeft: $(el).offset().left - ( $(window).width() - $(this).outerWidth(true) ) / 2
     }, 200);
 }
-angular.module('beastieApp')
-    .controller('GameCtrl', ['$scope', 'beastieEnv', '$firebase', '$log', function ($scope, beastieEnv, $firebase, $log) {
+angular.module("beastieApp")
+    .controller("GameCtrl", ["$scope", "beastieEnv", "$firebase", "$log", "$state", function ($scope, beastieEnv, $firebase, $log, $state) {
 
         $scope.music = music;
-        $scope.pauseMusic = function(event){
-          event.preventDefault();
-          if(!music){
-              settings.music.start();
-          } else {
-              settings.music.stop();
-          }
-          music = !music;
-          $scope.music = music;
 
-        }
+        $scope.pauseMusic = function (event) {
+            event.preventDefault();
+            if (!music) {
+                settings.music.start();
+            } else {
+                settings.music.stop();
+            }
+            music = !music;
+            $scope.music = music;
+        };
 
         var highScoreRef = new Firebase("https://highscore.firebaseio.com/beastie");
         // Automatically syncs everywhere in real time.
@@ -57,12 +57,12 @@ angular.module('beastieApp')
             player.on("die", function () {
                 $scope.endGame();
             });
-            player.on('complete_move', function (deltas) {
+            player.on("complete_move", function (deltas) {
                 // setTimeout(function(){center(player.el);}, 100);
                 // window.scrollBy(deltas.delta_x * 16, deltas.delta_y * 16);
-                $('html,body').animate({
+                $("html,body").animate({
                     scrollTop: document.body.scrollTop + deltas.delta_y * 16,
-                    scrollLeft: document.body.scrollLeft + deltas.delta_x * 16,
+                    scrollLeft: document.body.scrollLeft + deltas.delta_x * 16
                 }, 200);
             });
 
@@ -121,7 +121,7 @@ angular.module('beastieApp')
                     var newEgg = placeEgg($scope, this.position.x, this.position.y);
                     this.world.entities.push(newEgg);
                 };
-                monster.frame_id = monster.on('frame', function (frame) {
+                monster.frame_id = monster.on("frame", function (frame) {
                     if (!(frame % settings.gamespeed)) {
                         //chance to lay
                         var test = Math.floor(Math.random() * 10);
@@ -149,7 +149,7 @@ angular.module('beastieApp')
                             blocktype.position = {
                                 x: i,
                                 y: e,
-                                z: parseInt(Math.random()*100, 10)
+                                z: parseInt(Math.random() * 100, 10)
                             };
                             if (blocktype.id) {
                                 blocktype.classVal = $scope.iconPrefix + blocktype.id;
@@ -193,12 +193,13 @@ angular.module('beastieApp')
             world: $scope
         });
 
-        $scope.pauseGame = function() {
+        $scope.pauseGame = function () {
             $scope.loop.pause();
         };
 
-        $scope.endGame = function() {
+        $scope.endGame = function () {
             $scope.loop.stop();
+            $state.go("game.ended");
 
 //            var modalInstance = $modal.open({
 //                templateUrl: "views/modal_score_submit.html",
@@ -216,8 +217,18 @@ angular.module('beastieApp')
 //            });
 
         };
+
+        $scope.submitHighscore = function () {
+            highScoreRef.push({name: name, score: $scope.score});
+            $state.go("highscore");
+        };
+
+        $scope.restartGame = function () {
+            location.reload();
+        };
+
         addPlayer();
-        $scope.explore(1024-8, 1024-8, gridsize);
+        $scope.explore(1024 - 8, 1024 - 8, gridsize);
         $scope.loop.start();
 
 

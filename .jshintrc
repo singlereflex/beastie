@@ -21,6 +21,7 @@
     "globals": {
         "angular": false,
         "_": false,
+        "$": false,
         "Firebase": false,
         "Hammer": false,
         "requestAnimFrame": false
