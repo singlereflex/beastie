@@ -11,7 +11,6 @@ angular.module("beastieApp")
     .controller("GameCtrl", ["$scope", "beastieEnv", "$firebase", "$log", "$state", function ($scope, beastieEnv, $firebase, $log, $state) {
 
         $scope.music = music;
-
         $scope.pauseMusic = function (event) {
             event.preventDefault();
             if (!music) {
@@ -218,7 +217,8 @@ angular.module("beastieApp")
 
         };
 
-        $scope.submitHighscore = function () {
+        $scope.submitHighscore = function(name) {
+          console.log(arguments)
             highScoreRef.push({name: name, score: $scope.score});
             $state.go("highscore");
         };
