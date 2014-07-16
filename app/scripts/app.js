@@ -14,7 +14,7 @@ var settings = {
             settings.music.stop();
         }
     }
-}
+};
 
 var gameSpeed = 45;
 
@@ -105,8 +105,8 @@ angular.module("beastieApp", ["firebase", "ui.router"])
             .state("game.paused", {
                 templateUrl: "views/game_paused.html"
             })
-            .state("game.instructions", {
-                templateUrl: "../views/instructions.html"
+            .state("game.ended", {
+                templateUrl: "views/game_ended.html"
             });
     }]);
 

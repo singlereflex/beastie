@@ -16,8 +16,8 @@ html, body {
 input, textarea, select, .form-control {
     font-family: "Silkscreen", Helvetica, Arial, sans-serif;
     border-radius: 0 !important;
-    border: 1px solid #B1D6AC !important;
-    color: #B1D6AC !important;
+    border: 1px solid #FFF !important;
+    color: #FFF !important;
     background: #000 !important;
 }
 
@@ -68,6 +68,10 @@ body {
             }
         }
     }
+}
+
+.btn {
+    font-family: "Silkscreen", Helvetica, Arial, sans-serif;
 }
 
 .ui-container {
@@ -204,6 +208,19 @@ body {
     justify-content: center;
     flex-direction: column;
     color: white;
+    &.death-screen {
+        background: rgba(100,0,0,0.4);
+    }
+}
+
+.score-submit {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    input {
+        margin-bottom: 0;
+        border-color: #FFF;
+        color: #FFF;
+    }
 }
 
 .btn-default {

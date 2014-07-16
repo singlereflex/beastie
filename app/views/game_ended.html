@@ -1,0 +1,9 @@
+<div class="modal-container death-screen">
+    <h1>Game Over</h1>
+    <h4>Final Score: {{score}}</h4>
+    <div class="score-submit">
+      <input ng-model="name" type="text" class="form-control" placeholder="My Name">
+      <button ng-click="submitHighscore()" class="btn btn-default" type="button">Submit</button>
+    </div>
+    <button ng-click="restartGame()" class="btn btn-default" type="button">Restart</button>
+</div>
