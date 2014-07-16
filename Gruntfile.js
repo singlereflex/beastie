@@ -370,7 +370,7 @@ module.exports = function (grunt) {
         webfont: {
             icons: {
                 src: '<%= yeoman.app %>/svg/{,*/}*.svg',
-                dest: '<%= yeoman.app %>/styles',
+                dest: '<%= yeoman.dist %>/styles',
                 options: {
                     font: 'beastie',
                     stylesheet: 'scss',
