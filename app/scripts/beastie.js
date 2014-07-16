@@ -97,7 +97,7 @@ var env_schematics = {
 
                     this.el = document.getElementById('entityboard').appendChild(el);
                     this.on('complete_move', function (deltas) {
-                        
+
                         this.el.style.top = this.position.y + 'em';
                         this.el.style.left = this.position.x + 'em';
 
@@ -196,7 +196,7 @@ var env_schematics = {
                             if (entity.kind === 'player') {
                                 entity.die();
                             } else {
-                                throw "hit a block"
+                                console.log("hit a block");
                             }
                         },
                         rendered: function (el) {
