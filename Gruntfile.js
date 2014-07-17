@@ -293,6 +293,7 @@ module.exports = function (grunt) {
                             '*.{ico,png,txt}',
                             '.htaccess',
                             'bower_components/**/*',
+                            'scripts/**/*',
                             'images/{,*/}*.{gif,webp}',
                             'styles/fonts/*',
                             'fonts/**/*'
@@ -370,7 +371,7 @@ module.exports = function (grunt) {
         webfont: {
             icons: {
                 src: '<%= yeoman.app %>/svg/{,*/}*.svg',
-                dest: '<%= yeoman.app %>/styles',
+                dest: '<%= yeoman.dist %>/styles',
                 options: {
                     font: 'beastie',
                     stylesheet: 'scss',

@@ -1,12 +1,7 @@
 "use strict";
 // document.body.style.width = "2048em";
 // document.body.style.height = "2048em";
-function center(el) {
-    $("html,body").animate({
-        scrollTop: $(el).offset().top - ( $(window).height() - $(this).outerHeight(true) ) / 2,
-        scrollLeft: $(el).offset().left - ( $(window).width() - $(this).outerWidth(true) ) / 2
-    }, 200);
-}
+
 angular.module("beastieApp")
     .controller("GameCtrl", ["$scope", "beastieEnv", "$firebase", "$log", "$state", function ($scope, beastieEnv, $firebase, $log, $state) {
 
