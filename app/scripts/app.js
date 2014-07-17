@@ -16,6 +16,13 @@ var settings = {
     }
 };
 
+function center(el) {
+    $("html,body").animate({
+        scrollTop: $(el).offset().top - (( $(window).height() - $(this).outerHeight(true) ) / 2),
+        scrollLeft: $(el).offset().left - (( $(window).width() - $(this).outerWidth(true) ) / 2)
+    }, 200);
+};
+
 var gameSpeed = 45;
 
 // var gui = new dat.GUI({ autoPlace: false });
