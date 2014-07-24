@@ -194,11 +194,14 @@ function MoveComponent(entity) {
         if (entity.position.x + delta_x < 0 || entity.position.y + delta_y < 0) {
             throw "stay on the board please";
         }
-
+        var old_position = {
+          x: entity.position.x,
+          y: entity.position.y
+        };
         entity.position.x += delta_x;
         entity.position.y += delta_y;
 
-        entity.trigger('complete_move', {delta_x: delta_x, delta_y: delta_y});
+        entity.trigger('complete_move', {delta_x: delta_x, delta_y: delta_y}, old_position);
 
     }
 }
@@ -276,12 +279,12 @@ Entity.prototype.on = function (name, callback) {
 };
 
 Entity.prototype.trigger = function () {
-    var args = Array.prototype.slice.call(arguments);
-    var name = args.shift();
+    // var args = Array.prototype.slice.call(arguments);
+    var name = arguments.shift();
     var callbacks = this._events[name];
     if (callbacks !== undefined) {
         for (var i in callbacks) {
-            if (callbacks.hasOwnProperty(i)) callbacks[i].apply(this, args);//should use arguments instead of single argument
+            if (callbacks.hasOwnProperty(i)) callbacks[i].apply(this, arguments);//should use arguments instead of single argument
         }
     }
 };

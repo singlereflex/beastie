@@ -15,9 +15,11 @@ var env_schematics = {
             template: template,
             components: [DomRenderer, MoveComponent, CollisionComponent],
             events: {
-                complete_move: function (deltas) {
+                complete_move: function (deltas, old) {
                     // console.log(this.position);
                     //$scope.$apply();
+                    this.world.entities[old.x+","+old.y] = _.without(this.world.entities[old.x+","+old.y], entity);
+                    this.world.entities.place(entity);
                 },
                 start_move: function (deltas) {
                     console.log("move block")
@@ -80,6 +82,10 @@ var env_schematics = {
                     console.log("move block")
                     // console.log(this.position);
                     //$scope.$apply();
+                },
+                complete_move: function(deltas, old){
+                  this.world.entities[old.x+","+old.y] = _.without(this.world.entities[old.x+","+old.y], entity);
+                  this.world.entities.place(entity);
                 },
                 die: function () {
                     this.world.entities = _.without(this.world.entities, this);
@@ -163,9 +169,9 @@ var env_schematics = {
                         ExploreComponent
                     ],
                     events: {
-                        complete_move: function (deltas) {
-                            console.log("egg move");
-
+                        complete_move: function(deltas, old){
+                          this.world.entities[old.x+","+old.y] = _.without(this.world.entities[old.x+","+old.y], entity);
+                          this.world.entities.place(entity);
                         },
                         collided: function (entity) {
                             if (entity.kind === 'player') {
@@ -189,8 +195,9 @@ var env_schematics = {
                     template: template,
                     worth: 30,
                     events: {
-                        complete_move: function (deltas) {
-
+                        complete_move: function(deltas, old){
+                          this.world.entities[old.x+","+old.y] = _.without(this.world.entities[old.x+","+old.y], entity);
+                          this.world.entities.place(entity);
                         },
                         collided: function (entity) {
                             if (entity.kind === 'player') {
