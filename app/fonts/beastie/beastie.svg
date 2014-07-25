@@ -1,0 +1,75 @@
+<?xml version="1.0" standalone="no"?> 
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
+<svg xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <font id="beastie" horiz-adv-x="16">
+    <font-face font-family="beastie"
+      units-per-em="16" ascent="16"
+      descent="0" />
+    <missing-glyph horiz-adv-x="0" />
+    <glyph glyph-name="entities_egg"
+      unicode="&#xE001;"
+      horiz-adv-x="16" d=" M6 10H10V6H6z M0 0 M16 0 M0 16 M16 16 M0 0.125 M16 0.125 M16 0 M16 0L17 -1L1 -1L0 0z M16 16 M16 16L17 15L1 15L0 16z" />
+    <glyph glyph-name="entities_monster"
+      unicode="&#xE002;"
+      horiz-adv-x="16" d=" M4 12V4H12V12H4zM10 6H6V10H10V6z M0 16L1 15L17 15L16 16z M0 0L1 -1L17 -1L16 0z" />
+    <glyph glyph-name="entities_mother"
+      unicode="&#xE003;"
+      horiz-adv-x="16" d=" M2 14V2H14V14H2zM12 4H4V12H12V4z M16 0 M15.938 16 M15.938 16L16.938000000000002 15L0.938 15L-0.062 16z" />
+    <glyph glyph-name="entities_player"
+      unicode="&#xE004;"
+      horiz-adv-x="16" d=" M8 19H8V19H8z M16 16H0M0 0H16" />
+    <glyph glyph-name="environment_block"
+      unicode="&#xE005;"
+      horiz-adv-x="16" d=" M0 16H16V0H0z" />
+    <glyph glyph-name="environment_empty"
+      unicode="&#xE006;"
+      horiz-adv-x="16" d=" M313.5 388.5L314.5 387.5L298.5 387.5L297.5 388.5z M297.5 404.5L298.5 403.5L314.5 403.5L313.5 404.5z M297.5 388.5 M313.5 388.5 M297.5 404.5 M313.5 404.5" />
+    <glyph glyph-name="environment_wall_E"
+      unicode="&#xE007;"
+      horiz-adv-x="16" d=" M12 16L16 16L16 0L12 0z M16 0 M16 16 M0 16L1 15L1 -1L0 0z" />
+    <glyph glyph-name="environment_wall_N"
+      unicode="&#xE008;"
+      horiz-adv-x="16" d=" M0 16L16 16L16 12L0 12z M0 0 M16 0 M0 16 M16 16 M16 0L17 -1L1 -1L0 0z" />
+    <glyph glyph-name="environment_wall_NE"
+      unicode="&#xE009;"
+      horiz-adv-x="16" d=" M16 0L16 16L0 16L0 12L12 12L12 0z M0 0 M16 0 M0 16 M16 16" />
+    <glyph glyph-name="environment_wall_NS"
+      unicode="&#xE00A;"
+      horiz-adv-x="16" d=" M0 4L16 4L16 0L0 0z M0 16L16 16L16 12L0 12z M0 0 M16 0 M0 16 M16 16" />
+    <glyph glyph-name="environment_wall_NSE"
+      unicode="&#xE00B;"
+      horiz-adv-x="16" d=" M12 12L12 4L0 4L0 0L16 0L16 16L0 16L0 12z M0 16 M16 16" />
+    <glyph glyph-name="environment_wall_NSW"
+      unicode="&#xE00C;"
+      horiz-adv-x="16" d=" M16 12L16 16L0 16L0 0L16 0L16 4L4 4L4 12z M0 0 M16 0 M0 16 M16 16" />
+    <glyph glyph-name="environment_wall_NSWE"
+      unicode="&#xE00D;"
+      horiz-adv-x="16" d=" M0 16V0H16V16H0zM12 4L4 4V12L12 12V4z M0 0 M16 0 M0 16 M16 16" />
+    <glyph glyph-name="environment_wall_NW"
+      unicode="&#xE00E;"
+      horiz-adv-x="16" d=" M16 16L0 16L0 0L4 0L4 12L16 12z M0 0 M16 0 M0 16 M16 16" />
+    <glyph glyph-name="environment_wall_NWE"
+      unicode="&#xE00F;"
+      horiz-adv-x="16" d=" M4 12L4 0L0 0L0 16L16 16L16 0L12 0L12 12z M0 0 M16 0 M0 16 M16 16" />
+    <glyph glyph-name="environment_wall_S"
+      unicode="&#xE010;"
+      horiz-adv-x="16" d=" M0 4L16 4L16 0L0 0z M0 0 M16 0 M0 16 M16 16 M16 16L17 15L1 15L0 16z" />
+    <glyph glyph-name="environment_wall_SE"
+      unicode="&#xE011;"
+      horiz-adv-x="16" d=" M0 4L0 0L16 0L16 16L12 16L12 4 M0 0 M16 0 M0 16 M16 16" />
+    <glyph glyph-name="environment_wall_SW"
+      unicode="&#xE012;"
+      horiz-adv-x="16" d=" M4 16L0 16L0 0L16 0L16 4L4 4 M0 0 M16 0 M0 16 M16 16" />
+    <glyph glyph-name="environment_wall_SWE"
+      unicode="&#xE013;"
+      horiz-adv-x="16" d=" M4 4L4 16L0 16L0 0L16 0L16 16L12 16L12 4 M0 0 M16 0 M0 16 M16 16" />
+    <glyph glyph-name="environment_wall_W"
+      unicode="&#xE014;"
+      horiz-adv-x="16" d=" M0 16L4 16L4 0L0 0z M0 0 M0 16 M16 16L17 15L17 -1L16 0z" />
+    <glyph glyph-name="environment_wall_WE"
+      unicode="&#xE015;"
+      horiz-adv-x="16" d=" M12 16L16 16L16 0L12 0z M0 16L4 16L4 0L0 0z M0 2 M16 0 M0 16 M16 16" />
+  </font>
+</defs>
+</svg>
