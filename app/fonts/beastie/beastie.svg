@@ -18,7 +18,7 @@
       horiz-adv-x="16" d=" M2 14V2H14V14H2zM12 4H4V12H12V4z M16 0 M15.938 16 M15.938 16L16.938000000000002 15L0.938 15L-0.062 16z" />
     <glyph glyph-name="entities_player"
       unicode="&#xE004;"
-      horiz-adv-x="16" d=" M0 20L4 20L4 16L0 16z M2 16L0 16L0 18L2 18z M4 18L2 18L2 20L4 20z M0 0 M16 0 M0 16 M16 16 M16 16 M16 16L17 15L1 15L0 16z M0 16H16V0H0z" />
+      horiz-adv-x="16" d=" M8 19H8V19H8z M16 16H0M0 0H16" />
     <glyph glyph-name="environment_block"
       unicode="&#xE005;"
       horiz-adv-x="16" d=" M0 16H16V0H0z" />
