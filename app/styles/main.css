@@ -4298,13 +4298,6 @@ a.label:hover, a.label:focus, a.badge:hover, a.badge:focus {
   src: url('../fonts/silkscreenexpanded_bold_macroman/slkscreb-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/silkscreenexpanded_bold_macroman/slkscreb-webfont.woff') format('woff'), url('../fonts/silkscreenexpanded_bold_macroman/slkscreb-webfont.ttf') format('truetype'), url('../fonts/silkscreenexpanded_bold_macroman/slkscreb-webfont.svg#silkscreennormal') format('svg');
   font-weight: bold; }
 
-@font-face {
-  font-family: "beastie";
-  src: url("../fonts/beastie/beastie.eot");
-  src: url("../fonts/beastie/beastie.eot?#iefix") format("embedded-opentype"), url("../fonts/beastie/beastie.woff") format("woff"), url("../fonts/beastie/beastie.ttf") format("truetype"), url("../fonts/beastie/beastie.svg?#beastie") format("svg");
-  font-weight: normal;
-  font-style: normal; }
-
 [class^="icon-"]:before, [class*=" icon-"]:before {
   font-family: "beastie";
   display: inline-block;
@@ -4347,68 +4340,86 @@ li[class^="icon-"]:before, li[class*=" icon-"]:before {
 li[class^="icon-"].icon-large:before, li[class*=" icon-"].icon-large:before {
   text-indent: -1.333em; }
 
+@font-face {
+  font-family: "beastie";
+  src: url('../fonts/beastie/beastie.eot');
+  src: url('../fonts/beastie/beastie.eot?#iefix') format('eot'), url('../fonts/beastie/beastie.woff') format('woff'), url('../fonts/beastie/beastie.ttf') format('truetype'), url('../fonts/beastie/beastie.svg#beastie') format('svg');
+  font-weight: normal;
+  font-style: normal; }
+
+.icon-entities-egg:before, .icon-entities-monster:before, .icon-entities-mother:before, .icon-entities-player:before, .icon-environment-block:before, .icon-environment-empty:before, .icon-environment-wall-e:before, .icon-environment-wall-n:before, .icon-environment-wall-n-e:before, .icon-environment-wall-n-s:before, .icon-environment-wall-n-s-e:before, .icon-environment-wall-n-s-w:before, .icon-environment-wall-n-s-w-e:before, .icon-environment-wall-n-w:before, .icon-environment-wall-n-w-e:before, .icon-environment-wall-s:before, .icon-environment-wall-s-e:before, .icon-environment-wall-s-w:before, .icon-environment-wall-s-w-e:before, .icon-environment-wall-w:before, .icon-environment-wall-w-e:before {
+  font-family: "beastie";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  text-decoration: inherit; }
+
 .icon-entities-egg:before {
-  content: "\e001"; }
+  content: "\E001"; }
 
 .icon-entities-monster:before {
-  content: "\e002"; }
+  content: "\E002"; }
 
 .icon-entities-mother:before {
-  content: "\e003"; }
+  content: "\E003"; }
 
 .icon-entities-player:before {
-  content: "\e004"; }
+  content: "\E004"; }
 
 .icon-environment-block:before {
-  content: "\e005"; }
+  content: "\E005"; }
 
 .icon-environment-empty:before {
-  content: "\e006"; }
+  content: "\E006"; }
 
 .icon-environment-wall-e:before {
-  content: "\e007"; }
+  content: "\E007"; }
 
 .icon-environment-wall-n:before {
-  content: "\e008"; }
+  content: "\E008"; }
 
 .icon-environment-wall-n-e:before {
-  content: "\e009"; }
+  content: "\E009"; }
 
 .icon-environment-wall-n-s:before {
-  content: "\e00a"; }
+  content: "\E00A"; }
 
 .icon-environment-wall-n-s-e:before {
-  content: "\e00b"; }
+  content: "\E00B"; }
 
 .icon-environment-wall-n-s-w:before {
-  content: "\e00c"; }
+  content: "\E00C"; }
 
 .icon-environment-wall-n-s-w-e:before {
-  content: "\e00d"; }
+  content: "\E00D"; }
 
 .icon-environment-wall-n-w:before {
-  content: "\e00e"; }
+  content: "\E00E"; }
 
 .icon-environment-wall-n-w-e:before {
-  content: "\e00f"; }
+  content: "\E00F"; }
 
 .icon-environment-wall-s:before {
-  content: "\e010"; }
+  content: "\E010"; }
 
 .icon-environment-wall-s-e:before {
-  content: "\e011"; }
+  content: "\E011"; }
 
 .icon-environment-wall-s-w:before {
-  content: "\e012"; }
+  content: "\E012"; }
 
 .icon-environment-wall-s-w-e:before {
-  content: "\e013"; }
+  content: "\E013"; }
 
 .icon-environment-wall-w:before {
-  content: "\e014"; }
+  content: "\E014"; }
 
 .icon-environment-wall-w-e:before {
-  content: "\e015"; }
+  content: "\E015"; }
 
 /* Put your CSS here */
 html, body {

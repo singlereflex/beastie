@@ -7,7 +7,7 @@ var rename = require("gulp-rename");
 var fontName = 'beastie';
 var template = 'template';
 gulp.task('iconfont', function(){
-  gulp.src(['app/svg/*.svg'])
+  return gulp.src(['app/svg/*.svg'])
     .pipe(iconfont({ fontName: fontName }))
     .on('codepoints', function(codepoints) {
       var options = {
@@ -16,9 +16,9 @@ gulp.task('iconfont', function(){
         fontPath: '../fonts/beastie/', // set path to font (from your CSS file if relative)
         className: 'icon' // set class name in your CSS
       };
-      gulp.src('templates/' + template + '.css')
+      gulp.src('templates/' + template + '.scss')
         .pipe(consolidate('lodash', options))
-        .pipe(rename({ basename:fontName }))
+        .pipe(rename({ basename:"_icons" }))
         .pipe(gulp.dest('app/styles/')); // set path to export your CSS
 
       // if you don't need sample.html, remove next 4 lines
@@ -31,8 +31,8 @@ gulp.task('iconfont', function(){
 });
 
 var sass = require('gulp-sass')
-gulp.task('sass', function () {
-    gulp.src('app/styles/*.scss')
+gulp.task('sass', ['iconfont'], function () {
+    return gulp.src('app/styles/*.scss')
         .pipe(sass())
         .pipe(gulp.dest('app/styles'));
 });
@@ -47,11 +47,13 @@ gulp.task('server', function(next) {
   server.use(serveStatic(dest)).listen(process.env.PORT || 8080, next);
 });
 
-gulp.task('watch', ['server'], function() {
+gulp.task('watch', ['server', 'sass'], function() {
   var server = livereload();
   gulp.watch(dest + '/**').on('change', function(file) {
       server.changed(file.path);
   });
   gulp.watch(dest + '/styles/*.scss', ['sass']);
-  gulp.watch(dest + '/svg/**', ['iconfont']);
+  gulp.watch(dest + '/svg/**', ['sass']);
 });
+
+gulp.task('default', ['watch']);
