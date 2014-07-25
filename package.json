@@ -1,10 +1,7 @@
 {
   "name": "beastie",
   "version": "0.0.0",
-  "dependencies": {
-    "gulp": "^3.8.6",
-    "gulp-iconfont": "^0.1.1"
-  },
+  "dependencies": {},
   "devDependencies": {
     "connect": "^3.1.0",
     "connect-livereload": "~0.2.0",
@@ -31,7 +28,12 @@
     "grunt-svgmin": "~0.2.0",
     "grunt-usemin": "~0.1.11",
     "grunt-webfont": "~0.2.1",
+    "gulp": "^3.8.6",
+    "gulp-iconfont": "^0.1.1",
+    "gulp-consolidate": "^0.1.2",
+    "gulp-iconfont-css": "0.0.9",
     "gulp-livereload": "^2.1.0",
+    "gulp-rename": "^1.2.0",
     "gulp-sass": "^0.7.2",
     "karma": "~0.10.2",
     "karma-chrome-launcher": "~0.1.0",
@@ -45,6 +47,7 @@
     "karma-requirejs": "~0.2.0",
     "karma-script-launcher": "~0.1.0",
     "load-grunt-tasks": "~0.1.0",
+    "lodash": "^2.4.1",
     "serve-static": "^1.4.0",
     "time-grunt": "~0.1.0"
   },

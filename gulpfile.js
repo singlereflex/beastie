@@ -1,17 +1,33 @@
 var gulp = require('gulp');
 
 var iconfont = require('gulp-iconfont');
+var consolidate = require('gulp-consolidate');
+var rename = require("gulp-rename");
+
+var fontName = 'beastie';
+var template = 'template';
 gulp.task('iconfont', function(){
   gulp.src(['app/svg/*.svg'])
-    .pipe(iconfont({
-      fontName: 'beastie', // required
-      appendCodepoints: true // recommended option
-    }))
-      .on('codepoints', function(codepoints, options) {
-        // CSS templating, e.g.
-        console.log(codepoints, options);
-      })
-    .pipe(gulp.dest('app/fonts/beastie'));
+    .pipe(iconfont({ fontName: fontName }))
+    .on('codepoints', function(codepoints) {
+      var options = {
+        glyphs: codepoints,
+        fontName: fontName,
+        fontPath: '../fonts/beastie/', // set path to font (from your CSS file if relative)
+        className: 'icon' // set class name in your CSS
+      };
+      gulp.src('templates/' + template + '.css')
+        .pipe(consolidate('lodash', options))
+        .pipe(rename({ basename:fontName }))
+        .pipe(gulp.dest('app/styles/')); // set path to export your CSS
+
+      // if you don't need sample.html, remove next 4 lines
+      gulp.src('templates/' + template + '.html')
+        .pipe(consolidate('lodash', options))
+        .pipe(rename({ basename:fontName }))
+        .pipe(gulp.dest('app/')); // set path to export your sample HTML
+    })
+    .pipe(gulp.dest('app/fonts/beastie')); // set path to export your fonts
 });
 
 var sass = require('gulp-sass')
@@ -37,5 +53,5 @@ gulp.task('watch', ['server'], function() {
       server.changed(file.path);
   });
   gulp.watch(dest + '/styles/*.scss', ['sass']);
-  gulp.watch(dest + '/svg', ['iconfont']);
+  gulp.watch(dest + '/svg/**', ['iconfont']);
 });
