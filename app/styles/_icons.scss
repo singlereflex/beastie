@@ -1,0 +1,64 @@
+@font-face {
+  font-family: "beastie";
+  src: url('../fonts/beastie/beastie.eot');
+  src: url('../fonts/beastie/beastie.eot?#iefix') format('eot'),
+    url('../fonts/beastie/beastie.woff') format('woff'),
+    url('../fonts/beastie/beastie.ttf') format('truetype'),
+    url('../fonts/beastie/beastie.svg#beastie') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.icon-entities-egg:before,
+.icon-entities-monster:before,
+.icon-entities-mother:before,
+.icon-entities-player:before,
+.icon-environment-block:before,
+.icon-environment-empty:before,
+.icon-environment-wall-e:before,
+.icon-environment-wall-n:before,
+.icon-environment-wall-n-e:before,
+.icon-environment-wall-n-s:before,
+.icon-environment-wall-n-s-e:before,
+.icon-environment-wall-n-s-w:before,
+.icon-environment-wall-n-s-w-e:before,
+.icon-environment-wall-n-w:before,
+.icon-environment-wall-n-w-e:before,
+.icon-environment-wall-s:before,
+.icon-environment-wall-s-e:before,
+.icon-environment-wall-s-w:before,
+.icon-environment-wall-s-w-e:before,
+.icon-environment-wall-w:before,
+.icon-environment-wall-w-e:before {
+  font-family: "beastie";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  text-decoration: inherit;
+}
+
+.icon-entities-egg:before { content: "\E001" }
+.icon-entities-monster:before { content: "\E002" }
+.icon-entities-mother:before { content: "\E003" }
+.icon-entities-player:before { content: "\E004" }
+.icon-environment-block:before { content: "\E005" }
+.icon-environment-empty:before { content: "\E006" }
+.icon-environment-wall-e:before { content: "\E007" }
+.icon-environment-wall-n:before { content: "\E008" }
+.icon-environment-wall-n-e:before { content: "\E009" }
+.icon-environment-wall-n-s:before { content: "\E00A" }
+.icon-environment-wall-n-s-e:before { content: "\E00B" }
+.icon-environment-wall-n-s-w:before { content: "\E00C" }
+.icon-environment-wall-n-s-w-e:before { content: "\E00D" }
+.icon-environment-wall-n-w:before { content: "\E00E" }
+.icon-environment-wall-n-w-e:before { content: "\E00F" }
+.icon-environment-wall-s:before { content: "\E010" }
+.icon-environment-wall-s-e:before { content: "\E011" }
+.icon-environment-wall-s-w:before { content: "\E012" }
+.icon-environment-wall-s-w-e:before { content: "\E013" }
+.icon-environment-wall-w:before { content: "\E014" }
+.icon-environment-wall-w-e:before { content: "\E015" }
