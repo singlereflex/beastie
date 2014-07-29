@@ -4,7 +4,7 @@
 
 angular.module("beastieApp")
     .controller("GameCtrl", ["$scope", "beastieEnv", "$firebase", "$log", "$state", function ($scope, beastieEnv, $firebase, $log, $state) {
-
+        
         $scope.music = music;
         $scope.pauseMusic = function (event) {
             event.preventDefault();

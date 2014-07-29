@@ -1,7 +1,11 @@
 {
   "name": "beastie",
   "version": "0.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "connect-livereload": "^0.4.0",
+    "opn": "^0.1.2",
+    "serve-index": "^1.1.5"
+  },
   "devDependencies": {
     "connect": "^3.1.0",
     "connect-livereload": "~0.2.0",
@@ -29,8 +33,8 @@
     "grunt-usemin": "~0.1.11",
     "grunt-webfont": "~0.2.1",
     "gulp": "^3.8.6",
-    "gulp-iconfont": "^0.1.1",
     "gulp-consolidate": "^0.1.2",
+    "gulp-iconfont": "^0.1.1",
     "gulp-iconfont-css": "0.0.9",
     "gulp-livereload": "^2.1.0",
     "gulp-rename": "^1.2.0",

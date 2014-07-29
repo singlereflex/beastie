@@ -40,15 +40,30 @@ gulp.task('sass', ['iconfont'], function () {
 var livereload = require('gulp-livereload'),
     dest = 'app';
 
-gulp.task('server', function(next) {
-  var connect = require('connect'),
-      server = connect();
-  var serveStatic = require('serve-static');
-  server.use(serveStatic(dest)).listen(process.env.PORT || 8080, next);
+gulp.task('connect', function () {
+    var connect = require('connect');
+    var serveStatic = require('serve-static');
+    var serveIndex = require('serve-static');
+    var app = connect()
+        .use(require('connect-livereload')({ port: 35729, host:"0.0.0.0" }))
+        .use(serveStatic(dest))
+        .use(serveIndex(dest));
+
+    require('http').createServer(app)
+        .listen(9000, "0.0.0.0")
+        .on('listening', function () {
+            console.log('Started connect web server on http://localhost:9000');
+        });
 });
 
-gulp.task('watch', ['server', 'sass'], function() {
+gulp.task('server', ['connect'], function () {
+    require('opn')('http://localhost:9000');
+});
+
+
+gulp.task('watch', ['connect', 'server', 'sass'], function() {
   var server = livereload();
+
   gulp.watch(dest + '/**').on('change', function(file) {
       server.changed(file.path);
   });
