@@ -1,9 +1,10 @@
 var gulp = require('gulp');
 
+
+//Create the beastie font
 var iconfont = require('gulp-iconfont');
 var consolidate = require('gulp-consolidate');
 var rename = require("gulp-rename");
-
 var fontName = 'beastie';
 var template = 'template';
 gulp.task('iconfont', function(){
@@ -30,6 +31,7 @@ gulp.task('iconfont', function(){
     .pipe(gulp.dest('app/fonts/beastie')); // set path to export your fonts
 });
 
+//Sass our styles
 var sass = require('gulp-sass')
 gulp.task('sass', ['iconfont'], function () {
     return gulp.src('app/styles/*.scss')
@@ -37,6 +39,7 @@ gulp.task('sass', ['iconfont'], function () {
         .pipe(gulp.dest('app/styles'));
 });
 
+//live reload for fun and profit
 var livereload = require('gulp-livereload'),
     dest = 'app';
 
