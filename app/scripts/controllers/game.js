@@ -36,7 +36,7 @@ angular.module("beastieApp")
         $scope.score = 0;
 
         $scope.findEntityByPosition = function (x, y) {
-            return $scope.entities[x+','+y];
+            return $scope.entities[x+','+y] || [];
         };
 
         function addPlayer() {
@@ -78,7 +78,7 @@ angular.module("beastieApp")
 
                 if (frame % gameSpeed === 0) {
                     this.age++;
-                    if (this.age > 10) {
+                    if (this.age > 10 && (Math.random() > 0.25)) {
                         console.log("should hatch");
                         this.transition("hatch");
 
@@ -138,8 +138,9 @@ angular.module("beastieApp")
             for (var i = x; i < x + size; i++) {
                 for (var e = y; e < y + size; e++) {
                     if ($scope.entities[i + "," + e] === undefined) {
+                      console.log(Math.floor(Math.random() * 10));
                         // $scope.entities[i + "," + e] = true;
-                        if (Math.floor(Math.random() * 2) > 0 && $scope.findEntityByPosition(i, e).length < 1) {
+                          if(Math.floor(Math.random() * 1.5) > 0){
                             var blocktype = env_schematics.block($scope);
                             blocktype.position = {
                                 x: i,
@@ -151,23 +152,28 @@ angular.module("beastieApp")
                             }
 
                             $scope.entities.place(new Entity(blocktype));
-                        }
+                          } else if (Math.floor(Math.random() * 50) == 0) {
+                            var egg = placeEgg($scope, i, e);
+                            $scope.entities.place(egg);
+                          } else {
+                            $scope.entities[i + "," + e] = [];
+                          }
                     }
                 }
             }
 
-            for (var n = 0; n < Math.floor(size / 5); n++) {
-
-                var _x = Math.floor(Math.random() * size + x);
-                var _y = Math.floor(Math.random() * size + y);
-
-                while ($scope.findEntityByPosition(_x, _y).length > 0) {
-                    _x = Math.floor(Math.random() * size + x);
-                    _y = Math.floor(Math.random() * size + y);
-                }
-                var egg = placeEgg($scope, _x, _y);
-                $scope.entities.place(egg);
-            }
+            // for (var n = 0; n < Math.floor(size / 5); n++) {
+            //
+            //     var _x = Math.floor(Math.random() * size + x);
+            //     var _y = Math.floor(Math.random() * size + y);
+            //
+            //     while ($scope.findEntityByPosition(_x, _y).length > 0) {
+            //         _x = Math.floor(Math.random() * size + x);
+            //         _y = Math.floor(Math.random() * size + y);
+            //     }
+            //     var egg = placeEgg($scope, _x, _y);
+            //     $scope.entities.place(egg);
+            // }
         };
 
 

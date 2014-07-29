@@ -279,7 +279,8 @@ Entity.prototype.on = function (name, callback) {
 };
 
 Entity.prototype.trigger = function () {
-    // var args = Array.prototype.slice.call(arguments);
+  //so that we can use array functions, arguments is not a true array
+    var arguments = Array.prototype.slice.call(arguments);
     var name = arguments.shift();
     var callbacks = this._events[name];
     if (callbacks !== undefined) {

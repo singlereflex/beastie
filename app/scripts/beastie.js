@@ -18,8 +18,9 @@ var env_schematics = {
                 complete_move: function (deltas, old) {
                     // console.log(this.position);
                     //$scope.$apply();
-                    this.world.entities[old.x+","+old.y] = _.without(this.world.entities[old.x+","+old.y], entity);
-                    this.world.entities.place(entity);
+                    console.log(this);
+                    this.world.entities[old.x+","+old.y] = _.without(this.world.entities[old.x+","+old.y], this);
+                    this.world.entities.place(this);
                 },
                 start_move: function (deltas) {
                     console.log("move block")
@@ -84,11 +85,11 @@ var env_schematics = {
                     //$scope.$apply();
                 },
                 complete_move: function(deltas, old){
-                  this.world.entities[old.x+","+old.y] = _.without(this.world.entities[old.x+","+old.y], entity);
-                  this.world.entities.place(entity);
+                  this.world.entities[old.x+","+old.y] = _.without(this.world.entities[old.x+","+old.y], this);
+                  this.world.entities.place(this);
                 },
                 die: function () {
-                    this.world.entities = _.without(this.world.entities, this);
+                    this.world.entities[this.position.x+","+this.position.y] = _.without(this.world.entities[this.position.x+","+this.position.y], this);
                     document.getElementById('entityboard').removeChild(this.el);
                     this.dead = true;
                 },
@@ -128,7 +129,7 @@ var env_schematics = {
                 die: function () {
                     // console.log(this.world);
 
-                    this.world.entities = _.without(this.world.entities, this);
+                    this.world.entities[this.position.x+","+this.position.y] = _.without(this.world.entities[this.position.x+","+this.position.y], this);
                     document.getElementById('entityboard').removeChild(this.el);
                 },
                 collided: function (entity) {
@@ -170,8 +171,8 @@ var env_schematics = {
                     ],
                     events: {
                         complete_move: function(deltas, old){
-                          this.world.entities[old.x+","+old.y] = _.without(this.world.entities[old.x+","+old.y], entity);
-                          this.world.entities.place(entity);
+                          this.world.entities[old.x+","+old.y] = _.without(this.world.entities[old.x+","+old.y], this);
+                          this.world.entities.place(this);
                         },
                         collided: function (entity) {
                             if (entity.kind === 'player') {
@@ -196,8 +197,8 @@ var env_schematics = {
                     worth: 30,
                     events: {
                         complete_move: function(deltas, old){
-                          this.world.entities[old.x+","+old.y] = _.without(this.world.entities[old.x+","+old.y], entity);
-                          this.world.entities.place(entity);
+                          this.world.entities[old.x+","+old.y] = _.without(this.world.entities[old.x+","+old.y], this);
+                          this.world.entities.place(this);
                         },
                         collided: function (entity) {
                             if (entity.kind === 'player') {
