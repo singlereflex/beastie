@@ -1,6 +1,19 @@
 function WorldComponent(entity) {
     entity.frame_count = 0;
     entity.running = false;
+
+    entity.score = 0;
+    entity.entities = {};
+    entity.entities.place = function(entity) {
+      var loc = entity.position.x + "," + entity.position.y;
+      if (!$scope.entities[loc]) {
+        $scope.entities[loc] = [];
+      }
+      $scope.entities[loc].push(entity);
+    }
+    entity.findEntityByPosition = function(x, y) {
+      return $scope.entities[x + ',' + y] || [];
+    };
     function animloop() {
         entity.frame_count++;
         try {
