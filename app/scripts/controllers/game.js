@@ -5,6 +5,8 @@
 angular.module("beastieApp")
     .controller("GameCtrl", ["$scope", "beastieEnv", "$firebase", "$log", "$state", function ($scope, beastieEnv, $firebase, $log, $state) {
 
+        var game = new Game();
+
         $scope.music = music;
         $scope.pauseMusic = function (event) {
             event.preventDefault();
@@ -22,17 +24,17 @@ angular.module("beastieApp")
         $scope.scoreboard = $firebase(highScoreRef);
 
 
-        $scope.iconPrefix = "icon-";
-
-
         
 
+
+
+
         $scope.pauseGame = function () {
-            $scope.loop.pause();
+            game.loop.pause();
         };
 
         $scope.endGame = function () {
-            $scope.loop.stop();
+            game.loop.stop();
             $state.go("game.ended");
 
 //            var modalInstance = $modal.open({
@@ -62,9 +64,20 @@ angular.module("beastieApp")
             location.reload();
         };
 
-        addPlayer();
-        $scope.explore(1024 - 8, 1024 - 8, gridsize);
-        $scope.loop.start();
+        var player = game.addPlayer();
+        player.on("die", function() {
+          $scope.endGame();
+        });
+        player.on("complete_move", function(deltas) {
+          // setTimeout(function(){center(player.el);}, 100);
+          // window.scrollBy(deltas.delta_x * 16, deltas.delta_y * 16);
+          $("html,body").animate({
+            scrollTop: document.body.scrollTop + deltas.delta_y * 16,
+            scrollLeft: document.body.scrollLeft + deltas.delta_x * 16
+          }, 200);
+        });
+        game.explore(1024 - 8, 1024 - 8, gridsize);
+        game.loop.start();
 
 
     }]);
