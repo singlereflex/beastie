@@ -23,7 +23,7 @@ function center(el) {
     }, 200);
 };
 
-var gameSpeed = 45;
+var gameSpeed = 70;
 
 // var gui = new dat.GUI({ autoPlace: false });
 // var customContainer = document.getElementById('top-nav');
