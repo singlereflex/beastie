@@ -8,7 +8,10 @@ var fontName = 'beastie';
 var template = 'template';
 gulp.task('iconfont', function(){
   return gulp.src(['app/svg/*.svg'])
-    .pipe(iconfont({ fontName: fontName }))
+    .pipe(iconfont({
+        fontName: fontName,
+        fixedWidth: true
+    }))
     .on('codepoints', function(codepoints) {
       var options = {
         glyphs: codepoints,
