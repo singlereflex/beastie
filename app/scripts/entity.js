@@ -123,24 +123,37 @@ function ControllerComponent(entity) {
         }
     }, false);
 
+    document.body.addEventListener('touchstart', function dblClick(event){
+      if(!entity.dead){
+        var touch = event.changedTouches[0];
 
-    document.body.addEventListener('click', function dblClick(event){
-      event.preventDefault();
-      var x = 0, y = 0;
-      if(Math.abs(entity.el.offsetLeft - event.pageX) > Math.abs(entity.el.offsetTop - event.pageY)){
-        if(0 < entity.el.offsetLeft - event.pageX){
-          x = -1
-        } else if(0 > entity.el.offsetLeft - event.pageX){
-          x = 1;
+        event.preventDefault();
+
+        var x = 0, y = 0;
+        var center = document.body.clientWidth/2;
+        var rightCenter = {
+          x: document.body.clientWidth - document.body.clientWidth/4,
+          y: document.body.clientHeight/2
         }
-      } else {
-        if(0 < entity.el.offsetTop - event.pageY){
-          y = -1
-        } else if(0 > entity.el.offsetTop - event.pageY){
-          y = 1;
+
+        if(touch.clientX > center){
+          if(Math.abs(rightCenter.x - touch.clientX) > Math.abs(rightCenter.y - touch.clientY)){
+            if(0 < rightCenter.x - touch.clientX){
+              x = -1
+            } else if(0 > rightCenter.x - touch.clientX){
+              x = 1;
+            }
+
+          } else {
+            if(0 < rightCenter.y - touch.clientY){
+              y = -1
+            } else if(0 > rightCenter.y - touch.clientY){
+              y = 1;
+            }
+          }
+          entity.move(x, y);
         }
       }
-      entity.move(x, y);
 
       // event.x -
       // event.y -
@@ -194,11 +207,14 @@ function MoveComponent(entity) {
         if (entity.position.x + delta_x < 0 || entity.position.y + delta_y < 0) {
             throw "stay on the board please";
         }
-
+        var old_position = {
+          x: entity.position.x,
+          y: entity.position.y
+        };
         entity.position.x += delta_x;
         entity.position.y += delta_y;
 
-        entity.trigger('complete_move', {delta_x: delta_x, delta_y: delta_y});
+        entity.trigger('complete_move', {delta_x: delta_x, delta_y: delta_y}, old_position);
 
     }
 }
@@ -228,6 +244,29 @@ function PullComponent(entity) {
             entity.shiftDown = false;
         }
     });
+
+    document.body.addEventListener('touchstart', function dblClick(event){
+
+      var center = document.body.clientWidth/2;
+
+      if(event.touches.length > 1){
+        event.preventDefault();
+        entity.shiftDown = true;
+      }
+
+
+    }, false);
+    document.body.addEventListener('touchend', function dblClick(event){
+
+      var center = document.body.clientWidth/2;
+
+
+      if(event.touches.length < 2){
+        entity.shiftDown = false;
+      }
+
+    }, false)
+
     //subscribe to move event
     entity.on('complete_move', function (deltas) {
 
@@ -276,12 +315,13 @@ Entity.prototype.on = function (name, callback) {
 };
 
 Entity.prototype.trigger = function () {
-    var args = Array.prototype.slice.call(arguments);
-    var name = args.shift();
+  //so that we can use array functions, arguments is not a true array
+    var arguments = Array.prototype.slice.call(arguments);
+    var name = arguments.shift();
     var callbacks = this._events[name];
     if (callbacks !== undefined) {
         for (var i in callbacks) {
-            if (callbacks.hasOwnProperty(i)) callbacks[i].apply(this, args);//should use arguments instead of single argument
+            if (callbacks.hasOwnProperty(i)) callbacks[i].apply(this, arguments);//should use arguments instead of single argument
         }
     }
 };

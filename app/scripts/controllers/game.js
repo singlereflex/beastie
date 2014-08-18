@@ -4,7 +4,7 @@
 
 angular.module("beastieApp")
     .controller("GameCtrl", ["$scope", "beastieEnv", "$firebase", "$log", "$state", function ($scope, beastieEnv, $firebase, $log, $state) {
-
+        
         $scope.music = music;
         $scope.pauseMusic = function (event) {
             event.preventDefault();
@@ -24,18 +24,19 @@ angular.module("beastieApp")
         var gridsize = 16;
         $scope.cellsize = 16;
         $scope.iconPrefix = "icon-";
-        $scope.entities = [];
+        $scope.entities = {};
+        $scope.entities.place = function(entity){
+          var loc = entity.position.x+","+entity.position.y;
+          if(!$scope.entities[loc]){
+            $scope.entities[loc] = [];
+          }
+          $scope.entities[loc].push(entity);
+        }
         $scope.world = {};
         $scope.score = 0;
 
         $scope.findEntityByPosition = function (x, y) {
-            var collisions = [];
-            for (var i = $scope.entities.length - 1; i >= 0; i--) {
-                if ($scope.entities[i].position.x == x && $scope.entities[i].position.y == y) {
-                    collisions.push($scope.entities[i]);
-                }
-            }
-            return collisions;
+            return $scope.entities[x+','+y] || [];
         };
 
         function addPlayer() {
@@ -60,7 +61,7 @@ angular.module("beastieApp")
                 }, 200);
             });
 
-            $scope.entities.push(player);
+            $scope.entities.place(player);
             center(player.el);
         }
 
@@ -77,7 +78,7 @@ angular.module("beastieApp")
 
                 if (frame % gameSpeed === 0) {
                     this.age++;
-                    if (this.age > 10) {
+                    if (this.age > 10 && (Math.random() > 0.25)) {
                         console.log("should hatch");
                         this.transition("hatch");
 
@@ -113,7 +114,7 @@ angular.module("beastieApp")
                 monster.remove("frame", monster.frameId);
                 monster.lay = function () {
                     var newEgg = placeEgg($scope, this.position.x, this.position.y);
-                    this.world.entities.push(newEgg);
+                    this.world.entities.place(newEgg);
                 };
                 monster.frame_id = monster.on("frame", function (frame) {
                     if (!(frame % settings.gamespeed)) {
@@ -136,9 +137,10 @@ angular.module("beastieApp")
         $scope.explore = function (x, y, size) {
             for (var i = x; i < x + size; i++) {
                 for (var e = y; e < y + size; e++) {
-                    if ($scope.world[i + "/" + e] === undefined) {
-                        $scope.world[i + "/" + e] = true;
-                        if (Math.floor(Math.random() * 2) > 0 && $scope.findEntityByPosition(i, e).length < 1) {
+                    if ($scope.entities[i + "," + e] === undefined) {
+                      console.log(Math.floor(Math.random() * 10));
+                        // $scope.entities[i + "," + e] = true;
+                          if(Math.floor(Math.random() * 1.5) > 0){
                             var blocktype = env_schematics.block($scope);
                             blocktype.position = {
                                 x: i,
@@ -149,24 +151,29 @@ angular.module("beastieApp")
                                 blocktype.classVal = $scope.iconPrefix + blocktype.id;
                             }
 
-                            $scope.entities.push(new Entity(blocktype));
-                        }
+                            $scope.entities.place(new Entity(blocktype));
+                          } else if (Math.floor(Math.random() * 50) == 0) {
+                            var egg = placeEgg($scope, i, e);
+                            $scope.entities.place(egg);
+                          } else {
+                            $scope.entities[i + "," + e] = [];
+                          }
                     }
                 }
             }
 
-            for (var n = 0; n < Math.floor(size / 5); n++) {
-
-                var _x = Math.floor(Math.random() * size + x);
-                var _y = Math.floor(Math.random() * size + y);
-
-                while ($scope.findEntityByPosition(_x, _y).length > 0) {
-                    _x = Math.floor(Math.random() * size + x);
-                    _y = Math.floor(Math.random() * size + y);
-                }
-                var egg = placeEgg($scope, _x, _y);
-                $scope.entities.push(egg);
-            }
+            // for (var n = 0; n < Math.floor(size / 5); n++) {
+            //
+            //     var _x = Math.floor(Math.random() * size + x);
+            //     var _y = Math.floor(Math.random() * size + y);
+            //
+            //     while ($scope.findEntityByPosition(_x, _y).length > 0) {
+            //         _x = Math.floor(Math.random() * size + x);
+            //         _y = Math.floor(Math.random() * size + y);
+            //     }
+            //     var egg = placeEgg($scope, _x, _y);
+            //     $scope.entities.place(egg);
+            // }
         };
 
 

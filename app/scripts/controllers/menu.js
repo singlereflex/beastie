@@ -28,6 +28,23 @@ angular.module("beastieApp")
             console.log(e);
         };
 
+        $scope.fullscreen = function(){
+          var docElm = document.documentElement;
+
+          if (docElm.requestFullscreen) {
+              docElm.requestFullscreen();
+          }
+          else if (docElm.mozRequestFullScreen) {
+              docElm.mozRequestFullScreen();
+          }
+          else if (docElm.webkitRequestFullScreen) {
+              docElm.webkitRequestFullScreen();
+          }
+          else if (docElm.msRequestFullscreen) {
+              docElm.msRequestFullscreen();
+          }
+        }
+
         for (var i = 0; i < letters.length; i++) {
             for (var e = 0; e < letters[i].length; e++) {
                 var letter = letters[i].charAt(e);
