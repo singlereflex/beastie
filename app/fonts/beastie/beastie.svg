@@ -9,13 +9,13 @@
     <missing-glyph horiz-adv-x="0" />
     <glyph glyph-name="entities-egg"
       unicode="&#xE001;"
-      horiz-adv-x="16" d=" M6 10H10V6H6z M0 0 M16 0 M0 16 M16 16 M0 0.125 M16 0.125 M16 0 M16 0L17 -1L1 -1L0 0z M16 16 M16 16L17 15L1 15L0 16z" />
+      horiz-adv-x="16" d=" M6 10H10V6H6z" />
     <glyph glyph-name="entities-monster"
       unicode="&#xE002;"
-      horiz-adv-x="16" d=" M4 12V4H12V12H4zM10 6H6V10H10V6z M0 16L1 15L17 15L16 16z M0 0L1 -1L17 -1L16 0z" />
+      horiz-adv-x="16" d=" M4 12V4H12V12H4zM10 6H6V10H10V6z" />
     <glyph glyph-name="entities-mother"
       unicode="&#xE003;"
-      horiz-adv-x="16" d=" M2 14V2H14V14H2zM12 4H4V12H12V4z M16 0 M15.938 16 M15.938 16L16.938000000000002 15L0.938 15L-0.062 16z" />
+      horiz-adv-x="16" d=" M2 14V2H14V14H2zM12 4H4V12H12V4z" />
     <glyph glyph-name="entities-player"
       unicode="&#xE004;"
       horiz-adv-x="16" d=" M16 16H0M0 0H16 M12 8L8 12L4 8L8 4z" />
