@@ -49,65 +49,38 @@ var World = function(){
 }
 EventComponent(World);
 
-/*
-player: function (_world, x, y) {
-    return {
-        kind: 'player',
-        classVal: _world.iconPrefix + 'entities-player',
-        keyboard: true,
-        position: {
-            x: x,
-            y: y
-        },
-        template: template,
-        //order matthers X_x
-        components: [
-            DomRenderer,
-            MoveComponent,
-            PushComponent,
-            PullComponent,
-            CollisionComponent,
-            ControllerComponent,
-            DeathComponent,
-            ExploreComponent
-        ],
-        events: {
-            start_move: function (deltas) {
-                console.log("move block")
-                // console.log(this.position);
-                //$scope.$apply();
-            },
-            complete_move: function(deltas, old){
-              this.world.entities[old.x+","+old.y] = _.without(this.world.entities[old.x+","+old.y], this);
-              this.world.entities.place(this);
-            },
-            die: function () {
-                this.world.entities[this.position.x+","+this.position.y] = _.without(this.world.entities[this.position.x+","+this.position.y], this);
-                document.getElementById('entityboard').removeChild(this.el);
-                this.dead = true;
-            },
-            collided: function (entity) {
-                if (entity.kind === 'monster' || entity.kind === 'mother') {
-                    this.die();
-                } else {
-                    console.log("hit a block");
-                }
-            },
-            rendered: function (el) {
 
-                this.el = document.getElementById('entityboard').appendChild(el);
-                this.on('complete_move', function (deltas) {
-
-                    this.el.style.top = this.position.y + 'em';
-                    this.el.style.left = this.position.x + 'em';
-
-                });
-            }
-        },
-        world: _world
+var Display = function(player, icon){
+  this._events = {};
+  var self = this;
+  this.position = {
+    x: player.position.x,
+    y: player.position.y
+  }
+  this.kind = player.kind
+  this.on('rendered', function(){
+    self.el = document.getElementById('entityboard').appendChild(self.el);
+    player.el = self.el;
+    player.on('complete_move', function (delta_x, delta_y) {
+        self.el.style.top = player.position.y + 'em';
+        self.el.style.left = player.position.x + 'em';
+    });
+  });
+  player.on('die', function(){
+    document.getElementById('entityboard').removeChild(self.el);
+  });
+  DomRenderer(this, template({classVal: icon}));
+  this.render = function(player, icon){
+    self.position = {
+      x: player.position.x,
+      y: player.position.y
     }
-},
-*/
+    self.kind = player.kind
+    DomRenderer(self, template({classVal: icon}));
+  }
+}
+EventComponent(Display);
+
 var Player = function(x, y, world){
   this._events = {};
   //behavior
@@ -120,7 +93,6 @@ var Player = function(x, y, world){
 
   this.on('die', function die(){
     self.world.entities[self.position.x+","+self.position.y] = _.without(self.world.entities[self.position.x+","+self.position.y], self);
-    document.getElementById('entityboard').removeChild(self.el);
     self.dead = true;
   });
 
@@ -132,17 +104,6 @@ var Player = function(x, y, world){
     }
   });
 
-  this.on('rendered', function(){
-    console.log("rendering player");
-    self.el = document.getElementById('entityboard').appendChild(self.el);
-    self.on('complete_move', function (delta_x, delta_y) {
-
-        self.el.style.top = self.position.y + 'em';
-        self.el.style.left = self.position.x + 'em';
-
-    });
-  });
-
   this.world = world;
   //setup for dom rendering
   this.position = {
@@ -150,7 +111,6 @@ var Player = function(x, y, world){
     y:y
   }
   this.kind = "player";
-  DomRenderer(this, template({classVal: 'icon-entities-player'}));
 
   PushComponent(this);
 
@@ -162,6 +122,9 @@ var Player = function(x, y, world){
   PullControllerComponent(this);
 
   ExploreComponent(this);
+
+  //this will chanage for workers:
+  this.display = new Display(this, 'icon-entities-player');
 }
 
 //Class level component!
@@ -169,74 +132,20 @@ EventComponent(Player);
 MoveComponent(Player);
 DeathComponent(Player);
 
-/*
-block: function (_world) {
-    return {
-        kind: 'block',
-        id: 'environment-block',
-        push: true,
-        heavy: true,
-        walk: false,
-        template: template,
-        components: [DomRenderer, MoveComponent, CollisionComponent],
-        events: {
-            complete_move: function (deltas, old) {
-                // console.log(this.position);
-                //$scope.$apply();
-                console.log(this);
-                this.world.entities[old.x+","+old.y] = _.without(this.world.entities[old.x+","+old.y], this);
-                this.world.entities.place(this);
-            },
-            start_move: function (deltas) {
-                console.log("move block")
-                // console.log(this.position);
-                //$scope.$apply();
-            },
-            collided: function (entity) {
-                if (entity) {
-                    if (entity.kind === "block") {
-                        throw "hit a block";
-                    }
-                    if (entity.kind !== 'block') {
-                        console.log('monster');
-                        var delta_x = entity.position.x - this.position.x;
-                        var delta_y = entity.position.y - this.position.y;
-                        var neighbor = this.world.findEntityByPosition(entity.position.x + delta_x, entity.position.y + delta_y)[0];
-                        if (neighbor !== undefined && neighbor.kind === 'block') {
-                            entity.die();
-                        } else {
-                            throw "chouldn't kill the monster";
-                        }
-
-                    }
-                }
-            },
-            rendered: function (el) {
-                this.el = document.getElementById('entityboard').appendChild(el);
-                this.on('complete_move', function (deltas) {
-                    this.el.style.top = this.position.y + 'em';
-                    this.el.style.left = this.position.x + 'em';
-                });
-            }
-        },
-        world: _world
-    }
-},
-*/
-
+//blocks!
 var Block = function(x, y, world){
   this._events = {};
 
 
   //behavior
   var self = this;
-  this.on('rendered', function(){
-    self.el = document.getElementById('entityboard').appendChild(self.el);
-    self.on('complete_move', function (delta_x, delta_y) {
-        self.el.style.top = self.position.y + 'em';
-        self.el.style.left = self.position.x + 'em';
-    });
-  });
+  // this.on('rendered', function(){
+  //   self.el = document.getElementById('entityboard').appendChild(self.el);
+  //   self.on('complete_move', function (delta_x, delta_y) {
+  //       self.el.style.top = self.position.y + 'em';
+  //       self.el.style.left = self.position.x + 'em';
+  //   });
+  // });
 
   this.on('complete_move', function (delta_x, delta_y, old) {
       self.world.entities[old.x+","+old.y] = _.without(self.world.entities[old.x+","+old.y], self);
@@ -269,128 +178,14 @@ var Block = function(x, y, world){
     y:y
   }
   this.kind = "block";
-  DomRenderer(this, template({classVal: 'icon-environment-block'}));
+  // DomRenderer(this, template({classVal: 'icon-environment-block'}));
+  this.display = new Display(this, 'icon-environment-block');
   CollisionComponent(this);
 }
 EventComponent(Block);
 MoveComponent(Block);
 
-
-/*
-egg: function (_world, x, y) {
-    return {
-        kind: 'egg',
-        classVal: _world.iconPrefix + 'entities-egg',
-        keyboard: false,
-        position: {
-            x: x,
-            y: y
-        },
-        template: template,
-        worth: 10,
-        events: {
-            die: function () {
-                // console.log(this.world);
-
-                this.world.entities[this.position.x+","+this.position.y] = _.without(this.world.entities[this.position.x+","+this.position.y], this);
-                document.getElementById('entityboard').removeChild(this.el);
-            },
-            collided: function (entity) {
-                // console.log("collision")
-                // console.log(entity);
-                if (entity.kind === 'player') {
-                    entity.die();
-                }
-            },
-            rendered: function (el) {
-
-                this.el = document.getElementById('entityboard').appendChild(el);
-                this.on('complete_move', function (deltas) {
-                    this.el.style.top = this.position.y + 'em';
-                    this.el.style.left = this.position.x + 'em';
-                });
-            }
-        },
-        age: 0,
-        components: [
-            DomRenderer,
-            CollisionComponent,
-            DeathComponent,
-            FrameComponent
-        ],
-        world: _world,
-        states: {
-            hatch: {
-                kind: 'monster',
-                classVal: _world.iconPrefix + 'entities-monster',
-                template: template,
-                worth: 20,
-                components: [
-                    DomRenderer,
-                    MoveComponent,
-                    CollisionComponent,
-                    DeathComponent,
-                    ExploreComponent
-                ],
-                events: {
-                    complete_move: function(deltas, old){
-                      this.world.entities[old.x+","+old.y] = _.without(this.world.entities[old.x+","+old.y], this);
-                      this.world.entities.place(this);
-                    },
-                    collided: function (entity) {
-                        if (entity.kind === 'player') {
-                            entity.die();
-                        } else {
-                            throw "hit a block";
-                        }
-                    },
-                    rendered: function (el) {
-                        this.el = document.getElementById('entityboard').appendChild(el);
-                        this.on('complete_move', function (deltas) {
-                            this.el.style.top = this.position.y + 'em';
-                            this.el.style.left = this.position.x + 'em';
-                        });
-                    }
-                }
-            },
-            evolve: {
-                kind: 'mother',
-                classVal: _world.iconPrefix + 'entities-mother',
-                template: template,
-                worth: 30,
-                events: {
-                    complete_move: function(deltas, old){
-                      this.world.entities[old.x+","+old.y] = _.without(this.world.entities[old.x+","+old.y], this);
-                      this.world.entities.place(this);
-                    },
-                    collided: function (entity) {
-                        if (entity.kind === 'player') {
-                            entity.die();
-                        } else {
-                            console.log("hit a block");
-                        }
-                    },
-                    rendered: function (el) {
-                        this.el = document.getElementById('entityboard').appendChild(el);
-                        this.on('complete_move', function (deltas) {
-                            this.el.style.top = this.position.y + 'em';
-                            this.el.style.left = this.position.x + 'em';
-                        });
-                    }
-                },
-                components: [
-                    DomRenderer,
-                    MoveComponent,
-                    PushComponent,
-                    CollisionComponent,
-                    DeathComponent,
-                    ExploreComponent
-                ]
-            }
-        }
-    }
-}
-*/
+//eggs!
 
 var Egg = function(x, y, world){
   this._events = {};
@@ -401,7 +196,7 @@ var Egg = function(x, y, world){
     self.world.score += self.worth;
     // console.log(self.world.score);
     self.world.entities[self.position.x+","+self.position.y] = _.without(self.world.entities[self.position.x+","+self.position.y], self);
-    document.getElementById('entityboard').removeChild(self.el);
+    // document.getElementById('entityboard').removeChild(self.el);
     self.dead = true;
     self._events = {};
     this.world.remove('tick', self.tick);
@@ -415,14 +210,14 @@ var Egg = function(x, y, world){
       }
   });
 
-  this.on('rendered', function (el) {
-
-      self.el = document.getElementById('entityboard').appendChild(self.el);
-      self.on('complete_move', function (delta_x, delta_y) {
-          self.el.style.top = self.position.y + 'em';
-          self.el.style.left = self.position.x + 'em';
-      });
-  });
+  // this.on('rendered', function (el) {
+  //
+  //     self.el = document.getElementById('entityboard').appendChild(self.el);
+  //     self.on('complete_move', function (delta_x, delta_y) {
+  //         self.el.style.top = self.position.y + 'em';
+  //         self.el.style.left = self.position.x + 'em';
+  //     });
+  // });
 
   this.on('complete_move', function(delta_x, delta_y, old){
     self.world.entities[old.x+","+old.y] = _.without(self.world.entities[old.x+","+old.y], self);
@@ -454,7 +249,8 @@ var Egg = function(x, y, world){
   });
   // console.log(this.tick);
 
-  DomRenderer(this, template({classVal: 'icon-entities-egg'}));
+  // DomRenderer(this, template({classVal: 'icon-entities-egg'}));
+  this.display = new Display(this, 'icon-entities-egg');
   CollisionComponent(this);
 
   StateComponent(this, {
@@ -516,7 +312,7 @@ var Monster = function(){
   });
   // console.log(this.tick);
   MoveComponent(this);
-  DomRenderer(this, template({classVal: 'icon-entities-monster'}));
+  this.display.render(this, 'icon-entities-monster');
   ExploreComponent(this);
 }
 
@@ -547,7 +343,7 @@ var Mother = function(){
     self.hunt(self);
   });
 
-  DomRenderer(this, template({classVal: 'icon-entities-mother'}));
+  this.display.render(this, 'icon-entities-mother');
   PushComponent(this);
 
 }
