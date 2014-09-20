@@ -5,34 +5,38 @@ _.templateSettings = {
 var template = _.template('<i class="{{ classVal }}"></i>');
 
 var World = function(){
+  this._events = {};
+  var self = this;
     this.running = false;
 
     this.score = 0;
     this.entities = {};
+
     this.entities.place = function(entity) {
       var loc = entity.position.x + "," + entity.position.y;
-      if (!this.entities[loc]) {
-        this.entities[loc] = [];
+      if (!self.entities[loc]) {
+        self.entities[loc] = [];
       }
-      this.entities[loc].push(entity);
+      self.entities[loc].push(entity);
     }
     this.findEntityByPosition = function(x, y) {
       return this.entities[x + ',' + y] || [];
     };
 
-    function animloop() {
-        try {
-            this.trigger('tick');
-        } catch (e) {
-            // entity.pause()
-        }
-        if (this.running) {
-            requestAnimFrame(animloop);
+    this.animloop = function() {
+        // try {
+          self.trigger('tick');
+        // } catch (e) {
+          // console.log(e);
+          // self.pause();
+        // }
+        if (self.running) {
+            setTimeout(self.animloop, 100);
         }
     }
     this.start = function () {
         this.running = true;
-        animloop();
+        self.animloop();
     };
     this.pause = function () {
         this.running = !this.running;
@@ -104,6 +108,40 @@ player: function (_world, x, y) {
 },
 */
 var Player = function(x, y, world){
+  this._events = {};
+  //behavior
+  var self = this;
+  this.on('complete_move', function update(delta_x, delta_y, old){
+    self.world.entities[old.x+","+old.y] = _.without(self.world.entities[old.x+","+old.y], self);
+    self.world.entities.place(self);
+    // center(self.el);
+  })
+
+  this.on('die', function die(){
+    self.world.entities[self.position.x+","+self.position.y] = _.without(self.world.entities[self.position.x+","+self.position.y], self);
+    document.getElementById('entityboard').removeChild(self.el);
+    self.dead = true;
+  });
+
+  this.on('collided', function collision(entity){
+    if (entity.kind === 'monster' || entity.kind === 'mother') {
+        self.die();
+    } else {
+        console.info("hit a block");
+    }
+  });
+
+  this.on('rendered', function(){
+    console.log("rendering player");
+    self.el = document.getElementById('entityboard').appendChild(self.el);
+    self.on('complete_move', function (delta_x, delta_y) {
+
+        self.el.style.top = self.position.y + 'em';
+        self.el.style.left = self.position.x + 'em';
+
+    });
+  });
+
   this.world = world;
   //setup for dom rendering
   this.position = {
@@ -123,38 +161,6 @@ var Player = function(x, y, world){
   PullControllerComponent(this);
 
   ExploreComponent(this);
-
-
-  //behavior
-  var self = this;
-  this.on('complete_move', function update(delta_x, delta_y, old){
-    self.world.entities[old.x+","+old.y] = _.without(self.world.entities[old.x+","+old.y], self);
-    self.world.entities.place(self);
-  })
-
-  this.on('die', function die(){
-    self.world.entities[self.position.x+","+self.position.y] = _.without(self.world.entities[self.position.x+","+self.position.y], self);
-    document.getElementById('entityboard').removeChild(self.el);
-    self.dead = true;
-  });
-
-  this.on('collided', function collision(entity){
-    if (entity.kind === 'monster' || entity.kind === 'mother') {
-        self.die();
-    } else {
-        console.info("hit a block");
-    }
-  });
-
-  this.on('rendered', function(){
-    self.el = document.getElementById('entityboard').appendChild(self.el);
-    self.on('complete_move', function (delta_x, delta_y) {
-
-        self.el.style.top = self.position.y + 'em';
-        self.el.style.left = self.position.x + 'em';
-
-    });
-  });
 }
 
 //Class level component!
@@ -218,14 +224,7 @@ block: function (_world) {
 */
 
 var Block = function(x, y, world){
-  this.world = world;
-  this.position = {
-    x:x,
-    y:y
-  }
-  this.kind = "block";
-  DomRenderer(this, template({classVal: 'icon-environment-block'}));
-  CollisionComponent(this);
+  this._events = {};
 
 
   //behavior
@@ -244,6 +243,7 @@ var Block = function(x, y, world){
   });
 
   this.on('collided', function (entity) {
+    console.log(entity);
       if (entity) {
           if (entity.kind === "block") {
               throw "hit a block";
@@ -255,10 +255,21 @@ var Block = function(x, y, world){
               var neighbor = this.world.findEntityByPosition(entity.position.x + delta_x, entity.position.y + delta_y)[0];
               if (neighbor !== undefined && neighbor.kind === 'block') {
                   entity.die();
+              } else {
+                throw "couldn't kill monster";
               }
           }
       }
   });
+
+  this.world = world;
+  this.position = {
+    x:x,
+    y:y
+  }
+  this.kind = "block";
+  DomRenderer(this, template({classVal: 'icon-environment-block'}));
+  CollisionComponent(this);
 }
 EventComponent(Block);
 MoveComponent(Block);
@@ -381,29 +392,24 @@ egg: function (_world, x, y) {
 */
 
 var Egg = function(x, y, world){
-  this.world = world;
-  this.position = {
-    x:x,
-    y:y
-  }
-  this.kind = "egg";
-  DomRenderer(this, template({classVal: 'icon-entities-egg'}));
-  CollisionComponent(this);
-
-  StateComponent(this, {
-    'hatch': Monster,
-    'mother': Mother
-  });
+  this._events = {};
   var self = this;
+  self.worth = 10;
   this.on('die', function die(){
+    self.world.score += self.worth;
+    // console.log(self.world.score);
     self.world.entities[self.position.x+","+self.position.y] = _.without(self.world.entities[self.position.x+","+self.position.y], self);
     document.getElementById('entityboard').removeChild(self.el);
     self.dead = true;
+    self._events = {};
+    this.world.remove('tick', self.tick);
   });
 
   this.on('collided', function (entity) {
       if (entity.kind === 'player') {
-          entity.die();
+        entity.die();
+      } else {
+        throw "hit a block";
       }
   });
 
@@ -422,13 +428,36 @@ var Egg = function(x, y, world){
   });
 
   this.age = 0;
-  this.move = this.world.on('tick', function(){
-    this.age++;
-    if (this.age > 20) {
-      this.transition("hatch");
+
+
+  this.world = world;
+  this.position = {
+    x:x,
+    y:y
+  }
+  this.kind = "egg";
+
+  this.tick = this.world.on('tick', function(){
+    // console.log('tick');
+    self.age++;
+    if (self.age > Math.random() * (1000 - 20) + 20) {
+      console.log("hatch");
+      if(self.world.entities[self.position.x+","+self.position.y].length == 1 &&  self.world.entities[self.position.x+","+self.position.y][0] === self){
+        self.transition("hatch");
+      }
+      // console.log("hatch");
       // return true;
     }
     // beast_move(this);
+  });
+  console.log(this.tick);
+
+  DomRenderer(this, template({classVal: 'icon-entities-egg'}));
+  CollisionComponent(this);
+
+  StateComponent(this, {
+    'hatch': Monster,
+    'mother': Mother
   });
 }
 EventComponent(Egg);
@@ -436,6 +465,8 @@ DeathComponent(Egg)
 
 
 var Monster = function(){
+  var self = this;
+  self.worth = 20;
   if(arguments.length > 1){
     this.position = {
       x:arguments[0],
@@ -446,13 +477,25 @@ var Monster = function(){
     this.world = arguments[2];
   }
   this.kind = "monster";
-  this.world.remove('tick', this.move);
+  this.world.remove('tick', this.tick);
+
+  this.tick = this.world.on('tick', function(){
+    self.age++;
+    if (self.age > Math.random() * (10000 - 100) + 100) {
+      self.transition("mother");
+      return true;
+    }
+    beast_move(self);
+  });
+  // console.log(this.tick);
+  MoveComponent(this);
   DomRenderer(this, template({classVal: 'icon-entities-monster'}));
   ExploreComponent(this);
 }
-MoveComponent(Monster);
 
 var Mother = function(){
+  var self = this;
+  self.worth = 30;
   if(arguments.length > 1){
     this.position = {
       x:arguments[0],
@@ -463,7 +506,21 @@ var Mother = function(){
     this.world = arguments[2];
   }
   this.kind = "mother";
-  this.world.remove('tick', this.move);
+  this.world.remove('tick', this.tick);
+
+  this.lay = function() {
+    var egg = new Egg(self.position.x, self.position.y, self.world);
+    self.world.entities.place(egg);
+  };
+  this.tick = this.world.on("tick", function() {
+    var test = Math.floor(Math.random() * 10);
+    if (test == 0 && self.world.findEntityByPosition(self.position.x, self.position.y).length < 2) {
+      self.lay();
+    }
+    beast_move(self);
+  });
+
   DomRenderer(this, template({classVal: 'icon-entities-mother'}));
   PushComponent(this);
+
 }

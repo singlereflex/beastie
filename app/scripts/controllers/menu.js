@@ -29,6 +29,7 @@ angular.module("beastieApp")
         };
 
         $scope.fullscreen = function(){
+          /*
           var docElm = document.documentElement;
 
           if (docElm.requestFullscreen) {
@@ -43,6 +44,7 @@ angular.module("beastieApp")
           else if (docElm.msRequestFullscreen) {
               docElm.msRequestFullscreen();
           }
+          */
         }
 
         for (var i = 0; i < letters.length; i++) {

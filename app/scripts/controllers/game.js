@@ -4,9 +4,10 @@
 
 angular.module("beastieApp")
     .controller("GameCtrl", ["$scope", "beastieEnv", "$firebase", "$log", "$state", function ($scope, beastieEnv, $firebase, $log, $state) {
-
+        var gridsize = 16;
+        var cellsize = 16;
         var game = new Game();
-
+        $scope.score = game.loop.score;
         $scope.music = music;
         $scope.pauseMusic = function (event) {
             event.preventDefault();
@@ -68,12 +69,12 @@ angular.module("beastieApp")
         player.on("die", function() {
           $scope.endGame();
         });
-        player.on("complete_move", function(deltas) {
+        player.on("complete_move", function(delta_x, delta_y) {
           // setTimeout(function(){center(player.el);}, 100);
           // window.scrollBy(deltas.delta_x * 16, deltas.delta_y * 16);
           $("html,body").animate({
-            scrollTop: document.body.scrollTop + deltas.delta_y * 16,
-            scrollLeft: document.body.scrollLeft + deltas.delta_x * 16
+            scrollTop: document.body.scrollTop + delta_y * 16,
+            scrollLeft: document.body.scrollLeft + delta_x * 16
           }, 200);
         });
         game.loop.explore(1024 - 8, 1024 - 8, gridsize);

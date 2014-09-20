@@ -1,12 +1,9 @@
 var Game = function() {
 
-  var gridsize = 16;
-  var cellsize = 16;
-
   var loop = new World();
   this.loop = loop;
 
-  function addPlayer() {
+  this.addPlayer = function() {
     var x = 1024;
     var y = 1024;
 
@@ -22,9 +19,7 @@ var Game = function() {
     var egg = new Egg(_x, _y, loop);
 
     egg.on("die", function() {
-      loop.$apply(function() {
-        loop.score += egg.worth;
-      });
+      loop.score += egg.worth;
     });
 
     // egg.frameId = egg.on("frame", function(frame) {
@@ -91,20 +86,20 @@ var Game = function() {
     for (var i = x; i < x + size; i++) {
       for (var e = y; e < y + size; e++) {
         if (loop.entities[i + "," + e] === undefined) {
-          console.log(Math.floor(Math.random() * 10));
+          // console.log(Math.floor(Math.random() * 10));
           // loop.entities[i + "," + e] = true;
           if (Math.floor(Math.random() * 1.5) > 0) {
-            var blocktype = env_schematics.block(loop);
-            blocktype.position = {
-              x: i,
-              y: e,
-              z: parseInt(Math.random() * 100, 10)
-            };
-            if (blocktype.id) {
-              blocktype.classVal = this.iconPrefix + blocktype.id;
-            }
+            // var blocktype = env_schematics.block(loop);
+            // blocktype.position = {
+            //   x: i,
+            //   y: e,
+            //   z: parseInt(Math.random() * 100, 10)
+            // };
+            // if (blocktype.id) {
+            //   blocktype.classVal = this.iconPrefix + blocktype.id;
+            // }
 
-            loop.entities.place(new Entity(blocktype));
+            loop.entities.place(new Block(i, e, loop));
           } else if (Math.floor(Math.random() * 50) == 0) {
             var egg = placeEgg(loop, i, e);
             loop.entities.place(egg);

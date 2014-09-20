@@ -183,14 +183,15 @@ function CollisionComponent(entity) {
 
 function ExploreComponent(entity) {
     entity.on('complete_move', function () {
-        if (entity.world.world[entity.position.x + "/" + entity.position.y] === undefined) {
+        if (entity.world[entity.position.x + "/" + entity.position.y] === undefined) {
             entity.world.explore(entity.position.x - 8, entity.position.y - 8, 16);
         }
     });
 }
 
 function MoveComponent(Entity) {
-    Entity.prototype.move = function (delta_x, delta_y) {
+
+    var move = function (delta_x, delta_y) {
         this.trigger('start_move', delta_x, delta_y);
         //move this to an event?
         if (this.position.x + delta_x < 0 || this.position.y + delta_y < 0) {
@@ -206,6 +207,12 @@ function MoveComponent(Entity) {
 
         this.trigger('complete_move', delta_x, delta_y, old_position);
     }
+    if(Entity instanceof Function){
+      Entity.prototype.move = move;
+
+    } else {
+      Entity.move = move;
+    }
 }
 
 function PushComponent(entity) {
@@ -213,7 +220,7 @@ function PushComponent(entity) {
     entity.on('start_move', function (delta_x, delta_y) {
         var neighbor = entity.world.findEntityByPosition(entity.position.x + delta_x, entity.position.y + delta_y)[0];
         if (neighbor !== undefined && neighbor.kind === "block") {
-            neighbor.move(deltas.delta_x, deltas.delta_y);
+            neighbor.move(delta_x, delta_y);
         }
     });
 }
@@ -239,7 +246,7 @@ function StateComponent(entity, states){
 
   entity.transition = function(state_name){
     //this?
-    entity.states[state_name]().bind(entity);
+    entity.states[state_name].apply(entity);
   }
 }
 
@@ -248,6 +255,7 @@ function EventComponent(Entity){
       if (this._events[name] === undefined) {
           this._events[name] = [];
       }
+
       this._events[name].push(callback);
       return this._events[name].length-1;
   };
@@ -259,16 +267,24 @@ function EventComponent(Entity){
       var callbacks = this._events[name];
       if (callbacks !== undefined) {
         for (var i = 0; i < callbacks.length; i++) {
-          if callbacks[i].apply(this, arguments);
+          if(callbacks[i]){
+            callbacks[i].apply(this, arguments);
+          }
         }
       }
   };
 
   Entity.prototype.remove = function (event_name, event_id) {
-    return this._events[event_name].splice(event_id, 1);
+    // console.log("removing", arguments);
+    // console.log(this._events[event_name].length);
+    this._events[event_name][event_id] = null;
+    // console.log(this._events[event_name].length);
   };
 
   Entity.prototype.removeAll = function(event_name){
+    if(this._events === undefined){
+      this._events = {};
+    }
     delete this._events[event_name];
   }
 }
