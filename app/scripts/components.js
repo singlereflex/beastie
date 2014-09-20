@@ -57,7 +57,7 @@ function MoveControllerComponent(entity) {
     }, false);
 
     document.body.addEventListener('keyup', function keyUp(event) {
-        console.log(event.which);
+        // console.log(event.which);
         if (!entity.dead) {
             var newX = 0, newY = 0;
             switch (event.which) {

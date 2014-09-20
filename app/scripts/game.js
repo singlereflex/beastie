@@ -18,9 +18,9 @@ var Game = function() {
   function placeEgg(loop, _x, _y) {
     var egg = new Egg(_x, _y, loop);
 
-    egg.on("die", function() {
-      loop.score += egg.worth;
-    });
+    // egg.on("die", function() {
+    //   loop.score += egg.worth;
+    // });
 
     // egg.frameId = egg.on("frame", function(frame) {
     //

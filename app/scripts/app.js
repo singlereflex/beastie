@@ -35,26 +35,6 @@ var gameSpeed = 70;
 //   gui.add(settings, 'q', 0, 20);
 //   gui.add(settings, 'test');
 
-var beast_move = function(beast){
-  var beast_speed = 500;
-  // console.log(beast);
-  if(beast.probability === undefined){
-    beast.probability = beast_speed;
-  }
-  beast.probability = (beast.probability - 1) % beast_speed;
-  // console.log(beast.probability);
-  var yes = Math.floor(Math.abs(Math.random() * (beast.probability)));
-  if(yes  < 10){
-    var delta = (Math.floor(Math.random() * 3) - 1);
-    var y = Math.floor(Math.random() * 2);
-    beast.probability = beast_speed;
-    try {
-        beast.move((1 - (y)) * delta, (y) * delta);
-    } catch (e){
-        console.log("trying something: ", e);
-    }
-  }
-}
 
 //music!
 var pattern = new sc.Pshuf(sc.series(settings.series), Infinity);

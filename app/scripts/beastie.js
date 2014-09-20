@@ -26,12 +26,13 @@ var World = function(){
     this.animloop = function() {
         // try {
           self.trigger('tick');
+
         // } catch (e) {
           // console.log(e);
           // self.pause();
         // }
         if (self.running) {
-            setTimeout(self.animloop, 100);
+            setTimeout(self.animloop, 30);
         }
     }
     this.start = function () {
@@ -253,7 +254,7 @@ var Block = function(x, y, world){
               var delta_x = entity.position.x - this.position.x;
               var delta_y = entity.position.y - this.position.y;
               var neighbor = this.world.findEntityByPosition(entity.position.x + delta_x, entity.position.y + delta_y)[0];
-              if (neighbor !== undefined && neighbor.kind === 'block') {
+              if (neighbor !== undefined/* && neighbor.kind === 'block'*/) {
                   entity.die();
               } else {
                 throw "couldn't kill monster";
@@ -396,6 +397,7 @@ var Egg = function(x, y, world){
   var self = this;
   self.worth = 10;
   this.on('die', function die(){
+    console.log(self.worth);
     self.world.score += self.worth;
     // console.log(self.world.score);
     self.world.entities[self.position.x+","+self.position.y] = _.without(self.world.entities[self.position.x+","+self.position.y], self);
@@ -440,17 +442,17 @@ var Egg = function(x, y, world){
   this.tick = this.world.on('tick', function(){
     // console.log('tick');
     self.age++;
-    if (self.age > Math.random() * (1000 - 20) + 20) {
-      console.log("hatch");
+    if (self.age > Math.random() * (1000 - 100) + 100) {
+
       if(self.world.entities[self.position.x+","+self.position.y].length == 1 &&  self.world.entities[self.position.x+","+self.position.y][0] === self){
         self.transition("hatch");
       }
       // console.log("hatch");
       // return true;
     }
-    // beast_move(this);
+    // self.hunt(this);
   });
-  console.log(this.tick);
+  // console.log(this.tick);
 
   DomRenderer(this, template({classVal: 'icon-entities-egg'}));
   CollisionComponent(this);
@@ -466,6 +468,31 @@ DeathComponent(Egg)
 
 var Monster = function(){
   var self = this;
+  var beast_speed = 10000;
+  self.hunt = function(){
+
+    // console.log(beast);
+    if(self.probability === undefined){
+      self.probability = beast_speed;
+    }
+    self.probability--;
+    // console.log(self.probability);
+    var yes = Math.floor(Math.random() * (self.probability));
+    if(self.probability < 0){
+      self.die();
+    }
+    else if(yes  < 100){
+      var delta = (Math.floor(Math.random() * 3) - 1);
+      var y = Math.floor(Math.random() * 2);
+      try {
+          self.move((1 - (y)) * delta, (y) * delta);
+          self.probability = beast_speed;
+      } catch (e){
+          console.log("trying something: ", e);
+      }
+    }
+  }
+
   self.worth = 20;
   if(arguments.length > 1){
     this.position = {
@@ -481,11 +508,11 @@ var Monster = function(){
 
   this.tick = this.world.on('tick', function(){
     self.age++;
-    if (self.age > Math.random() * (10000 - 100) + 100) {
+    if (self.age > Math.random() * (100000 - 1000) + 1000) {
       self.transition("mother");
       return true;
     }
-    beast_move(self);
+    self.hunt(self);
   });
   // console.log(this.tick);
   MoveComponent(this);
@@ -513,11 +540,11 @@ var Mother = function(){
     self.world.entities.place(egg);
   };
   this.tick = this.world.on("tick", function() {
-    var test = Math.floor(Math.random() * 10);
+    var test = Math.floor(Math.random() * 50);
     if (test == 0 && self.world.findEntityByPosition(self.position.x, self.position.y).length < 2) {
       self.lay();
     }
-    beast_move(self);
+    self.hunt(self);
   });
 
   DomRenderer(this, template({classVal: 'icon-entities-mother'}));

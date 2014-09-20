@@ -7,7 +7,10 @@ angular.module("beastieApp")
         var gridsize = 16;
         var cellsize = 16;
         var game = new Game();
-        $scope.score = game.loop.score;
+        $scope.game = game;
+
+        //for the moment:
+
         $scope.music = music;
         $scope.pauseMusic = function (event) {
             event.preventDefault();
