@@ -24,7 +24,7 @@ angular.module("beastieApp")
         $scope.scoreboard = $firebase(highScoreRef);
 
 
-        
+
 
 
 
@@ -76,7 +76,7 @@ angular.module("beastieApp")
             scrollLeft: document.body.scrollLeft + deltas.delta_x * 16
           }, 200);
         });
-        game.explore(1024 - 8, 1024 - 8, gridsize);
+        game.loop.explore(1024 - 8, 1024 - 8, gridsize);
         game.loop.start();
 
 

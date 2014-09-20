@@ -3,25 +3,23 @@ var Game = function() {
   var gridsize = 16;
   var cellsize = 16;
 
-  var loop = new Entity({
-    kind: "loop",
-    components: [WorldComponent],
-  });
+  var loop = new World();
   this.loop = loop;
 
   function addPlayer() {
     var x = 1024;
     var y = 1024;
 
-    var player = new Entity(env_schematics.player(loop, x, y));
+    var player = new Player(x, y, loop);
 
     loop.entities.place(player);
     center(player.el);
     return player;
   }
 
+
   function placeEgg(loop, _x, _y) {
-    var egg = new Entity(env_schematics.egg(loop, _x, _y));
+    var egg = new Egg(_x, _y, loop);
 
     egg.on("die", function() {
       loop.$apply(function() {
@@ -29,67 +27,67 @@ var Game = function() {
       });
     });
 
-    egg.frameId = egg.on("frame", function(frame) {
-
-      if (frame % gameSpeed === 0) {
-        this.age++;
-        if (this.age > 10 && (Math.random() > 0.25)) {
-          console.log("should hatch");
-          this.transition("hatch");
-
-          return true;
-
-        }
-      }
-
-      return false;
-
-    });
-
-    egg.on("transition:hatch", function hatch(monster) {
-      monster.remove("frame", monster.frameId);
-      console.log("hatch");
-      monster.frameId = monster.on("frame", function(frame) {
-
-        if (frame % gameSpeed === 0) {
-          this.age++;
-          if (this.age > 20) {
-            this.transition("evolve");
-            return true;
-          }
-          beast_move(this);
-          return true;
-        }
-
-        return false;
-
-      });
-    });
-    egg.on("transition:evolve", function evolve(monster) {
-      monster.remove("frame", monster.frameId);
-      monster.lay = function() {
-        var newEgg = placeEgg(loop, this.position.x, this.position.y);
-        this.world.entities.place(newEgg);
-      };
-      monster.frame_id = monster.on("frame", function(frame) {
-        if (!(frame % settings.gamespeed)) {
-          //chance to lay
-          var test = Math.floor(Math.random() * 10);
-          if (test == 0 && loop.findEntityByPosition(this.position.x, this.position.y).length < 2) {
-            this.lay();
-          }
-          beast_move(this);
-          return true;
-        } else {
-          return false;
-        }
-      });
-    });
+    // egg.frameId = egg.on("frame", function(frame) {
+    //
+    //   if (frame % gameSpeed === 0) {
+    //     this.age++;
+    //     if (this.age > 10 && (Math.random() > 0.25)) {
+    //       console.log("should hatch");
+    //       this.transition("hatch");
+    //
+    //       return true;
+    //
+    //     }
+    //   }
+    //
+    //   return false;
+    //
+    // });
+    //
+    // egg.on("transition:hatch", function hatch(monster) {
+    //   monster.remove("frame", monster.frameId);
+    //   console.log("hatch");
+    //   monster.frameId = monster.on("frame", function(frame) {
+    //
+    //     if (frame % gameSpeed === 0) {
+    //       this.age++;
+    //       if (this.age > 20) {
+    //         this.transition("evolve");
+    //         return true;
+    //       }
+    //       beast_move(this);
+    //       return true;
+    //     }
+    //
+    //     return false;
+    //
+    //   });
+    // });
+    // egg.on("transition:evolve", function evolve(monster) {
+    //   monster.remove("frame", monster.frameId);
+    //   monster.lay = function() {
+    //     var newEgg = placeEgg(loop, this.position.x, this.position.y);
+    //     this.world.entities.place(newEgg);
+    //   };
+    //   monster.frame_id = monster.on("frame", function(frame) {
+    //     if (!(frame % settings.gamespeed)) {
+    //       //chance to lay
+    //       var test = Math.floor(Math.random() * 10);
+    //       if (test == 0 && loop.findEntityByPosition(this.position.x, this.position.y).length < 2) {
+    //         this.lay();
+    //       }
+    //       beast_move(this);
+    //       return true;
+    //     } else {
+    //       return false;
+    //     }
+    //   });
+    // });
 
     return egg;
   }
-  this.iconPrefix = "icon-";
-  this.explore = function(x, y, size) {
+  // this.iconPrefix = "icon-";
+  this.loop.explore = function(x, y, size) {
     for (var i = x; i < x + size; i++) {
       for (var e = y; e < y + size; e++) {
         if (loop.entities[i + "," + e] === undefined) {
@@ -130,16 +128,4 @@ var Game = function() {
     //     loop.entities.place(egg);
     // }
   };
-
-
-  /*
-         world should have
-         environment = {
-         loop,///the game loop
-         entities,///the list of entities
-         world,///a representation of the list of entities?
-         explore?///the ability to add to the entities, works with world
-
-         }
-         */
 }
