@@ -37,6 +37,17 @@
         <!-- Add your site or application content here -->
         <div class="ui-container" ui-view></div>
 
+        <script type="text/ng-template" id="entities.html">
+            <div ng-model="entity" class="entity {{ entity.kind }}" ng-style="{
+                    'left': entity.position.x + 'em',
+                    'top': entity.position.y + 'em',
+                    'z-index' : entity.position.z
+                }" ng-repeat="entity in entities">
+                <i class="{{ entity.classVal }}"></i>
+            </div>
+        </script>
+
+
         <script src="bower_components/dat.gui/dat.gui.js"></script>
         <script src="bower_components/jquery/jquery.js"></script>
         <script src="bower_components/angular/angular.js"></script>
