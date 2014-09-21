@@ -11,7 +11,7 @@ angular.module("beastieApp")
         $scope.score = 0;
 
 
-        var game = new Worker('/scripts/worker/game.js');//new Game();
+        var game = new Worker('/beastie/scripts/worker/game.js');//new Game();
 
         // game.postMessage();
 
