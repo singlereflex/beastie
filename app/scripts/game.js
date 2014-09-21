@@ -18,7 +18,7 @@
         },
         kind: entity.kind
       },
-      id:entity.position.x+","+entity.position.y,
+      _id:entity._id,
       icon:entity.icon
     })
     entity.on('complete_move', function(delta_x, delta_y, old){
@@ -31,7 +31,7 @@
           },
           kind: entity.kind
         },
-        id:old.x+","+old.y,
+        _id:entity._id,
         icon: entity.icon
       });
     });
@@ -45,7 +45,7 @@
           },
           kind: entity.kind
         },
-        id:entity.position.x+","+entity.position.y,
+        _id:entity._id,
         icon: entity.icon
       });
     })
@@ -59,7 +59,7 @@
           },
           kind: entity.kind
         },
-        id:entity.position.x+","+entity.position.y,
+        _id:entity._id,
         icon: entity.icon
       });
     });

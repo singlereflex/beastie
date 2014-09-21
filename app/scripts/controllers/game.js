@@ -65,18 +65,20 @@ angular.module("beastieApp")
         game.addEventListener('message', function(e){
           switch(e.data.event){
             case 'place':
-              if(world[e.data.id] === undefined){
-                world[e.data.id] = []
-              }
-              world[e.data.id].push(new Display(e.data.entity, e.data.icon))
+              world[e.data._id] = new Display(e.data.entity, e.data.icon);
               break;
             case 'complete_move':
-              // world[e.data.id].el.style.top = e.data.entity.position.y + 'em';
-              // world[e.data.id].el.style.left = e.data.entity.position.x + 'em';
+              console.log("move");
+              
+              world[e.data._id].el.style.top = e.data.entity.position.y + 'em';
+              world[e.data._id].el.style.left = e.data.entity.position.x + 'em';
             break;
             case 'die':
+              document.getElementById('entityboard').removeChild(world[e.data._id].el);
+              delete world[e.data._id];
             break;
             case 'transition':
+              world[e.data._id].render(e.data.entity, e.data.icon);
             break;
           }
 

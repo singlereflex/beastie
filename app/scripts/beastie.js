@@ -13,8 +13,10 @@ var World = function(){
       if (!self.entities[loc]) {
         self.entities[loc] = [];
       }
+
       self.entities[loc].push(entity);
       if(!silent){
+        entity._id = _.uniqueId("mob_");
         self.trigger('place', entity);
       }
     }
