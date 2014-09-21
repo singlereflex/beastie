@@ -35,15 +35,6 @@ var gameSpeed = 70;
 //   gui.add(settings, 'q', 0, 20);
 //   gui.add(settings, 'test');
 
-var beast_move = function(beast){
-    var delta = (Math.floor(Math.random() * 3) - 1);
-    var y = Math.floor(Math.random() * 2);
-    try {
-        beast.move((1 - (y)) * delta, (y) * delta);
-    } catch (e){
-        console.log("trying something: ", e);
-    }
-}
 
 //music!
 var pattern = new sc.Pshuf(sc.series(settings.series), Infinity);
