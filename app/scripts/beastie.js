@@ -1,8 +1,4 @@
 // beastie.js
-_.templateSettings = {
-    interpolate: /\{\{(.+?)\}\}/g
-};
-var template = _.template('<i class="{{ classVal }}"></i>');
 
 var World = function(){
   this._events = {};
@@ -12,13 +8,15 @@ var World = function(){
     this.score = 0;
     this.entities = {};
 
-    this.entities.place = function(entity) {
+    this.entities.place = function(entity, silent) {
       var loc = entity.position.x + "," + entity.position.y;
       if (!self.entities[loc]) {
         self.entities[loc] = [];
       }
       self.entities[loc].push(entity);
-      self.trigger('place', entity);
+      if(!silent){
+        self.trigger('place', entity);
+      }
     }
     this.findEntityByPosition = function(x, y) {
       return this.entities[x + ',' + y] || [];
@@ -51,33 +49,7 @@ var World = function(){
 EventComponent(World);
 
 /*
-var Display = function(player, icon){
-  this._events = {};
-  var self = this;
-  this.on('rendered', function(){
-    self.el = document.getElementById('entityboard').appendChild(self.el);
-    player.el = self.el;
-    player.on('complete_move', function (delta_x, delta_y) {
-        self.el.style.top = player.position.y + 'em';
-        self.el.style.left = player.position.x + 'em';
-    });
-  });
-  player.on('die', function(){
-    document.getElementById('entityboard').removeChild(self.el);
-  });
 
-  this.render = function(player, icon){
-    self.position = {
-      x: player.position.x,
-      y: player.position.y
-    }
-    self.kind = player.kind
-    DomRenderer(self, template({classVal: icon}));
-  }
-
-  this.render(player, icon);
-}
-EventComponent(Display);
 */
 var Player = function(x, y, world){
   this._events = {};
@@ -85,7 +57,7 @@ var Player = function(x, y, world){
   var self = this;
   this.on('complete_move', function update(delta_x, delta_y, old){
     self.world.entities[old.x+","+old.y] = _.without(self.world.entities[old.x+","+old.y], self);
-    self.world.entities.place(self);
+    self.world.entities.place(self, true);
     // center(self.el);
   })
 
@@ -120,7 +92,7 @@ var Player = function(x, y, world){
   // PullControllerComponent(this);
 
   ExploreComponent(this);
-
+  this.icon = 'icon-entities-player';
   //this will chanage for workers:
   // this.display = new Display(this, 'icon-entities-player');
 }
@@ -147,7 +119,7 @@ var Block = function(x, y, world){
 
   this.on('complete_move', function (delta_x, delta_y, old) {
       self.world.entities[old.x+","+old.y] = _.without(self.world.entities[old.x+","+old.y], self);
-      self.world.entities.place(self);
+      self.world.entities.place(self, true);
   });
 
   this.on('collided', function (entity) {
@@ -176,6 +148,7 @@ var Block = function(x, y, world){
     y:y
   }
   this.kind = "block";
+  this.icon = 'icon-environment-block';
   // DomRenderer(this, template({classVal: 'icon-environment-block'}));
   // this.display = new Display(this, 'icon-environment-block');
   CollisionComponent(this);
@@ -219,7 +192,7 @@ var Egg = function(x, y, world){
 
   this.on('complete_move', function(delta_x, delta_y, old){
     self.world.entities[old.x+","+old.y] = _.without(self.world.entities[old.x+","+old.y], self);
-    self.world.entities.place(self);
+    self.world.entities.place(self, true);
   });
 
   this.age = 0;
@@ -246,7 +219,7 @@ var Egg = function(x, y, world){
     // self.hunt(this);
   });
   // console.log(this.tick);
-
+  this.icon = 'icon-entities-egg';
   // DomRenderer(this, template({classVal: 'icon-entities-egg'}));
   // this.display = new Display(this, 'icon-entities-egg');
   CollisionComponent(this);
@@ -310,6 +283,7 @@ var Monster = function(){
   });
   // console.log(this.tick);
   MoveComponent(this);
+  this.icon = 'icon-entities-monster';
   // this.display.render(this, 'icon-entities-monster');
   ExploreComponent(this);
 }
@@ -340,7 +314,7 @@ var Mother = function(){
     }
     self.hunt(self);
   });
-
+  this.icon = 'icon-entities-mother';
   // this.display.render(this, 'icon-entities-mother');
   PushComponent(this);
 

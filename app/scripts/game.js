@@ -8,6 +8,7 @@
   self.loop = loop;
 
   loop.on('place', function(entity){
+    // console.log(entity.icon);
     self.postMessage({
       event: 'place',
       entity: {
@@ -16,9 +17,11 @@
           y: entity.position.y
         },
         kind: entity.kind
-      }
+      },
+      id:entity.position.x+","+entity.position.y,
+      icon:entity.icon
     })
-    entity.on('complete_move', function(){
+    entity.on('complete_move', function(delta_x, delta_y, old){
       self.postMessage({
         event: 'complete_move',
         entity: {
@@ -27,7 +30,9 @@
             y: entity.position.y
           },
           kind: entity.kind
-        }
+        },
+        id:old.x+","+old.y,
+        icon: entity.icon
       });
     });
     entity.on('die', function(){
@@ -39,7 +44,9 @@
             y: entity.position.y
           },
           kind: entity.kind
-        }
+        },
+        id:entity.position.x+","+entity.position.y,
+        icon: entity.icon
       });
     })
     entity.on('transition', function(){
@@ -51,7 +58,9 @@
             y: entity.position.y
           },
           kind: entity.kind
-        }
+        },
+        id:entity.position.x+","+entity.position.y,
+        icon: entity.icon
       });
     });
   });

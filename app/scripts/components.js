@@ -10,18 +10,7 @@
 // }
 
 /*
-function DomRenderer(entity, innerHTML) {
-    if (entity.el !== undefined) {
-        document.getElementById('entityboard').removeChild(entity.el);
-    }
-    var div = document.createElement('div');
-    div.innerHTML = innerHTML;
-    div.className = "entity " + entity.kind;
-    div.style.left = entity.position.x + 'em';
-    div.style.top = entity.position.y + 'em';
-    entity.el = div;
-    entity.trigger('rendered', entity);
-}
+
 
 function MoveControllerComponent(entity) {
     //requires the MoveComponent
