@@ -70,7 +70,7 @@ gulp.task('server', ['connect'], function () {
 gulp.task('watch', ['connect', 'server', 'sass'], function() {
   var server = livereload();
 
-  gulp.watch(dest + '/**').on('change', function(file) {
+  gulp.watch([dest + '/**', "!"+dest+"/bower_components"]).on('change', function(file) {
       server.changed(file.path);
   });
   gulp.watch(dest + '/styles/*.scss', ['sass']);

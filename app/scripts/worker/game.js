@@ -1,6 +1,7 @@
 // var Game = function() {
 
-  importScripts('/beastie/bower_components/underscore/underscore.js');
+  importScripts('../../bower_components/underscore/underscore.js');
+  importScripts('../shared/components.js');
   importScripts('components.js');
   importScripts('beastie.js');
 

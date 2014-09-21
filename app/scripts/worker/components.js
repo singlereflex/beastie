@@ -1,19 +1,5 @@
 // components.js
 
-
-// function FrameComponent(entity) {
-//     entity.world.loop.toBeRendered.push(entity);
-//     // entity.loop_id = entity.world.loop.on('frame', entity.frame.bind(entity));//really need a remove thing..
-//     entity.on('die', function () {
-//         entity.world.loop.toBeRendered = _.without(entity.world.loop.toBeRendered, entity);
-//     });
-// }
-
-/*
-
-
-
-*/
 function CollisionComponent(entity) {
     entity.on('start_move', function (delta_x, delta_y) {
         var collided = entity.world.findEntityByPosition(entity.position.x + delta_x, entity.position.y + delta_y);
@@ -64,6 +50,7 @@ function PushComponent(entity) {
     //subscribe to move event
     entity.on('start_move', function (delta_x, delta_y) {
         var neighbor = entity.world.findEntityByPosition(entity.position.x + delta_x, entity.position.y + delta_y)[0];
+
         if (neighbor !== undefined && neighbor.kind === "block") {
             neighbor.move(delta_x, delta_y);
         }
@@ -93,44 +80,5 @@ function StateComponent(entity, states){
     //this?
     entity.states[state_name].apply(entity);
     entity.trigger('transition');
-  }
-}
-
-function EventComponent(Entity){
-  Entity.prototype.on = function (name, callback) {
-      if (this._events[name] === undefined) {
-          this._events[name] = [];
-      }
-
-      this._events[name].push(callback);
-      return this._events[name].length-1;
-  };
-
-  Entity.prototype.trigger = function () {
-    //so that we can use array functions, arguments is not a true array
-      var arguments = Array.prototype.slice.call(arguments);
-      var name = arguments.shift();
-      var callbacks = this._events[name];
-      if (callbacks !== undefined) {
-        for (var i = 0; i < callbacks.length; i++) {
-          if(callbacks[i]){
-            callbacks[i].apply(this, arguments);
-          }
-        }
-      }
-  };
-
-  Entity.prototype.remove = function (event_name, event_id) {
-    // console.log("removing", arguments);
-    // console.log(this._events[event_name].length);
-    this._events[event_name][event_id] = null;
-    // console.log(this._events[event_name].length);
-  };
-
-  Entity.prototype.removeAll = function(event_name){
-    if(this._events === undefined){
-      this._events = {};
-    }
-    delete this._events[event_name];
   }
 }

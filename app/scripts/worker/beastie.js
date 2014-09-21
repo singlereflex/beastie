@@ -259,7 +259,7 @@ var Monster = function(){
           self.move((1 - (y)) * delta, (y) * delta);
           self.probability = beast_speed;
       } catch (e){
-          console.log("trying something: ", e);
+          console.debug("trying something: "+ e);
       }
     }
   }
@@ -319,7 +319,9 @@ var Mother = function(){
     self.hunt(self);
   });
   this.icon = 'icon-entities-mother';
+  this.removeAll('start_move');
   // this.display.render(this, 'icon-entities-mother');
   PushComponent(this);
+  CollisionComponent(this);
 
 }

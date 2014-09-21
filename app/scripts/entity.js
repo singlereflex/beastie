@@ -15,7 +15,7 @@ var Display = function(player, icon){
   });
 
   this.render = function(player, icon){
-    console.log(icon);
+    // console.log(icon);
     self.position = {
       x: player.position.x,
       y: player.position.y

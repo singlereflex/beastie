@@ -11,7 +11,7 @@ angular.module("beastieApp")
         $scope.score = 0;
 
 
-        var game = new Worker('/beastie/scripts/worker/game.js');//new Game();
+        var game = new Worker('scripts/worker/game.js');//new Game();
 
         // game.postMessage();
 
@@ -21,7 +21,7 @@ angular.module("beastieApp")
               world[e.data._id] = new Display(e.data.entity, e.data.icon);
               break;
             case 'complete_move':
-              console.log("move");
+              // console.log("move");
 
               world[e.data._id].el.style.top = e.data.entity.position.y + 'em';
               world[e.data._id].el.style.left = e.data.entity.position.x + 'em';
@@ -43,7 +43,7 @@ angular.module("beastieApp")
             break;
           }
 
-          console.log(arguments);
+          // console.log(arguments);
         });
 
         var player = new DummyPlayer(game);
