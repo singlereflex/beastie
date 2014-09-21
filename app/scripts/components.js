@@ -76,7 +76,7 @@ function MoveControllerComponent(entity) {
                 break;
             case 32:
                 event.preventDefault();
-                center(entity.display.el);
+                center(entity.el);
                 break;
             }
         }

@@ -64,6 +64,7 @@ angular.module("beastieApp")
 
         $scope.endGame = function () {
           //game.terminate();
+          player.dead = true;
           $state.go("game.ended");
         };
 
