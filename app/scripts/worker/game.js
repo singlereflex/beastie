@@ -121,10 +121,6 @@
     }
   })
 
-  player.on('die', function(){
-    self.close();
-  });
-
   this.loop.explore(1024 - 8, 1024 - 8, 16);
   this.loop.start();
 // }

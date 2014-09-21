@@ -63,7 +63,7 @@ angular.module("beastieApp")
         $scope.scoreboard = $firebase(highScoreRef);
 
         $scope.endGame = function () {
-          //game.terminate();
+          game.terminate();
           player.dead = true;
           $state.go("game.ended");
         };
