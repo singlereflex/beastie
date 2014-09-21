@@ -1,7 +1,7 @@
 <div class="highscore-container">
     <h2>Highscore</h2>
     <ol class="highscore-list">
-        <li ng-repeat="player in scoreboard | toArray | orderBy:'score':true" ng-show="player.name"><span class="name">{{player.name}}</span><span class="score">{{player.score}}</span></li>
+        <li ng-repeat="player in scoreboard | toArray | orderBy:'score':true | limitTo:pageSize" ><span class="name" ng-show="player.name">{{player.name}}</span><span class="name" ng-hide="player.name">Unknown</span><span class="score">{{player.score}}</span></li>
     </ol>
     <a href="#" class="btn btn-default">Back to Main Menu</a>
 </div>
