@@ -82,44 +82,6 @@ function MoveControllerComponent(entity) {
         }
     }, false);
 
-
-
-
-    document.body.addEventListener('touchstart', function dblClick(event){
-      if(!entity.dead){
-        var touch = event.changedTouches[0];
-
-        event.preventDefault();
-
-        var x = 0, y = 0;
-        var center = document.body.clientWidth/2;
-        var rightCenter = {
-          x: document.body.clientWidth - document.body.clientWidth/4,
-          y: document.body.clientHeight/2
-        }
-
-        if(touch.clientX > center){
-          if(Math.abs(rightCenter.x - touch.clientX) > Math.abs(rightCenter.y - touch.clientY)){
-            if(0 < rightCenter.x - touch.clientX){
-              x = -1
-            } else if(0 > rightCenter.x - touch.clientX){
-              x = 1;
-            }
-
-          } else {
-            if(0 < rightCenter.y - touch.clientY){
-              y = -1
-            } else if(0 > rightCenter.y - touch.clientY){
-              y = 1;
-            }
-          }
-          entity.move(x, y);
-        }
-      }
-
-      // event.x -
-      // event.y -
-    }, false)
 }
 
 function PullControllerComponent(entity){
@@ -137,26 +99,4 @@ function PullControllerComponent(entity){
           entity.pulling(false);
       }
   });
-
-  document.body.addEventListener('touchstart', function dblClick(event){
-
-    var center = document.body.clientWidth/2;
-
-    if(event.touches.length > 1){
-      event.preventDefault();
-      entity.pulling(true);
-    }
-
-
-  }, false);
-  document.body.addEventListener('touchend', function dblClick(event){
-
-    var center = document.body.clientWidth/2;
-
-
-    if(event.touches.length < 2){
-      entity.pulling(false);
-    }
-
-  }, false)
 }
