@@ -9,6 +9,7 @@
 //     });
 // }
 
+/*
 function DomRenderer(entity, innerHTML) {
     if (entity.el !== undefined) {
         document.getElementById('entityboard').removeChild(entity.el);
@@ -168,7 +169,7 @@ function PullControllerComponent(entity){
 
   }, false)
 }
-
+*/
 function CollisionComponent(entity) {
     entity.on('start_move', function (delta_x, delta_y) {
         var collided = entity.world.findEntityByPosition(entity.position.x + delta_x, entity.position.y + delta_y);
@@ -247,6 +248,7 @@ function StateComponent(entity, states){
   entity.transition = function(state_name){
     //this?
     entity.states[state_name].apply(entity);
+    entity.trigger('transition');
   }
 }
 

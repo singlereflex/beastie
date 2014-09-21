@@ -6,7 +6,12 @@ angular.module("beastieApp")
     .controller("GameCtrl", ["$scope", "beastieEnv", "$firebase", "$log", "$state", function ($scope, beastieEnv, $firebase, $log, $state) {
         var gridsize = 16;
         var cellsize = 16;
-        var game = new Game();
+        var game = new Worker('/scripts/game.js');//new Game();
+        game.postMessage();
+        game.addEventListener('message', function(e){
+          console.log(arguments);
+        });
+
         $scope.game = game;
 
         //for the moment:
@@ -67,7 +72,7 @@ angular.module("beastieApp")
         $scope.restartGame = function () {
             location.reload();
         };
-
+/*
         var player = game.addPlayer();
         player.on("die", function() {
           $scope.endGame();
@@ -82,6 +87,6 @@ angular.module("beastieApp")
         });
         game.loop.explore(1024 - 8, 1024 - 8, gridsize);
         game.loop.start();
-
+*/
 
     }]);

@@ -1,7 +1,60 @@
-var Game = function() {
+// var Game = function() {
+
+  importScripts('/bower_components/underscore/underscore.js');
+  importScripts('components.js');
+  importScripts('beastie.js');
 
   var loop = new World();
-  this.loop = loop;
+  self.loop = loop;
+
+  loop.on('place', function(entity){
+    self.postMessage({
+      event: 'place',
+      entity: {
+        position:{
+          x: entity.position.x,
+          y: entity.position.y
+        },
+        kind: entity.kind
+      }
+    })
+    entity.on('complete_move', function(){
+      self.postMessage({
+        event: 'complete_move',
+        entity: {
+          position:{
+            x: entity.position.x,
+            y: entity.position.y
+          },
+          kind: entity.kind
+        }
+      });
+    });
+    entity.on('die', function(){
+      self.postMessage({
+        event: 'die',
+        entity: {
+          position:{
+            x: entity.position.x,
+            y: entity.position.y
+          },
+          kind: entity.kind
+        }
+      });
+    })
+    entity.on('transition', function(){
+      self.postMessage({
+        event: 'transition',
+        entity: {
+          position:{
+            x: entity.position.x,
+            y: entity.position.y
+          },
+          kind: entity.kind
+        }
+      });
+    });
+  });
 
   this.addPlayer = function() {
     var x = 1024;
@@ -10,95 +63,21 @@ var Game = function() {
     var player = new Player(x, y, loop);
 
     loop.entities.place(player);
-    center(player.el);
+    // center(player.el);
     return player;
   }
 
 
   function placeEgg(loop, _x, _y) {
     var egg = new Egg(_x, _y, loop);
-
-    // egg.on("die", function() {
-    //   loop.score += egg.worth;
-    // });
-
-    // egg.frameId = egg.on("frame", function(frame) {
-    //
-    //   if (frame % gameSpeed === 0) {
-    //     this.age++;
-    //     if (this.age > 10 && (Math.random() > 0.25)) {
-    //       console.log("should hatch");
-    //       this.transition("hatch");
-    //
-    //       return true;
-    //
-    //     }
-    //   }
-    //
-    //   return false;
-    //
-    // });
-    //
-    // egg.on("transition:hatch", function hatch(monster) {
-    //   monster.remove("frame", monster.frameId);
-    //   console.log("hatch");
-    //   monster.frameId = monster.on("frame", function(frame) {
-    //
-    //     if (frame % gameSpeed === 0) {
-    //       this.age++;
-    //       if (this.age > 20) {
-    //         this.transition("evolve");
-    //         return true;
-    //       }
-    //       beast_move(this);
-    //       return true;
-    //     }
-    //
-    //     return false;
-    //
-    //   });
-    // });
-    // egg.on("transition:evolve", function evolve(monster) {
-    //   monster.remove("frame", monster.frameId);
-    //   monster.lay = function() {
-    //     var newEgg = placeEgg(loop, this.position.x, this.position.y);
-    //     this.world.entities.place(newEgg);
-    //   };
-    //   monster.frame_id = monster.on("frame", function(frame) {
-    //     if (!(frame % settings.gamespeed)) {
-    //       //chance to lay
-    //       var test = Math.floor(Math.random() * 10);
-    //       if (test == 0 && loop.findEntityByPosition(this.position.x, this.position.y).length < 2) {
-    //         this.lay();
-    //       }
-    //       beast_move(this);
-    //       return true;
-    //     } else {
-    //       return false;
-    //     }
-    //   });
-    // });
-
     return egg;
   }
-  // this.iconPrefix = "icon-";
-  this.loop.explore = function(x, y, size) {
+
+  self.loop.explore = function(x, y, size) {
     for (var i = x; i < x + size; i++) {
       for (var e = y; e < y + size; e++) {
         if (loop.entities[i + "," + e] === undefined) {
-          // console.log(Math.floor(Math.random() * 10));
-          // loop.entities[i + "," + e] = true;
           if (Math.floor(Math.random() * 1.5) > 0) {
-            // var blocktype = env_schematics.block(loop);
-            // blocktype.position = {
-            //   x: i,
-            //   y: e,
-            //   z: parseInt(Math.random() * 100, 10)
-            // };
-            // if (blocktype.id) {
-            //   blocktype.classVal = this.iconPrefix + blocktype.id;
-            // }
-
             loop.entities.place(new Block(i, e, loop));
           } else if (Math.floor(Math.random() * 50) == 0) {
             var egg = placeEgg(loop, i, e);
@@ -109,18 +88,10 @@ var Game = function() {
         }
       }
     }
-
-    // for (var n = 0; n < Math.floor(size / 5); n++) {
-    //
-    //     var _x = Math.floor(Math.random() * size + x);
-    //     var _y = Math.floor(Math.random() * size + y);
-    //
-    //     while (loop.findEntityByPosition(_x, _y).length > 0) {
-    //         _x = Math.floor(Math.random() * size + x);
-    //         _y = Math.floor(Math.random() * size + y);
-    //     }
-    //     var egg = placeEgg(loop, _x, _y);
-    //     loop.entities.place(egg);
-    // }
   };
-}
+
+
+  this.addPlayer();
+  this.loop.explore(1024 - 8, 1024 - 8, 16);
+  this.loop.start();
+// }
