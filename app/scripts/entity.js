@@ -1,32 +1,47 @@
-//now this is just a concept!
+// alert("loaded");
+_.templateSettings = {
+    interpolate: /\{\{(.+?)\}\}/g
+};
+var template = _.template('<i class="{{ classVal }}"></i>');
 
+var Display = function(player, icon){
+  this._events = {};
+  var self = this;
+  this.on('rendered', function(){
+    self.el = document.getElementById('entityboard').appendChild(self.el);
+    if(player.kind == 'player'){
+      center(self.el);
+    }
+  });
 
+  this.render = function(player, icon){
+    console.log(icon);
+    self.position = {
+      x: player.position.x,
+      y: player.position.y
+    }
+    self.kind = player.kind
+    DomRenderer(self, template({classVal: icon}));
+  }
 
+  this.render(player, icon);
+}
+EventComponent(Display);
 
-/**
- * @todo move this to a component: see StateComponent
- */
-// Entity.prototype.transition = function (state_name) {
-//     this.state = state_name;
-//
-//     // if(this.states[state_name].frame !== undefined){
-//     //     this.frame = this.states[state_name].frame.bind(this);
-//     // }
-//     if (this.states[state_name].events !== undefined) {
-//         for (var key in this.states[state_name].events) {
-//             if (this.states[state_name].events.hasOwnProperty(key)) {
-//                 this._events[key] = {};
-//                 if (this.states[state_name].events[key]) {
-//                     this.on(key, this.states[state_name].events[key].bind(this));
-//                 }
-//
-//             }
-//         }
-//     }
-//     _.extend(this, this.states[state_name]);//that should override the correct things
-//     if (this.states[state_name].components !== undefined) {
-//         this.loadComponents(this.states[state_name].components)
-//     }
-//     this.trigger('transition', state_name);
-//     this.trigger('transition:' + state_name, this);
-// };
+var DummyPlayer = function(game){
+  this.move = function(delta_x, delta_y){
+    game.postMessage({
+      event: 'move',
+      delta_x: delta_x,
+      delta_y: delta_y
+    });
+  }
+  this.pulling = function(yes){
+    game.postMessage({
+      event: 'pulling',
+      is_pulling: yes
+    })
+  }
+  MoveControllerComponent(this);
+  PullControllerComponent(this);
+}

@@ -8,59 +8,12 @@ angular.module("beastieApp")
         var cellsize = 16;
         var world = {};
 
-        _.templateSettings = {
-            interpolate: /\{\{(.+?)\}\}/g
-        };
-        var template = _.template('<i class="{{ classVal }}"></i>');
+        $scope.score = 0;
 
 
-        var game = new Worker('/scripts/game.js');//new Game();
-        game.postMessage();
+        var game = new Worker('/scripts/worker/game.js');//new Game();
 
-        function DomRenderer(entity, innerHTML) {
-            if (entity.el !== undefined) {
-                document.getElementById('entityboard').removeChild(entity.el);
-            }
-            var div = document.createElement('div');
-            div.innerHTML = innerHTML;
-            div.className = "entity " + entity.kind;
-            div.style.left = entity.position.x + 'em';
-            div.style.top = entity.position.y + 'em';
-            entity.el = div;
-            entity.trigger('rendered', entity);
-        }
-
-        var Display = function(player, icon){
-          this._events = {};
-          var self = this;
-          this.on('rendered', function(){
-            self.el = document.getElementById('entityboard').appendChild(self.el);
-            if(player.kind == 'player'){
-              center(self.el);
-            }
-            // player.el = self.el;
-            // player.on('complete_move', function (delta_x, delta_y) {
-            //     self.el.style.top = player.position.y + 'em';
-            //     self.el.style.left = player.position.x + 'em';
-            // });
-          });
-          // player.on('die', function(){
-          //   document.getElementById('entityboard').removeChild(self.el);
-          // });
-
-          this.render = function(player, icon){
-            console.log(icon);
-            self.position = {
-              x: player.position.x,
-              y: player.position.y
-            }
-            self.kind = player.kind
-            DomRenderer(self, template({classVal: icon}));
-          }
-
-          this.render(player, icon);
-        }
-        EventComponent(Display);
+        // game.postMessage();
 
         game.addEventListener('message', function(e){
           switch(e.data.event){
@@ -69,13 +22,21 @@ angular.module("beastieApp")
               break;
             case 'complete_move':
               console.log("move");
-              
+
               world[e.data._id].el.style.top = e.data.entity.position.y + 'em';
               world[e.data._id].el.style.left = e.data.entity.position.x + 'em';
             break;
             case 'die':
               document.getElementById('entityboard').removeChild(world[e.data._id].el);
-              delete world[e.data._id];
+              // delete world[e.data._id];
+              if(e.data.entity.kind == "player"){
+                $scope.endGame();
+              } else {
+                $scope.score += e.data.worth;
+              }
+              if(!$scope.$$phase){
+                $scope.$apply();
+              }
             break;
             case 'transition':
               world[e.data._id].render(e.data.entity, e.data.icon);
@@ -85,55 +46,15 @@ angular.module("beastieApp")
           console.log(arguments);
         });
 
-        $scope.game = game;
-
-        //for the moment:
-
-        $scope.music = music;
-        $scope.pauseMusic = function (event) {
-            event.preventDefault();
-            if (!music) {
-                settings.music.start();
-            } else {
-                settings.music.stop();
-            }
-            music = !music;
-            $scope.music = music;
-        };
+        var player = new DummyPlayer(game);
 
         var highScoreRef = new Firebase("https://highscore.firebaseio.com/beastie");
         // Automatically syncs everywhere in real time.
         $scope.scoreboard = $firebase(highScoreRef);
 
-
-
-
-
-
-
-        $scope.pauseGame = function () {
-            game.loop.pause();
-        };
-
         $scope.endGame = function () {
-            game.loop.stop();
-            $state.go("game.ended");
-
-//            var modalInstance = $modal.open({
-//                templateUrl: "views/modal_score_submit.html",
-//                controller: "HighscoreModalCtrl",
-//                scope: $scope
-//            });
-//
-//            modalInstance.result.then(function (name) {
-//                $log.info(name);
-//                highScoreRef.push({name: name, score: $scope.score});
-//                location.reload();
-//            }, function () {
-//                $log.info("Modal dismissed at: " + new Date());
-//                location.reload();
-//            });
-
+          //game.terminate();
+          $state.go("game.ended");
         };
 
         $scope.submitHighscore = function(name) {
@@ -145,21 +66,4 @@ angular.module("beastieApp")
         $scope.restartGame = function () {
             location.reload();
         };
-/*
-        var player = game.addPlayer();
-        player.on("die", function() {
-          $scope.endGame();
-        });
-        player.on("complete_move", function(delta_x, delta_y) {
-          // setTimeout(function(){center(player.el);}, 100);
-          // window.scrollBy(deltas.delta_x * 16, deltas.delta_y * 16);
-          $("html,body").animate({
-            scrollTop: document.body.scrollTop + delta_y * 16,
-            scrollLeft: document.body.scrollLeft + delta_x * 16
-          }, 200);
-        });
-        game.loop.explore(1024 - 8, 1024 - 8, gridsize);
-        game.loop.start();
-*/
-
     }]);

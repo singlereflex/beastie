@@ -46,7 +46,8 @@
           kind: entity.kind
         },
         _id:entity._id,
-        icon: entity.icon
+        icon: entity.icon,
+        worth: entity.worth
       });
     })
     entity.on('transition', function(){
@@ -100,7 +101,25 @@
   };
 
 
-  this.addPlayer();
+  var player = this.addPlayer();
+
+  self.addEventListener('message', function(e){
+    if(e.data){
+      switch(e.data.event){
+        case 'move':
+          player.move(e.data.delta_x, e.data.delta_y);
+          break;
+        case 'pulling':
+          player.pulling = e.data.is_pulling;
+          break;
+      }
+    }
+  })
+
+  player.on('die', function(){
+    self.close();
+  });
+
   this.loop.explore(1024 - 8, 1024 - 8, 16);
   this.loop.start();
 // }

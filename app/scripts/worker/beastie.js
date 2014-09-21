@@ -15,8 +15,10 @@ var World = function(){
       }
 
       self.entities[loc].push(entity);
-      if(!silent){
+      if(entity._id === undefined){
         entity._id = _.uniqueId("mob_");
+      }
+      if(!silent){
         self.trigger('place', entity);
       }
     }
