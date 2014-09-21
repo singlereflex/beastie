@@ -14,17 +14,27 @@ angular.module("beastieApp")
         var game = new Worker('scripts/worker/game.js');//new Game();
 
         // game.postMessage();
-
+        var player = new DummyPlayer(game);
         game.addEventListener('message', function(e){
           switch(e.data.event){
             case 'place':
               world[e.data._id] = new Display(e.data.entity, e.data.icon);
+              if(e.data.entity.kind == "player"){
+                player.display = world[e.data._id];
+              }
               break;
             case 'complete_move':
               // console.log("move");
 
               world[e.data._id].el.style.top = e.data.entity.position.y + 'em';
               world[e.data._id].el.style.left = e.data.entity.position.x + 'em';
+              if(e.data.entity.kind == "player"){
+                $("html,body").animate({
+                  scrollTop: document.body.scrollTop + e.data.deltas.delta_y * 16,
+                  scrollLeft: document.body.scrollLeft + e.data.deltas.delta_x * 16
+                }, 200);
+              }
+
             break;
             case 'die':
               document.getElementById('entityboard').removeChild(world[e.data._id].el);
@@ -46,7 +56,7 @@ angular.module("beastieApp")
           // console.log(arguments);
         });
 
-        var player = new DummyPlayer(game);
+
 
         var highScoreRef = new Firebase("https://highscore.firebaseio.com/beastie");
         // Automatically syncs everywhere in real time.

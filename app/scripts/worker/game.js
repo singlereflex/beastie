@@ -25,6 +25,10 @@
     entity.on('complete_move', function(delta_x, delta_y, old){
       self.postMessage({
         event: 'complete_move',
+        deltas:{
+          delta_x: delta_x,
+          delta_y: delta_y
+        },
         entity: {
           position:{
             x: entity.position.x,
