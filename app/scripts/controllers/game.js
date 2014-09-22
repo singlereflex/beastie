@@ -34,6 +34,25 @@ var viewport = {
   x:0,
   y:0
 }
+
+var images = [
+  '../../svg/uE001-entities-egg.svg',
+  '../../svg/uE002-entities-monster.svg',
+  '../../svg/uE003-entities-mother.svg',
+  '../../svg/uE004-entities-player.svg'
+]
+var sprites = {};
+sprites['icon-entities-player'] = new Image();
+sprites['icon-entities-player'].src = '../../svg/uE004-entities-player.svg';
+sprites['icon-environment-block'] = new Image();
+sprites['icon-environment-block'].src = '../../svg/uE005-environment-block.svg';
+sprites['icon-entities-egg'] = new Image();
+sprites['icon-entities-egg'].src = '../../svg/uE001-entities-egg.svg';
+sprites['icon-entities-monster'] = new Image();
+sprites['icon-entities-monster'].src = '../../svg/uE002-entities-monster.svg';
+sprites['icon-entities-mother'] = new Image();
+sprites['icon-entities-mother'].src = '../../svg/uE003-entities-mother.svg';
+
 angular.module("beastieApp")
     .controller("GameCtrl", ["$scope", "beastieEnv", "$firebase", "$log", "$state", function ($scope, beastieEnv, $firebase, $log, $state) {
         var gridsize = 16;
@@ -89,15 +108,24 @@ angular.module("beastieApp")
 
           // console.log(arguments);
         });
+        window.addEventListener('resize', resizeCanvas, false);
+        var canvas = document.getElementById('entityboard');
 
-        var canvas = document.getElementById('entityboard')
         var context = canvas.getContext('2d');
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
 
+        }
+        resizeCanvas();
 
         var frameId;
         function render(){
+          context.clearRect(0,0,canvas.width, canvas.height);
+          // canvas.width = window.innerWidth;
+          // canvas.height = window.innerHeight;
           for(var key in world){
-            // console.log(world[key]);
+            // console.log("draw", world[key].icon);
             world[key].draw(context);
           }
           frameId = requestAnimationFrame(render);

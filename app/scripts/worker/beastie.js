@@ -96,7 +96,7 @@ var Player = function(x, y, world){
   // PullControllerComponent(this);
 
   ExploreComponent(this);
-  this.icon = '../../svg/uE004-entities-player.svg';
+  this.icon = 'icon-entities-player';
   //this will chanage for workers:
   // this.display = new Display(this, 'icon-entities-player');
 }
@@ -152,7 +152,7 @@ var Block = function(x, y, world){
     y:y
   }
   this.kind = "block";
-  this.icon = '../../svg/uE004-entities-player.svg';
+  this.icon = 'icon-environment-block';
   // DomRenderer(this, template({classVal: 'icon-environment-block'}));
   // this.display = new Display(this, 'icon-environment-block');
   CollisionComponent(this);
@@ -232,7 +232,7 @@ var Egg = function(x, y, world){
     // self.hunt(this);
   });
   // console.log(this.tick);
-  this.icon = '../../svg/uE004-entities-player.svg';
+  this.icon = 'icon-entities-egg';
   // DomRenderer(this, template({classVal: 'icon-entities-egg'}));
   // this.display = new Display(this, 'icon-entities-egg');
   CollisionComponent(this);
@@ -313,7 +313,7 @@ var Monster = function(){
   });
   // console.log(this.tick);
   MoveComponent(this);
-  this.icon = '../../svg/uE004-entities-player.svg';
+  this.icon = 'icon-entities-monster';
   // this.display.render(this, 'icon-entities-monster');
   ExploreComponent(this);
 }
@@ -365,7 +365,7 @@ var Mother = function(){
     }
     self.hunt(self);
   });
-  this.icon = '../../svg/uE004-entities-player.svg';
+  this.icon = 'icon-entities-mother';
   this.removeAll('start_move');
   // this.display.render(this, 'icon-entities-mother');
   PushComponent(this);
