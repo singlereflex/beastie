@@ -32,7 +32,7 @@ function DomRenderer(entity, innerHTML) {
 }
 
 function CanvasRenderer(entity){
-  var square = 32;
+  var square = 24;
   //rendering position needs to be offset but current player position (or canvas viewport if you want to think about it that way);
   entity.draw = function(context){//figure out the animated move part later
     // console.log(((context.canvas.width/2)/square));
