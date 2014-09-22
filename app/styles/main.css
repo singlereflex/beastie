@@ -4486,8 +4486,6 @@ body {
   display: none !important; }
 
 #game-container {
-  height: 2048em;
-  width: 2048em;
   margin-top: 24px; }
   #game-container div {
     height: 16px;

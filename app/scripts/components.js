@@ -8,7 +8,53 @@ function DomRenderer(entity, innerHTML) {
     div.style.left = entity.position.x + 'em';
     div.style.top = entity.position.y + 'em';
     entity.el = div;
+
+
+    entity.move = function(delta_x, delta_y, entity){
+      entity.el.style.top = entity.position.y + 'em'; //e.data.entity.position.y + 'em';
+      entity.el.style.left = entity.position.x + 'em';
+      if(e.data.entity.kind == "player"){
+        $("html,body").animate({
+          scrollTop: document.body.scrollTop + delta_y * 16,//e.data.deltas.delta_y * 16,
+          scrollLeft: document.body.scrollLeft + delta_x * 16
+        }, 200);
+      }
+    }
+
+    entity.die = function(){
+      document.getElementById('entityboard').removeChild(entity.el);
+    }
+    entity.el = document.getElementById('entityboard').appendChild(entity.el);
+    if(entity.kind == 'player'){
+      center(entity.el);
+    }
     entity.trigger('rendered', entity);
+}
+
+function CanvasRenderer(entity){
+  var square = 32;
+  //rendering position needs to be offset but current player position (or canvas viewport if you want to think about it that way);
+  entity.draw = function(context){//figure out the animated move part later
+    if(!entity.sprite || entity.sprite.src != entity.icon){
+      entity.sprite = new Image();
+      entity.sprite.onload = function() {
+          context.drawImage(entity.sprite, (entity.position.x - viewport.x)*square, (entity.position.y - viewport.y)*square, square, square);
+      }
+      entity.sprite.src = entity.icon;
+    } else {
+      context.drawImage(img, (entity.position.x - viewport.x)*square, (entity.position.y - viewport.y)*square, square, square);
+    }
+
+  }
+  entity.move = function(delta_x, delta_y, entity){
+    if(entity.kind == "player"){
+      viewport.x += delta_x;
+      viewport.y += delta_y;
+    }
+  }
+  entity.die = function(){
+    //remove from draw loop somehow
+  }
 }
 
 function MoveControllerComponent(entity) {
