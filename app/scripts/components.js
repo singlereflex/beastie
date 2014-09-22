@@ -35,6 +35,7 @@ function CanvasRenderer(entity){
   var square = 32;
   //rendering position needs to be offset but current player position (or canvas viewport if you want to think about it that way);
   entity.draw = function(context){//figure out the animated move part later
+    // console.log(entity.sprite);
     if(!entity.sprite || entity.sprite.src != entity.icon){
       entity.sprite = new Image();
       entity.sprite.onload = function() {
@@ -42,7 +43,7 @@ function CanvasRenderer(entity){
       }
       entity.sprite.src = entity.icon;
     } else {
-      context.drawImage(img, (entity.position.x - viewport.x)*square, (entity.position.y - viewport.y)*square, square, square);
+      context.drawImage(entity.sprite, (entity.position.x - viewport.x)*square, (entity.position.y - viewport.y)*square, square, square);
     }
 
   }

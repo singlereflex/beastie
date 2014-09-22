@@ -64,8 +64,8 @@ angular.module("beastieApp")
                 x: e.data.entity.position.x,
                 y: e.data.entity.position.y
               }
-              world[e.data._id].kind = e.data.entity.kind
-              world[e.data._id].icon = e.data.entity.icon
+              // world[e.data._id].kind = e.data.entity.kind
+              // world[e.data._id].icon = e.data.entity.icon
               world[e.data._id].move(e.data.deltas.delta_x, e.data.deltas.delta_y, e.data.entity);
 
 
