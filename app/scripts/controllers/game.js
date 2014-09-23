@@ -119,10 +119,10 @@ angular.module("beastieApp")
 
           for(var key in world){
 
-            if(world[key].position.x < viewport.x+(canvas.width/2)/32
-              && world[key].position.x > viewport.x-(canvas.width/2)/32
-              && world[key].position.y < viewport.y+(canvas.height/2)/32
-              && world[key].position.y > viewport.y-(canvas.height/2)/32){
+            if(world[key].position.x < viewport.x+(canvas.width/2)/24
+              && world[key].position.x > viewport.x-(canvas.width/2)/24
+              && world[key].position.y < viewport.y+(canvas.height/2)/24
+              && world[key].position.y > viewport.y-(canvas.height/2)/24){
               world[key].draw(context);
             }
           }
