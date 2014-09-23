@@ -20,6 +20,10 @@ var Display = function(player, icon){
       x: player.position.x,
       y: player.position.y
     }
+    self._position = {
+      x: player.position.x,
+      y: player.position.y
+    }
     self.kind = player.kind
     self.icon = icon
     CanvasRenderer(self);

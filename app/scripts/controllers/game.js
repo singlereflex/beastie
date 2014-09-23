@@ -35,12 +35,6 @@ var viewport = {
   y:0
 }
 
-var images = [
-  '../../svg/uE001-entities-egg.svg',
-  '../../svg/uE002-entities-monster.svg',
-  '../../svg/uE003-entities-mother.svg',
-  '../../svg/uE004-entities-player.svg'
-]
 var sprites = {};
 sprites['icon-entities-player'] = new Image();
 sprites['icon-entities-player'].src = '../../svg/uE004-entities-player.svg';
@@ -79,7 +73,7 @@ angular.module("beastieApp")
             case 'complete_move':
               // console.log("move");
 
-              world[e.data._id].position = {
+              world[e.data._id]._position = {
                 x: e.data.entity.position.x,
                 y: e.data.entity.position.y
               }
@@ -122,11 +116,15 @@ angular.module("beastieApp")
         var frameId;
         function render(){
           context.clearRect(0,0,canvas.width, canvas.height);
-          // canvas.width = window.innerWidth;
-          // canvas.height = window.innerHeight;
+
           for(var key in world){
-            // console.log("draw", world[key].icon);
-            world[key].draw(context);
+
+            if(world[key].position.x < viewport.x+(canvas.width/2)/32
+              && world[key].position.x > viewport.x-(canvas.width/2)/32
+              && world[key].position.y < viewport.y+(canvas.height/2)/32
+              && world[key].position.y > viewport.y-(canvas.height/2)/32){
+              world[key].draw(context);
+            }
           }
           frameId = requestAnimationFrame(render);
         }

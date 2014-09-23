@@ -36,23 +36,31 @@ function CanvasRenderer(entity){
   //rendering position needs to be offset but current player position (or canvas viewport if you want to think about it that way);
   entity.draw = function(context){//figure out the animated move part later
     // console.log(((context.canvas.width/2)/square));
+    // var delta = 1;
+    // console.log(Math.abs(entity.position.x-entity._position.x)/60);
+    var step = 4;
+    if(!Math.abs(entity._position.x-entity.position.x)/step<0.01) {
+      entity.position.x = (entity.position.x + (entity._position.x-entity.position.x)/step);
+      if(entity.kind == "player"){
+        viewport.x = entity.position.x;
+      }
+    }
+    if(!Math.abs(entity._position.y-entity.position.y)/step<0.01) {
+      entity.position.y = (entity.position.y + (entity._position.y-entity.position.y)/step);
+      if(entity.kind == "player"){
+        viewport.y = entity.position.y;
+      }
+    }
+
     context.drawImage(sprites[entity.icon], (entity.position.x  - (viewport.x-((context.canvas.width/2)/square)))*square, (entity.position.y - (viewport.y-((context.canvas.height/2)/square)))*square, square, square);
-    // if(!entity.sprite || entity.sprite.src != entity.icon){
-    //   entity.sprite = new Image();
-    //   entity.sprite.onload = function() {
-    //       context.drawImage(entity.sprite, (entity.position.x - viewport.x)*square, (entity.position.y - viewport.y)*square, square, square);
-    //   }
-    //   entity.sprite.src = entity.icon;
-    // } else {
-    //   context.drawImage(entity.sprite, (entity.position.x - viewport.x)*square, (entity.position.y - viewport.y)*square, square, square);
-    // }
+
 
   }
   entity.move = function(delta_x, delta_y, entity){
-    if(entity.kind == "player"){
-      viewport.x += delta_x;
-      viewport.y += delta_y;
-    }
+    // if(entity.kind == "player"){
+    //   viewport.x += delta_x;
+    //   viewport.y += delta_y;
+    // }
   }
   entity.die = function(){
     //remove from draw loop somehow
