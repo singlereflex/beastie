@@ -50,7 +50,6 @@ function PushComponent(entity) {
     //subscribe to move event
     entity.on('start_move', function (delta_x, delta_y) {
         var neighbor = entity.world.findEntityByPosition(entity.position.x + delta_x, entity.position.y + delta_y)[0];
-
         if (neighbor !== undefined && neighbor.kind === "block") {
             neighbor.move(delta_x, delta_y);
         }
@@ -61,7 +60,7 @@ function PullComponent(entity) {
     //subscribe to move event
     entity.on('complete_move', function (delta_x, delta_y) {
         var neighbor = entity.world.findEntityByPosition(entity.position.x - (delta_x * 2), entity.position.y - (delta_y * 2));
-        if (entity.pulling) {
+        if (entity.pulling && neighbor[0] !== undefined) {
             neighbor[0].move(delta_x, delta_y);
         }
     });

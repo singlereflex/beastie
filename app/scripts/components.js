@@ -8,7 +8,63 @@ function DomRenderer(entity, innerHTML) {
     div.style.left = entity.position.x + 'em';
     div.style.top = entity.position.y + 'em';
     entity.el = div;
+
+
+    entity.move = function(delta_x, delta_y, entity){
+      entity.el.style.top = entity.position.y + 'em'; //e.data.entity.position.y + 'em';
+      entity.el.style.left = entity.position.x + 'em';
+      if(e.data.entity.kind == "player"){
+        $("html,body").animate({
+          scrollTop: document.body.scrollTop + delta_y * 16,//e.data.deltas.delta_y * 16,
+          scrollLeft: document.body.scrollLeft + delta_x * 16
+        }, 200);
+      }
+    }
+
+    entity.die = function(){
+      document.getElementById('entityboard').removeChild(entity.el);
+    }
+    entity.el = document.getElementById('entityboard').appendChild(entity.el);
+    if(entity.kind == 'player'){
+      center(entity.el);
+    }
     entity.trigger('rendered', entity);
+}
+
+function CanvasRenderer(entity){
+  var square = 24;
+  //rendering position needs to be offset but current player position (or canvas viewport if you want to think about it that way);
+  entity.draw = function(context){//figure out the animated move part later
+    // console.log(((context.canvas.width/2)/square));
+    // var delta = 1;
+    // console.log(Math.abs(entity.position.x-entity._position.x)/60);
+    var step = 4;
+    if(!Math.abs(entity._position.x-entity.position.x)/step<0.01) {
+      entity.position.x = (entity.position.x + (entity._position.x-entity.position.x)/step);
+      if(entity.kind == "player"){
+        viewport.x = entity.position.x;
+      }
+    }
+    if(!Math.abs(entity._position.y-entity.position.y)/step<0.01) {
+      entity.position.y = (entity.position.y + (entity._position.y-entity.position.y)/step);
+      if(entity.kind == "player"){
+        viewport.y = entity.position.y;
+      }
+    }
+
+    context.drawImage(sprites[entity.icon], (entity.position.x  - (viewport.x-((context.canvas.width/2)/square)))*square, (entity.position.y - (viewport.y-((context.canvas.height/2)/square)))*square, square, square);
+
+
+  }
+  entity.move = function(delta_x, delta_y, entity){
+    // if(entity.kind == "player"){
+    //   viewport.x += delta_x;
+    //   viewport.y += delta_y;
+    // }
+  }
+  entity.die = function(){
+    //remove from draw loop somehow
+  }
 }
 
 function MoveControllerComponent(entity) {
