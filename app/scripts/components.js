@@ -35,20 +35,23 @@ function CanvasRenderer(entity){
   var square = 24;
   //rendering position needs to be offset but current player position (or canvas viewport if you want to think about it that way);
   entity.draw = function(context){//figure out the animated move part later
-    // console.log(((context.canvas.width/2)/square));
-    // var delta = 1;
-    // console.log(Math.abs(entity.position.x-entity._position.x)/60);
+
     var step = 4;
-    if(!Math.abs(entity._position.x-entity.position.x)/step<0.01) {
-      entity.position.x = (entity.position.x + (entity._position.x-entity.position.x)/step);
-      if(entity.kind == "player"){
-        viewport.x = entity.position.x;
+    if(Math.abs(entity._position.x-entity.position.x) > 2 || Math.abs(entity._position.y-entity.position.y) > 2){
+      entity.position.x = entity._position.x;
+      entity.position.y = entity._position.y;
+    } else {
+      if(!Math.abs(entity._position.x-entity.position.x)/step<0.01) {
+        entity.position.x = (entity.position.x + (entity._position.x-entity.position.x)/step);
+        if(entity.kind == "player"){
+          viewport.x = entity.position.x;
+        }
       }
-    }
-    if(!Math.abs(entity._position.y-entity.position.y)/step<0.01) {
-      entity.position.y = (entity.position.y + (entity._position.y-entity.position.y)/step);
-      if(entity.kind == "player"){
-        viewport.y = entity.position.y;
+      if(!Math.abs(entity._position.y-entity.position.y)/step<0.01) {
+        entity.position.y = (entity.position.y + (entity._position.y-entity.position.y)/step);
+        if(entity.kind == "player"){
+          viewport.y = entity.position.y;
+        }
       }
     }
 
