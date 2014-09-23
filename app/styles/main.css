@@ -4426,7 +4426,8 @@ html, body {
   margin: 0;
   background: #002505 url(../images/graphy.png) top left;
   height: 100%;
-  width: 100%; }
+  width: 100%;
+  overflow: hidden; }
 
 input, textarea, select, .form-control {
   font-family: "Silkscreen", Helvetica, Arial, sans-serif;
