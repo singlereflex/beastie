@@ -42,6 +42,20 @@ gulp.task('sass', ['iconfont'], function () {
         .pipe(gulp.dest('app/styles'));
 });
 
+//create a manifest
+var manifest = require('gulp-manifest');
+gulp.task('manifest', function(){
+  gulp.src(['app/**', '!\.*'])
+    .pipe(manifest({
+      hash: true,
+      preferOnline: true,
+      network: ['http://*', 'https://*', '*'],
+      filename: 'app.manifest',
+      exclude: 'app.manifest'
+     }))
+    .pipe(gulp.dest('app'));
+});
+
 //live reload for fun and profit
 var livereload = require('gulp-livereload'),
     dest = 'app';
