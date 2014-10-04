@@ -2,7 +2,6 @@ CACHE MANIFEST
 
 
 CACHE:
-404.html
 CNAME
 beastie.html
 favicon.ico
@@ -268,4 +267,4 @@ http://*
 https://*
 *
 
-# hash: cecc2b63c9c5dd2358641b150241ff3aae77b1444b02356af2c7e9d24382ca72
+# hash: 24203dcf7f3057e87b82ec6af01fce64e57e2a993e52acc3da59f052b44ac967
