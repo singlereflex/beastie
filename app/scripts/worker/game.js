@@ -132,9 +132,10 @@ var viewport = {
         case 'viewport':
           viewport.width = e.data.width;
           viewport.height = e.data.height;
+          break;
         case 'kill':
           self.close();
-        break;
+          break;
       }
     }
   })
