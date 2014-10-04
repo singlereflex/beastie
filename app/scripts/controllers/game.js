@@ -203,7 +203,8 @@ angular.module("beastieApp")
         };
 
         $scope.submitHighscore = function(name) {
-          console.log(arguments)
+          // console.log(arguments)
+          var highScoreRef = new Firebase("https://highscore.firebaseio.com/beastie");
             highScoreRef.push({name: name, score: $scope.score});
             $state.go("highscore");
         };
