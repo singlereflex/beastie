@@ -188,7 +188,6 @@ angular.module("beastieApp")
           }
 
           context.clearRect(0,0,canvas.width, canvas.height);
-          console.log(renderQueue.length);
           for(var i = 0; i < renderQueue.length; i++){
             renderQueue[i].draw(context);
           }
