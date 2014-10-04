@@ -49,11 +49,16 @@ sprites['icon-entities-mother'].src = '../../svg/uE003-entities-mother.svg';
 
 angular.module("beastieApp")
     .controller("GameCtrl", ["$scope", "$log", "$state", function ($scope, $log, $state) {
+
+
         var gridsize = 16;
         var cellsize = 16;
         var world = {};
         var queue = [];
+
+        //could move this to a custom type later
         var renderQueue = [];
+
         $scope.score = 0;
 
         var handleMessage = function(e){
@@ -79,8 +84,19 @@ angular.module("beastieApp")
                 x: e.data.entity.position.x,
                 y: e.data.entity.position.y
               }
-
-              if(world[e.data._id]._position.x < viewport.x+(canvas.width/2)/24
+              if(e.data.entity.kind == "player"){
+                renderQueue = [];
+                //reset renderQueue
+                for(var key in world){
+                  if(world[key]._position.x < viewport.x+(canvas.width/2)/24
+                  && world[key]._position.x > viewport.x-(canvas.width/2)/24
+                  && world[key]._position.y < viewport.y+(canvas.height/2)/24
+                  && world[key]._position.y > viewport.y-(canvas.height/2)/24){
+                    renderQueue.push(world[key]);
+                  }
+                }
+              }
+              else if(world[e.data._id]._position.x < viewport.x+(canvas.width/2)/24
               && world[e.data._id]._position.x > viewport.x-(canvas.width/2)/24
               && world[e.data._id]._position.y < viewport.y+(canvas.height/2)/24
               && world[e.data._id]._position.y > viewport.y-(canvas.height/2)/24){
@@ -151,6 +167,16 @@ angular.module("beastieApp")
               height: canvas.width,
               width: canvas.height
             });
+            renderQueue = [];
+            //reset renderQueue
+            for(var key in world){
+              if(world[key]._position.x < viewport.x+(canvas.width/2)/24
+              && world[key]._position.x > viewport.x-(canvas.width/2)/24
+              && world[key]._position.y < viewport.y+(canvas.height/2)/24
+              && world[key]._position.y > viewport.y-(canvas.height/2)/24){
+                renderQueue.push(world[key]);
+              }
+            }
         }
         resizeCanvas();
 

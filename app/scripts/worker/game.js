@@ -28,27 +28,22 @@ var viewport = {
       icon:entity.icon
     })
     entity.on('complete_move', function(delta_x, delta_y, old){
-      // if(entity.position.x < viewport.x+(viewport.width/2)/24
-      // && entity.position.x > viewport.x-(viewport.width/2)/24
-      // && entity.position.y < viewport.y+(viewport.height/2)/24
-      // && entity.position.y > viewport.y-(viewport.height/2)/24){
-        self.postMessage({
-          event: 'complete_move',
-          deltas:{
-            delta_x: delta_x,
-            delta_y: delta_y
+      self.postMessage({
+        event: 'complete_move',
+        deltas:{
+          delta_x: delta_x,
+          delta_y: delta_y
+        },
+        entity: {
+          position:{
+            x: entity.position.x,
+            y: entity.position.y
           },
-          entity: {
-            position:{
-              x: entity.position.x,
-              y: entity.position.y
-            },
-            kind: entity.kind
-          },
-          _id:entity._id,
-          icon: entity.icon
-        });
-      // }
+          kind: entity.kind
+        },
+        _id:entity._id,
+        icon: entity.icon
+      });
     });
     entity.on('die', function(){
       self.postMessage({
@@ -91,7 +86,9 @@ var viewport = {
       viewport.x = player.position.x;
       viewport.y = player.position.y;
     });
-    player.on('die', self.close);
+    player.on('die', function(){
+      self.close();
+    });
     loop.entities.place(player);
     // center(player.el);
     return player;
@@ -135,6 +132,8 @@ var viewport = {
         case 'viewport':
           viewport.width = e.data.width;
           viewport.height = e.data.height;
+        case 'kill':
+          self.close();
         break;
       }
     }
