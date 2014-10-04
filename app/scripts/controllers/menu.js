@@ -9,17 +9,25 @@
  */
 angular.module("beastieApp")
     .controller("MenuCtrl", function ($scope) {
-        $scope.appCache = window.applicationCache;
-
-        $scope.appCache.update();
-        function handleCacheEvent(e){
-          if(!$scope.$$phase){
-            $scope.$apply();
-          }
-          console.debug(e);
+      function handleCacheEvent(e){
+        if(!$scope.$$phase){
+          $scope.$apply();
         }
+        console.debug(e);
+      }
+
+        $scope.appCache = window.applicationCache;
+        try{
+          $scope.appCache.update();
+        } catch (e){
+          $scope.update_state = "downloading cache...";
+        }
+
         // Fired after the first cache of the manifest.
-        $scope.appCache.addEventListener('cached', handleCacheEvent, false);
+        $scope.appCache.addEventListener('cached', function(e){
+          $scope.update_state = "up to date";
+          handleCacheEvent(e);
+        }, false);
 
         // Checking for an update. Always the first event fired in the sequence.
         $scope.appCache.addEventListener('checking', function(e){
