@@ -45,7 +45,7 @@ gulp.task('sass', ['iconfont'], function () {
 //create a manifest
 var manifest = require('gulp-manifest');
 gulp.task('manifest', function(){
-  gulp.src(['app/**', '!\.*'])
+  gulp.src(['app/**', '!**/*\.scss', '!**/*\.less', '!**/docs/**', '!**/bootstrap-sass/**', '!**/test/**','!\.*'])
     .pipe(manifest({
       hash: true,
       preferOnline: false,
