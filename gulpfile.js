@@ -48,7 +48,7 @@ gulp.task('manifest', function(){
   gulp.src(['app/**', '!\.*'])
     .pipe(manifest({
       hash: true,
-      preferOnline: true,
+      preferOnline: false,
       network: ['http://*', 'https://*', '*'],
       filename: 'app.manifest',
       exclude: 'app.manifest'

@@ -48,7 +48,7 @@ sprites['icon-entities-mother'] = new Image();
 sprites['icon-entities-mother'].src = '../../svg/uE003-entities-mother.svg';
 
 angular.module("beastieApp")
-    .controller("GameCtrl", ["$scope", "beastieEnv", "$firebase", "$log", "$state", function ($scope, beastieEnv, $firebase, $log, $state) {
+    .controller("GameCtrl", ["$scope", "beastieEnv", "$log", "$state", function ($scope, beastieEnv, $log, $state) {
         var gridsize = 16;
         var cellsize = 16;
         var world = {};
@@ -134,10 +134,6 @@ angular.module("beastieApp")
         }
 
         render();
-
-        var highScoreRef = new Firebase("https://highscore.firebaseio.com/beastie");
-        // Automatically syncs everywhere in real time.
-        $scope.scoreboard = $firebase(highScoreRef);
 
         $scope.endGame = function () {
           cancelAnimationFrame(frameId);
