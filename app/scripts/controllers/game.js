@@ -48,19 +48,15 @@ sprites['icon-entities-mother'] = new Image();
 sprites['icon-entities-mother'].src = '../../svg/uE003-entities-mother.svg';
 
 angular.module("beastieApp")
-    .controller("GameCtrl", ["$scope", "beastieEnv", "$log", "$state", function ($scope, beastieEnv, $log, $state) {
+    .controller("GameCtrl", ["$scope", "$log", "$state", function ($scope, $log, $state) {
         var gridsize = 16;
         var cellsize = 16;
         var world = {};
-
+        var queue = [];
+        var renderQueue = [];
         $scope.score = 0;
 
-
-        var game = new Worker('scripts/worker/game.js');//new Game();
-
-        // game.postMessage();
-        var player = new DummyPlayer(game);
-        game.addEventListener('message', function(e){
+        var handleMessage = function(e){
           switch(e.data.event){
             case 'place':
               world[e.data._id] = new Display(e.data.entity, e.data.icon);
@@ -69,6 +65,12 @@ angular.module("beastieApp")
                 viewport.x = world[e.data._id].position.x;
                 viewport.y = world[e.data._id].position.y;
               }
+              if(world[e.data._id].position.x < viewport.x+(canvas.width/2)/24
+              && world[e.data._id].position.x > viewport.x-(canvas.width/2)/24
+              && world[e.data._id].position.y < viewport.y+(canvas.height/2)/24
+              && world[e.data._id].position.y > viewport.y-(canvas.height/2)/24){
+                renderQueue.push(world[e.data._id]);
+              }
               break;
             case 'complete_move':
               // console.log("move");
@@ -76,6 +78,21 @@ angular.module("beastieApp")
               world[e.data._id]._position = {
                 x: e.data.entity.position.x,
                 y: e.data.entity.position.y
+              }
+
+              if(world[e.data._id]._position.x < viewport.x+(canvas.width/2)/24
+              && world[e.data._id]._position.x > viewport.x-(canvas.width/2)/24
+              && world[e.data._id]._position.y < viewport.y+(canvas.height/2)/24
+              && world[e.data._id]._position.y > viewport.y-(canvas.height/2)/24){
+                var index = renderQueue.indexOf(world[e.data._id]);
+                if(index < 0){
+                  renderQueue.push(world[e.data._id]);
+                }
+              } else {
+                var index = renderQueue.indexOf(world[e.data._id]);
+                if(index > -1){
+                  renderQueue.splice(index, 1);
+                }
               }
               // world[e.data._id].kind = e.data.entity.kind
               // world[e.data._id].icon = e.data.entity.icon
@@ -93,6 +110,10 @@ angular.module("beastieApp")
               } else {
                 $scope.score += e.data.worth;
               }
+              var index = renderQueue.indexOf(world[e.data._id]);
+              if(index > -1){
+                renderQueue.splice(index, 1);
+              }
               world[e.data._id].die();
               delete world[e.data._id];
               if(!$scope.$$phase){
@@ -105,30 +126,45 @@ angular.module("beastieApp")
           }
 
           // console.log(arguments);
+        };
+
+
+
+        var game = new Worker('scripts/worker/game.js');//new Game();
+
+        // game.postMessage();
+        var player = new DummyPlayer(game);
+        game.addEventListener('message', function(e){
+          queue.push(e);
         });
         window.addEventListener('resize', resizeCanvas, false);
         var canvas = document.getElementById('entityboard');
 
         var context = canvas.getContext('2d');
         function resizeCanvas() {
+
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-
+            //update worker viewport:
+            game.postMessage({
+              event: 'viewport',
+              height: canvas.width,
+              width: canvas.height
+            });
         }
         resizeCanvas();
 
         var frameId;
         function render(){
+          var current_length = queue.length;
+          for(var i = 0; i < current_length; i++){
+            handleMessage(queue.shift());
+          }
+
           context.clearRect(0,0,canvas.width, canvas.height);
-
-          for(var key in world){
-
-            if(world[key].position.x < viewport.x+(canvas.width/2)/24
-              && world[key].position.x > viewport.x-(canvas.width/2)/24
-              && world[key].position.y < viewport.y+(canvas.height/2)/24
-              && world[key].position.y > viewport.y-(canvas.height/2)/24){
-              world[key].draw(context);
-            }
+          console.log(renderQueue.length);
+          for(var i = 0; i < renderQueue.length; i++){
+            renderQueue[i].draw(context);
           }
           frameId = requestAnimationFrame(render);
         }
@@ -137,7 +173,6 @@ angular.module("beastieApp")
 
         $scope.endGame = function () {
           cancelAnimationFrame(frameId);
-          
           player.dead = true;
           $state.go("game.ended");
         };

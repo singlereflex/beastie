@@ -4,7 +4,12 @@
   importScripts('../shared/components.js');
   importScripts('components.js');
   importScripts('beastie.js');
-
+var viewport = {
+  x:0,
+  y:0,
+  width: 0,
+  height: 0
+}
   var loop = new World();
   self.loop = loop;
 
@@ -23,22 +28,27 @@
       icon:entity.icon
     })
     entity.on('complete_move', function(delta_x, delta_y, old){
-      self.postMessage({
-        event: 'complete_move',
-        deltas:{
-          delta_x: delta_x,
-          delta_y: delta_y
-        },
-        entity: {
-          position:{
-            x: entity.position.x,
-            y: entity.position.y
+      // if(entity.position.x < viewport.x+(viewport.width/2)/24
+      // && entity.position.x > viewport.x-(viewport.width/2)/24
+      // && entity.position.y < viewport.y+(viewport.height/2)/24
+      // && entity.position.y > viewport.y-(viewport.height/2)/24){
+        self.postMessage({
+          event: 'complete_move',
+          deltas:{
+            delta_x: delta_x,
+            delta_y: delta_y
           },
-          kind: entity.kind
-        },
-        _id:entity._id,
-        icon: entity.icon
-      });
+          entity: {
+            position:{
+              x: entity.position.x,
+              y: entity.position.y
+            },
+            kind: entity.kind
+          },
+          _id:entity._id,
+          icon: entity.icon
+        });
+      // }
     });
     entity.on('die', function(){
       self.postMessage({
@@ -74,8 +84,13 @@
   this.addPlayer = function() {
     var x = 1024;
     var y = 1024;
-
+    viewport.x = x;
+    viewport.y = y;
     var player = new Player(x, y, loop);
+    player.on('complete_move', function(){
+      viewport.x = player.position.x;
+      viewport.y = player.position.y;
+    });
     player.on('die', self.close);
     loop.entities.place(player);
     // center(player.el);
@@ -117,6 +132,10 @@
         case 'pulling':
           player.pulling = e.data.is_pulling;
           break;
+        case 'viewport':
+          viewport.width = e.data.width;
+          viewport.height = e.data.height;
+        break;
       }
     }
   })

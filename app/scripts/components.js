@@ -154,32 +154,25 @@ function MoveControllerComponent(entity) {
           x: document.body.clientWidth/2,
           y: document.body.clientHeight/2
         }
-        // var rightCenter = {
-        //   x: document.body.clientWidth - document.body.clientWidth/4,
-        //   y: document.body.clientHeight/2
-        // }
 
-        // if(touch.clientX > center){
-          if(Math.abs(center.x - touch.clientX) > Math.abs(center.y - touch.clientY)){
-            if(0 < center.x - touch.clientX){
-              x = -1
-            } else if(0 > center.x - touch.clientX){
-              x = 1;
-            }
-
-          } else {
-            if(0 < center.y - touch.clientY){
-              y = -1
-            } else if(0 > center.y - touch.clientY){
-              y = 1;
-            }
+        if(Math.abs(center.x - touch.clientX) > Math.abs(center.y - touch.clientY)){
+          if(0 < center.x - touch.clientX){
+            x = -1
+          } else if(0 > center.x - touch.clientX){
+            x = 1;
           }
-          entity.move(x, y);
 
-        // }
+        } else {
+          if(0 < center.y - touch.clientY){
+            y = -1
+          } else if(0 > center.y - touch.clientY){
+            y = 1;
+          }
+        }
+        entity.move(x, y);
       }
       entity.pulling(false);
-    });
+    }, false);
 
 
 }

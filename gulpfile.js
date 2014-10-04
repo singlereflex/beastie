@@ -81,7 +81,7 @@ gulp.task('server', ['connect'], function () {
 });
 
 
-gulp.task('watch', ['connect', 'server', 'sass'], function() {
+gulp.task('watch', ['connect', 'server'], function() {
   var server = livereload();
 
   gulp.watch([dest + '/**', "!"+dest+"/bower_components"]).on('change', function(file) {
