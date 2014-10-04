@@ -76,7 +76,7 @@
     var y = 1024;
 
     var player = new Player(x, y, loop);
-
+    player.on('die', self.close);
     loop.entities.place(player);
     // center(player.el);
     return player;

@@ -7,16 +7,6 @@ function center(el) {
     }, 200);
 };
 
-// var gui = new dat.GUI({ autoPlace: false });
-// var customContainer = document.getElementById('top-nav');
-// customContainer.appendChild(gui.domElement);
-//
-//   gui.add(settings, 'gamespeed');
-//   gui.add(settings, 'series');
-//   gui.add(settings, 'cutoff', 100, 1000);
-//   gui.add(settings, 'q', 0, 20);
-//   gui.add(settings, 'test');
-
 angular.module("beastieApp", ["firebase", "ui.router"])
     .config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider){
         $urlRouterProvider.otherwise("/menu");

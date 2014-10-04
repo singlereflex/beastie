@@ -137,7 +137,7 @@ angular.module("beastieApp")
 
         $scope.endGame = function () {
           cancelAnimationFrame(frameId);
-          game.terminate();
+          
           player.dead = true;
           $state.go("game.ended");
         };
