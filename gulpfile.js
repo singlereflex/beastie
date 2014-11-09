@@ -42,6 +42,20 @@ gulp.task('sass', ['iconfont'], function () {
         .pipe(gulp.dest('app/styles'));
 });
 
+//create a manifest
+var manifest = require('gulp-manifest');
+gulp.task('manifest', function(){
+  gulp.src(['app/**', '!app/404.html', '!**/*\.scss', '!**/*\.less', '!**/docs/**', '!**/bootstrap-sass/**', '!**/test/**','!\.*'])
+    .pipe(manifest({
+      hash: true,
+      preferOnline: false,
+      network: ['http://*', 'https://*', '*'],
+      filename: 'app.manifest',
+      exclude: 'app.manifest'
+     }))
+    .pipe(gulp.dest('app'));
+});
+
 //live reload for fun and profit
 var livereload = require('gulp-livereload'),
     dest = 'app';
@@ -63,11 +77,11 @@ gulp.task('connect', function () {
 });
 
 gulp.task('server', ['connect'], function () {
-    require('opn')('http://localhost:9000');
+    // require('opn')('http://localhost:9000');
 });
 
 
-gulp.task('watch', ['connect', 'server', 'sass'], function() {
+gulp.task('watch', ['connect', 'server'], function() {
   var server = livereload();
 
   gulp.watch([dest + '/**', "!"+dest+"/bower_components"]).on('change', function(file) {

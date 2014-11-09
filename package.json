@@ -4,20 +4,20 @@
   "dependencies": {},
   "devDependencies": {
     "connect": "^3.1.0",
-    "connect-livereload": "~0.2.0",
+    "connect-livereload": "^0.4.0",
     "gulp": "^3.8.6",
     "gulp-consolidate": "^0.1.2",
     "gulp-iconfont": "^0.1.1",
     "gulp-iconfont-css": "0.0.9",
     "gulp-livereload": "^2.1.0",
+    "gulp-manifest": "0.0.6",
     "gulp-rename": "^1.2.0",
     "gulp-sass": "^0.7.2",
     "lodash": "^2.4.1",
-    "serve-static": "^1.4.0",
-    "time-grunt": "~0.1.0",
-    "connect-livereload": "^0.4.0",
     "opn": "^0.1.2",
-    "serve-index": "^1.1.5"
+    "serve-index": "^1.1.5",
+    "serve-static": "^1.4.0",
+    "time-grunt": "~0.1.0"
   },
   "engines": {
     "node": ">=0.8.0"
