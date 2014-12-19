@@ -1,46 +1,50 @@
-// alert("loaded");
+"use strict";
+
 _.templateSettings = {
     interpolate: /\{\{(.+?)\}\}/g
 };
-var template = _.template('<i class="{{ classVal }}"></i>');
 
-var Display = function(player, icon){
-  this._events = {};
-  var self = this;
+BL.Display = function (player, icon) {
+    this._events = {};
+    var self = this;
 
-  this.render = function(player, icon){
-    // console.log(icon);
-    self.position = {
-      x: player.position.x,
-      y: player.position.y
-    }
-    self._position = {
-      x: player.position.x,
-      y: player.position.y
-    }
-    self.kind = player.kind
-    self.icon = icon
-    CanvasRenderer(self);
-  }
+    this.render = function (player, icon) {
+        self.position = {
+            x: player.position.x,
+            y: player.position.y
+        };
 
-  this.render(player, icon);
-}
-EventComponent(Display);
+        self._position = {
+            x: player.position.x,
+            y: player.position.y
+        };
 
-var DummyPlayer = function(game){
-  this.move = function(delta_x, delta_y){
-    game.postMessage({
-      event: 'move',
-      delta_x: delta_x,
-      delta_y: delta_y
-    });
-  }
-  this.pulling = function(yes){
-    game.postMessage({
-      event: 'pulling',
-      is_pulling: yes
-    })
-  }
-  MoveControllerComponent(this);
-  PullControllerComponent(this);
-}
+        self.kind = player.kind;
+        self.icon = icon;
+        BL.CanvasRenderer(self);
+    };
+
+    this.render(player, icon);
+};
+
+BL.EventComponent(BL.Display);
+
+BL.DummyPlayer = function (game) {
+    this.move = function (deltaX, deltaY) {
+        game.postMessage({
+            event: "move",
+            deltaX: deltaX,
+            deltaY: deltaY
+        });
+    };
+
+    this.pulling = function (yes) {
+        game.postMessage({
+            event: "pulling",
+            isPulling: yes
+        });
+    };
+
+    BL.MoveControllerComponent(this);
+    BL.PullControllerComponent(this);
+};

@@ -24,6 +24,8 @@
         "$": false,
         "Firebase": false,
         "Hammer": false,
-        "requestAnimFrame": false
+        "requestAnimFrame": false,
+        "BL": true,
+        "self": false
     }
 }
