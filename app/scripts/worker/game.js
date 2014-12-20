@@ -1,10 +1,11 @@
 "use strict";
+
 self.BL = {};
 
 self.importScripts("../../bower_components/underscore/underscore.js");
 self.importScripts("../shared/components.js");
 self.importScripts("components.js");
-self.importScripts("beastie.js");
+self.importScripts("entities.js");
 
 var loop = new BL.World();
 self.loop = loop;

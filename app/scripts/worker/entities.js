@@ -52,9 +52,9 @@ BL.World = function () {
     this.stop = function () {
         this.running = false;
     };
-
 };
 BL.EventComponent(BL.World);
+
 BL.Player = function (x, y, world) {
     this._events = {};
 
@@ -96,13 +96,8 @@ BL.Player = function (x, y, world) {
 
     BL.CollisionComponent(this);
 
-    // MoveControllerComponent(this);
-    // PullControllerComponent(this);
-
     BL.ExploreComponent(this);
     this.icon = "icon-entities-player";
-    //this will chanage for workers:
-    // this.display = new Display(this, "icon-entities-player");
 };
 
 //Class level component!
@@ -110,7 +105,7 @@ BL.EventComponent(BL.Player);
 BL.MoveComponent(BL.Player);
 BL.DeathComponent(BL.Player);
 
-//blocks!
+// Blocks!
 BL.Block = function (x, y, world) {
     this._events = {};
 
@@ -164,7 +159,7 @@ BL.Block = function (x, y, world) {
 BL.EventComponent(BL.Block);
 BL.MoveComponent(BL.Block);
 
-//eggs!
+// Eggs!
 BL.Egg = function (x, y, world) {
     this._events = {};
     var self = this;
