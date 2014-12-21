@@ -76,8 +76,8 @@ angular.module("beastieApp")
                         world[e.data._id].position.x > BL.Viewport.x - (canvas.width / 2) / 24 &&
                         world[e.data._id].position.y < BL.Viewport.y + (canvas.height / 2) / 24 &&
                         world[e.data._id].position.y > BL.Viewport.y - (canvas.height / 2) / 24) {
-                        //renderQueue.push(world[e.data._id]);
-                        renderQueue.splice(Math.floor(Math.random()*renderQueue.length), 0, world[e.data._id]);
+                        renderQueue.push(world[e.data._id]);
+                        //renderQueue.splice(Math.floor(Math.random()*renderQueue.length), 0, world[e.data._id]);
                     }
                     break;
                 case "completeMove":

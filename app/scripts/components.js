@@ -87,23 +87,17 @@ BL.CanvasRenderer = function(entity) {
         } else {
             context.shadowColor = "transparent";
             context.drawImage(BL.Sprites[entity.icon], posX+0.5, posY+0.5, square+0.5, square+0.5);
-            context.globalAlpha = 0.2;
             var posOffX = posX - ((entity.position.x - BL.Viewport.x)/3)+0.5;
             var posOffY = posY - ((entity.position.y - BL.Viewport.y)/12)+4;
-            context.drawImage(BL.Sprites[entity.icon], posOffX, posOffY, square+0.5, square+0.5);
+            //context.drawImage(BL.Sprites[entity.icon], posOffX, posOffY, square+0.5, square+0.5);
         }
 
     };
 
     entity.move = function (/*deltaX, deltaY, entity*/) {
-        // if(entity.kind == "player"){
-        //   viewport.x += deltaX;
-        //   viewport.y += deltaY;
-        // }
     };
 
     entity.die = function () {
-        //remove from draw loop somehow
     };
 };
 
