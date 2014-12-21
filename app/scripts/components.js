@@ -24,7 +24,6 @@ BL.DomRenderer = function (entity, innerHTML) {
     div.style.top = entity.position.y + "em";
     entity.el = div;
 
-
     entity.move = function (deltaX, deltaY, entity) {
         entity.el.style.top = entity.position.y + "em"; //e.data.entity.position.y + "em";
         entity.el.style.left = entity.position.x + "em";
@@ -49,6 +48,7 @@ BL.DomRenderer = function (entity, innerHTML) {
 
 BL.CanvasRenderer = function(entity) {
     var square = 24;
+
     //rendering position needs to be offset but current player position (or canvas viewport if you want to think about it that way);
     entity.draw = function (context) {//figure out the animated move part later
 
@@ -71,8 +71,27 @@ BL.CanvasRenderer = function(entity) {
             }
         }
 
-        context.drawImage(BL.Sprites[entity.icon], (entity.position.x - (BL.Viewport.x - ((context.canvas.width / 2) / square))) * square, (entity.position.y - (BL.Viewport.y - ((context.canvas.height / 2) / square))) * square, square, square);
+        var posX = (entity.position.x - (BL.Viewport.x - ((context.canvas.width / 2) / square))) * square;
+        var posY = (entity.position.y - (BL.Viewport.y - ((context.canvas.height / 2) / square))) * square;
+        context.globalAlpha = 1;
 
+        if (entity.kind === "block") {
+            context.shadowOffsetY = (-(entity.position.y - BL.Viewport.y)/12)+5;
+            context.shadowOffsetX = -(entity.position.x - BL.Viewport.x)/3;
+            context.shadowBlur = 4;
+            context.shadowColor = "rgba(255,255,255,0.4)";
+            context.strokeStyle="red";
+
+            context.fillStyle = "rgba(200,200,200,0.4)";
+            context.fillRect(posX+0.5, posY+0.5, square+0.5, square+0.5);
+        } else {
+            context.shadowColor = "transparent";
+            context.drawImage(BL.Sprites[entity.icon], posX+0.5, posY+0.5, square+0.5, square+0.5);
+            context.globalAlpha = 0.2;
+            var posOffX = posX - ((entity.position.x - BL.Viewport.x)/3)+0.5;
+            var posOffY = posY - ((entity.position.y - BL.Viewport.y)/12)+4;
+            context.drawImage(BL.Sprites[entity.icon], posOffX, posOffY, square+0.5, square+0.5);
+        }
 
     };
 
@@ -96,21 +115,21 @@ BL.MoveControllerComponent = function (entity) {
                 //left
                 case 37:
                 case 65:
-                    event.preventDefault();
-                    // entity.move(-1, 0);
-                    break;
+                    //event.preventDefault();
+                    //// entity.move(-1, 0);
+                    //break;
                 //down
                 case 40:
                 case 83:
-                    event.preventDefault();
-                    // entity.move(0, 1);
-                    //right
-                    break;
+                    //event.preventDefault();
+                    //// entity.move(0, 1);
+                    ////right
+                    //break;
                 case 39:
                 case 68:
-                    event.preventDefault();
-                    // entity.move(1, 0);
-                    break;
+                    //event.preventDefault();
+                    //// entity.move(1, 0);
+                    //break;
                 //up
                 case 38:
                 case 87:

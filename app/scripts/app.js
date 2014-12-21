@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module("beastieApp", ["ui.router"])
+angular.module("beastieApp", ["ui.router", "firebase"])
     .config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider){
         $urlRouterProvider.otherwise("/menu");
 

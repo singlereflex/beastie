@@ -31,8 +31,8 @@ BL.MoveComponent = function (Entity) {
         }
 
         var oldPosition = {
-          x: this.position.x,
-          y: this.position.y
+            x: this.position.x,
+            y: this.position.y
         };
 
         this.position.x += deltaX;
@@ -75,10 +75,10 @@ BL.DeathComponent = function (Entity) {
 };
 
 BL.StateComponent = function (entity, states){
-  entity.states = states;
+    entity.states = states;
 
-  entity.transition = function(stateName){
-    entity.states[stateName].apply(entity);
-    entity.trigger("transition");
-  };
+    entity.transition = function(stateName){
+        entity.states[stateName].apply(entity);
+        entity.trigger("transition");
+    };
 };

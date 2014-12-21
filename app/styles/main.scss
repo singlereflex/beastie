@@ -8,7 +8,16 @@ $iconWhiteSpritePath: "../images/glyphicons-halflings-white.png";
 /* Put your CSS here */
 html, body {
     margin: 0;
-    background: #002505 url(../images/graphy.png) top left;
+    $gradStart: #222;
+    $gradMid: #333;
+    $gradEnd: #454545;
+    background-color: $gradStart;
+    background: -moz-linear-gradient(top,  $gradStart 0%, $gradMid 66%, $gradEnd 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,$gradStart), color-stop(66%,$gradMid), color-stop(100%,$gradEnd));
+    background: -webkit-linear-gradient(top,  $gradStart 0%,$gradMid 66%,$gradEnd 100%);
+    background: -o-linear-gradient(top,  $gradStart 0%,$gradMid 66%,$gradEnd 100%);
+    background: -ms-linear-gradient(top,  $gradStart 0%,$gradMid 66%,$gradEnd 100%);
+    background: linear-gradient(to bottom,  $gradStart 0%,$gradMid 66%,$gradEnd 100%);
     height:100%;
     width:100%;
     overflow:hidden;
@@ -33,6 +42,8 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    -webkit-perspective: 1000;
+    perspective: 1000;
 }
 
 .highscore-container {
@@ -148,6 +159,7 @@ body {
     font-size: 16px;
     line-height: 16px;
     display: block;
+    transform: rotateX(35deg) translateY(-14%) scale3d(1.22,1.22,1.22);
     i {
         margin: 0;
         width: 16px;

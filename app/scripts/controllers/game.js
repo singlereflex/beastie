@@ -36,17 +36,19 @@
 
 }());
 
-BL.Sprites = {};
-BL.Sprites["icon-entities-player"] = new Image();
-BL.Sprites["icon-entities-player"].src = "../../svg/uE004-entities-player.svg";
-BL.Sprites["icon-environment-block"] = new Image();
-BL.Sprites["icon-environment-block"].src = "../../svg/uE005-environment-block.svg";
-BL.Sprites["icon-entities-egg"] = new Image();
-BL.Sprites["icon-entities-egg"].src = "../../svg/uE001-entities-egg.svg";
-BL.Sprites["icon-entities-monster"] = new Image();
-BL.Sprites["icon-entities-monster"].src = "../../svg/uE002-entities-monster.svg";
-BL.Sprites["icon-entities-mother"] = new Image();
-BL.Sprites["icon-entities-mother"].src = "../../svg/uE003-entities-mother.svg";
+BL.Sprites = {
+    "icon-entities-player": new Image(),
+    "icon-environment-block": new Image(),
+    "icon-entities-egg": new Image(),
+    "icon-entities-monster": new Image(),
+    "icon-entities-mother": new Image()
+};
+
+BL.Sprites["icon-entities-player"].src = "../../svg/entities-player.svg";
+BL.Sprites["icon-environment-block"].src = "../../svg/environment-block.svg";
+BL.Sprites["icon-entities-egg"].src = "../../svg/entities-egg.svg";
+BL.Sprites["icon-entities-monster"].src = "../../svg/entities-monster.svg";
+BL.Sprites["icon-entities-mother"].src = "../../svg/entities-mother.svg";
 
 angular.module("beastieApp")
     .controller("GameCtrl", ["$scope", "$log", "$state", function ($scope, $log, $state) {
@@ -74,7 +76,8 @@ angular.module("beastieApp")
                         world[e.data._id].position.x > BL.Viewport.x - (canvas.width / 2) / 24 &&
                         world[e.data._id].position.y < BL.Viewport.y + (canvas.height / 2) / 24 &&
                         world[e.data._id].position.y > BL.Viewport.y - (canvas.height / 2) / 24) {
-                        renderQueue.push(world[e.data._id]);
+                        //renderQueue.push(world[e.data._id]);
+                        renderQueue.splice(Math.floor(Math.random()*renderQueue.length), 0, world[e.data._id]);
                     }
                     break;
                 case "completeMove":
@@ -149,6 +152,7 @@ angular.module("beastieApp")
         var player = new BL.DummyPlayer(game);
         var canvas = document.getElementById("entityboard");
         var context = canvas.getContext("2d");
+        var frameId;
 
         function resizeCanvas() {
             canvas.width = window.innerWidth;
@@ -171,28 +175,24 @@ angular.module("beastieApp")
             }
         }
 
-        var frameId;
-
         function render() {
             var currentLength = queue.length;
             var i;
             for (i = 0; i < currentLength; i++) {
                 handleMessage(queue.shift());
             }
-
             context.clearRect(0, 0, canvas.width, canvas.height);
             for (i = 0; i < renderQueue.length; i++) {
                 renderQueue[i].draw(context);
             }
             frameId = window.requestAnimationFrame(render, canvas);
         }
-        render();
 
         game.addEventListener("message", function (e) {
             queue.push(e);
         });
+
         window.addEventListener("resize", resizeCanvas, false);
-        resizeCanvas();
 
         $scope.endGame = function () {
             window.cancelAnimationFrame(frameId);
@@ -209,4 +209,8 @@ angular.module("beastieApp")
         $scope.restartGame = function () {
             location.reload();
         };
+
+        render();
+        resizeCanvas();
+
     }]);

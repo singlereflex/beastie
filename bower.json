@@ -13,7 +13,9 @@
     "underscore": "~1.5.2",
     "angular-bootstrap": "~0.10.0",
     "angular-ui-router": "~0.2.10",
-    "fontawesome": "~4.2.0"
+    "fontawesome": "~4.2.0",
+    "modernizr": "~2.8.3",
+    "noisejs": "*"
   },
   "devDependencies": {
     "angular-mocks": "~1.0.7",

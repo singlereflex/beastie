@@ -4424,7 +4424,13 @@ li[class^="icon-"].icon-large:before, li[class*=" icon-"].icon-large:before {
 /* Put your CSS here */
 html, body {
   margin: 0;
-  background: #002505 url(../images/graphy.png) top left;
+  background-color: #222;
+  background: -moz-linear-gradient(top, #222 0%, #333 66%, #454545 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #222), color-stop(66%, #333), color-stop(100%, #454545));
+  background: -webkit-linear-gradient(top, #222 0%, #333 66%, #454545 100%);
+  background: -o-linear-gradient(top, #222 0%, #333 66%, #454545 100%);
+  background: -ms-linear-gradient(top, #222 0%, #333 66%, #454545 100%);
+  background: linear-gradient(to bottom, #222 0%, #333 66%, #454545 100%);
   height: 100%;
   width: 100%;
   overflow: hidden; }
@@ -4446,7 +4452,9 @@ body {
   -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  user-select: none; }
+  user-select: none;
+  -webkit-perspective: 1000;
+  perspective: 1000; }
 
 .highscore-container {
   display: flex;
@@ -4540,7 +4548,8 @@ body {
   position: relative;
   font-size: 16px;
   line-height: 16px;
-  display: block; }
+  display: block;
+  transform: rotateX(35deg) translateY(-14%) scale3d(1.22, 1.22, 1.22); }
   .entityboard i {
     margin: 0;
     width: 16px;

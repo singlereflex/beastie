@@ -3,12 +3,15 @@
 self.BL = {};
 
 self.importScripts("../../bower_components/underscore/underscore.js");
+self.importScripts("../../bower_components/noisejs/index.js");
 self.importScripts("../shared/components.js");
 self.importScripts("components.js");
 self.importScripts("entities.js");
 
 var loop = new BL.World();
 self.loop = loop;
+
+var noise = new Noise(Math.random());
 
 loop.on("place", function (entity) {
     // console.log(entity.icon);
@@ -100,7 +103,7 @@ self.loop.explore = function (x, y, size) {
     for (var i = x; i < x + size; i++) {
         for (var e = y; e < y + size; e++) {
             if (loop.entities[i + "," + e] === undefined) {
-                if (Math.floor(Math.random() * 1.5) > 0) {
+                if (noise.simplex2(i/15, e/2) > 0.4 || noise.simplex2(i/2, e/15) > 0.4) {
                     loop.entities.place(new BL.Block(i, e, loop));
                 } else if (Math.floor(Math.random() * 50) === 0) {
                     var egg = placeEgg(loop, i, e);
@@ -136,6 +139,6 @@ self.addEventListener("message", function (e) {
     }
 });
 
-self.loop.explore(1024 - 8, 1024 - 8, 16);
+self.loop.explore(1024 - 24, 1024 - 24, 48);
 self.loop.start();
 // }
