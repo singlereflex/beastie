@@ -81,11 +81,15 @@ BL.CanvasRenderer = function(entity) {
             context.shadowBlur = 4;
             context.shadowColor = "rgba(255,255,255,0.4)";
             context.strokeStyle="red";
-
             context.fillStyle = "rgba(200,200,200,0.4)";
             context.fillRect(posX+0.5, posY+0.5, square+0.5, square+0.5);
         } else {
             context.shadowColor = "transparent";
+            context.shadowBlur = 0;
+
+            var variedShade = (Math.random()/4)+0.75;
+            context.globalAlpha = variedShade;
+
             context.drawImage(BL.Sprites[entity.icon], posX+0.5, posY+0.5, square+0.5, square+0.5);
             var posOffX = posX - ((entity.position.x - BL.Viewport.x)/3)+0.5;
             var posOffY = posY - ((entity.position.y - BL.Viewport.y)/12)+4;

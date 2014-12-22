@@ -139,6 +139,6 @@ self.addEventListener("message", function (e) {
     }
 });
 
-self.loop.explore(1024 - 24, 1024 - 24, 48);
+self.loop.explore(1024 - 8, 1024 - 8, 16);
 self.loop.start();
 // }

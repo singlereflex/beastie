@@ -8,7 +8,7 @@ $iconWhiteSpritePath: "../images/glyphicons-halflings-white.png";
 /* Put your CSS here */
 html, body {
     margin: 0;
-    $gradStart: #222;
+    $gradStart: #111;
     $gradMid: #333;
     $gradEnd: #454545;
     background-color: $gradStart;
@@ -161,6 +161,18 @@ body {
     display: block;
     -webkit-transform: rotateX(35deg) translateY(-14%) scale3d(1.22,1.22,1.22);
     transform: rotateX(35deg) translateY(-14%) scale3d(1.22,1.22,1.22);
+    &.dom-view {
+        -webkit-transform: none;
+        transform: none;
+    }
+    &.trainer-box {
+        box-shadow: inset 0 0 18px 2px #000;
+        width: 5em;
+        height: 5em;
+        font-size: 18px;
+        overflow: hidden;
+        background: url("../images/graphy.png") top left;
+    }
     i {
         margin: 0;
         width: 16px;

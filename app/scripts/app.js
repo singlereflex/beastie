@@ -30,6 +30,11 @@ angular.module("beastieApp", ["ui.router", "firebase"])
             })
             .state("game.ended", {
                 templateUrl: "views/game_ended.html"
+            })
+            .state("trainer", {
+                url: "/trainer",
+                templateUrl: "views/trainer.html",
+                controller: "TrainerCtrl"
             });
     }]);
 
