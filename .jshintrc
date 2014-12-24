@@ -26,6 +26,7 @@
         "Hammer": false,
         "requestAnimFrame": false,
         "BL": true,
-        "self": false
+        "self": false,
+        "brain": false
     }
 }

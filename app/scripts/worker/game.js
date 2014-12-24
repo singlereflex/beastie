@@ -103,9 +103,9 @@ self.loop.explore = function (x, y, size) {
     for (var i = x; i < x + size; i++) {
         for (var e = y; e < y + size; e++) {
             if (loop.entities[i + "," + e] === undefined) {
-                if (noise.simplex2(i/15, e/2) > 0.25 || noise.simplex2(i/2, e/15) > 0.25) {
+                if (noise.simplex2(i, e/10) > 0.5 || noise.simplex2(i/10, e) > 0.5) {
                     loop.entities.place(new BL.Block(i, e, loop));
-                } else if (noise.simplex2(i/10, e/10) > 0.6) {
+                } else if (noise.simplex2(i/8, e/8) > 0.7) {
                     var egg = placeEgg(loop, i, e);
                     loop.entities.place(egg);
                 } else {

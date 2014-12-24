@@ -1,5 +1,18 @@
 <div class="help-container">
-    <trainer class="entityboard dom-view trainer-box"></trainer>
+    <h2>{{ status }}</h2>
+    <h4>Time Left: {{ roundTime }} Gen: {{ gen }} Score To Beat: {{ bestScore }}</h4>
+    <ul class="training-grid">
+        <li ng-repeat="trainer in trainings track by $index">
+            <trainer training="trainer" class="entityboard dom-view trainer-box" ng-style="{
+                'background-position': trainer.board.x+'em '+trainer.board.y+'em'
+            }"></trainer>
+            <ul class="info">
+                <li>{{ trainer.name.join("") }}-{{ trainer.gen }}</li>
+                <li ng-if="!trainer.ready">Training...</li>
+                <li ng-style="{ color: trainer.score > bestScore ? 'green' : 'white' }" ng-if="trainer.ready">Score: {{ trainer.score }}</li>
+            </ul>
+        </li>
+    </ul>
     <hr />
     <a href="#" class="btn btn-default">Back to Main Menu</a>
 </div>

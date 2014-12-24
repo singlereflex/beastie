@@ -192,7 +192,7 @@ BL.Egg = function (x, y, world) {
             entity.die();
         } else if (entity.kind === "mother" && self.kind === "mother") {
             entity.worth = 0;
-            console.info("I ate an mother, I'm such a cannible. And you get"+ entity.worth);
+            console.info("I ate an mother, I'm such a cannible. And you get "+ entity.worth);
             self.beastSpeed = self.beastSpeed > 30 ? self.beastSpeed - 1 : self.beastSpeed;
             self.timeOfDeath += 20;
             entity.die();
@@ -350,7 +350,7 @@ BL.Mother = function () {
         if (self.age > self.timeOfDeath) {
             //you get less points if you let them die of old age
             self.worth = 1;
-            console.debug("died of old age so I'm worth"+ self.worth );
+            console.debug("died of old age so I'm worth "+ self.worth );
             self.die();
             return;
         }
