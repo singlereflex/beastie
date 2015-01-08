@@ -81,7 +81,7 @@ angular.module("beastieApp")
                     }
                     break;
                 case "completeMove":
-
+                    //TODO: some of this can be moved to worker
                     world[e.data._id]._position = {
                         x: e.data.entity.position.x,
                         y: e.data.entity.position.y
