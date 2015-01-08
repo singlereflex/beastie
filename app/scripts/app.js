@@ -1,6 +1,10 @@
 "use strict";
 
 angular.module("beastieApp", ["ui.router", "firebase"])
+  .run(['$rootScope', function($rootScope){
+    if (!localStorage.highscores) localStorage.highscores = JSON.stringify([]);
+    $rootScope.highscores = JSON.parse(localStorage.highscores);
+  }])
     .config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider){
         $urlRouterProvider.otherwise("/menu");
 

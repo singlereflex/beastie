@@ -51,7 +51,7 @@ BL.Sprites["icon-entities-monster"].src = "../../svg/entities-monster.svg";
 BL.Sprites["icon-entities-mother"].src = "../../svg/entities-mother.svg";
 
 angular.module("beastieApp")
-    .controller("GameCtrl", ["$scope", "$log", "$state", function ($scope, $log, $state) {
+    .controller("GameCtrl", ["$scope", "$log", "$state", "$rootScope", function ($scope, $log, $state, $rootScope) {
 
         var world = {};
         var queue = [];
@@ -203,6 +203,20 @@ angular.module("beastieApp")
         $scope.submitHighscore = function (name) {
             var highScoreRef = new Firebase("https://highscore.firebaseio.com/beastie");
             highScoreRef.push({name: name, score: $scope.score});
+            var highscores = JSON.parse(localStorage.highscores);
+            console.log(highscores);
+            highscores.push({
+              date: moment().valueOf(),
+              score: $scope.score
+            });
+            console.log(highscores)
+            localStorage.highscores = JSON.stringify(highscores);
+            $rootScope.highscores = JSON.parse(localStorage.highscores);
+
+            $rootScope.highscores = JSON.parse(localStorage.highscores);
+            var current_game = $rootScope.highscores.length-1;
+            $rootScope.highscores[current_game].current = true;
+            console.log($rootScope.highscores);
             $state.go("highscore");
         };
 
