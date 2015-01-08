@@ -1,0 +1,13 @@
+{
+  "name": "brain",
+  "homepage": "https://github.com/harthur/brain",
+  "_release": "8f09d0ff80",
+  "_resolution": {
+    "type": "branch",
+    "branch": "gh-pages",
+    "commit": "8f09d0ff80fb271c3e7f0e04b0e838ce048a860c"
+  },
+  "_source": "https://github.com/harthur/brain.git",
+  "_target": "gh-pages",
+  "_originalSource": "https://github.com/harthur/brain.git"
+}

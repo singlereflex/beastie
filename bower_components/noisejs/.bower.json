@@ -1,0 +1,24 @@
+{
+  "name": "noisejs",
+  "description": "Perlin noise implementation",
+  "main": "index.js",
+  "keywords": [
+    "perlin",
+    "noise",
+    "simplex"
+  ],
+  "author": "Joseph Gentle",
+  "bugs": {
+    "url": "https://github.com/josephg/noisejs/issues"
+  },
+  "homepage": "https://github.com/xixixao/noisejs",
+  "_release": "a197948a68",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "a197948a68dc10cd91ef39260b481defdb77a037"
+  },
+  "_source": "git://github.com/xixixao/noisejs.git",
+  "_target": "*",
+  "_originalSource": "noisejs"
+}

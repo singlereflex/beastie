@@ -1,0 +1,107 @@
+<!doctype html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" manifest="app.manifest"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Beast Land</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="icon" sizes="192x192" href="monster.png">
+        <link rel="icon" sizes="128x128" href="monster-128.png">
+        <link rel="apple-touch-icon" sizes="128x128" href="monster-128.png">
+        <link rel="apple-touch-icon-precomposed" sizes="128x128" href="monster-128.png">
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <!-- build:css(.tmp) styles/main.css -->
+        <link rel="stylesheet" href="styles/main.css">
+        <!-- endbuild -->
+        <link href="bower_components/fontawesome/css/font-awesome.css" rel="stylesheet">
+        <script src="https://cdn.firebase.com/js/client/1.0.21/firebase.js"></script>
+    </head>
+    <body ng-app="beastieApp">
+
+        <!--[if lt IE 7]>
+        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please
+            <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.
+        </p>
+        <![endif]-->
+
+        <!--[if lt IE 9]>
+        <script src="bower_components/es5-shim/es5-shim.js"></script>
+        <script src="bower_components/json3/lib/json3.min.js"></script>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+        <div class="ui-container" ui-view></div>
+
+        <script type="text/ng-template" id="entities.html">
+            <div ng-model="entity" class="entity {{ entity.kind }}" ng-style="{
+                    'left': entity.position.x + 'em',
+                    'top': entity.position.y + 'em',
+                    'z-index' : entity.position.z
+                }" ng-repeat="entity in entities">
+                <i class="{{ entity.classVal }}"></i>
+            </div>
+        </script>
+
+
+        <!-- // <script src="bower_components/dat.gui/dat.gui.js"></script> -->
+        <script src="bower_components/jquery/jquery.js"></script>
+        <script src="bower_components/moment/moment.js"></script>
+        <script src="bower_components/angular/angular.js"></script>
+        <script src="https://cdn.firebase.com/libs/angularfire/0.8.2/angularfire.min.js"></script>
+		    <!-- // <script src="bower_components/timbre/misc/js/subcollider.js"></script> -->
+        <!-- // <script src="bower_components/timbre/timbre.dev.js"></script> -->
+        <script src="bower_components/underscore/underscore.js"></script>
+        <script src="bower_components/angular-resource/angular-resource.js"></script>
+        <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+        <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+        <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+        <script src="bower_components/brain/brain-0.6.3.min.js"></script>
+        <script src="scripts/components.js"></script>
+        <script src="scripts/shared/components.js"></script>
+        <script src="scripts/entities.js"></script>
+        <!-- // <script src="scripts/game.js"></script> -->
+        <script src="scripts/app.js"></script>
+        <script src="scripts/controllers/game.js"></script>
+        <script src="scripts/controllers/highscore.js"></script>
+        <script src="scripts/controllers/menu.js"></script>
+        <script src="scripts/controllers/trainer.js"></script>
+        <script src="scripts/directives/menu-options.js"></script>
+        <script src="scripts/directives/move-example.js"></script>
+        <script src="scripts/controllers/instructions.js"></script>
+        <script src="scripts/directives/kill-example.js"></script>
+        <script src="scripts/directives/pull-example.js"></script>
+        <script src="scripts/directives/trainer.js"></script>
+        <!-- build:js scripts/plugins.js -->
+
+        <!-- endbuild -->
+
+        <!-- build:js scripts/modules.js -->
+
+        <!-- endbuild -->
+
+        <!-- build:js({.tmp,app}) scripts/scripts.js -->
+
+        <!-- endbuild -->
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-55017039-1', 'auto');
+          ga('send', 'pageview');
+
+        </script>
+    </body>
+</html>

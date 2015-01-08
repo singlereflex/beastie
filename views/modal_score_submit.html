@@ -1,0 +1,20 @@
+<div class="modal-header text-center">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h1>Game Over!</h1>
+    <h4 class="modal-title">Scored: {{score}}</h4>
+</div>
+<div class="modal-body">
+    <ol class="list-group highscore-list">
+        <li ng-repeat="player in scoreboard | toArray | orderBy:'score':true" ng-show="player.name" class="list-group-item"><span class="name">{{($index-10) + ".&nbsp;" + player.name}}</span><span class="separator"></span><span class="score">{{player.score}}</span></li>
+    </ol>
+</div>
+<div class="modal-footer">
+    <div class="form-group">
+        <label for="name" class="col-sm-2 control-label">Submit Your Name</label>
+        <div class="col-sm-10">
+            <input id="name" name="name" ng-model="name" type="text" class="modal-title form-control"/>
+        </div>
+    </div>
+    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancel()">Close</button>
+    <button class="btn btn-primary" ng-click="ok(name)">Submit Score</button>
+</div>

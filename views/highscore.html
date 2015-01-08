@@ -1,0 +1,13 @@
+<div class="highscore-container">
+    <h2>Highscore</h2>
+    <ol class="highscore-list" ng-hide="local">
+        <li ng-repeat="player in scoreboard | toArray | orderBy:'score':true | limitTo:pageSize" ><span class="name" ng-show="player.name">{{player.name}}</span><span class="name" ng-hide="player.name">Unknown</span><span class="score">{{player.score}}</span></li>
+    </ol>
+    <ol class="highscore-list" ng-show="local">
+      <li ng-repeat="date in highscores | toArray | orderBy:'score':true | limitTo:pageSize" ng-class="{current_game: date.current}"><span class="name" ng-show="date.date">{{moment(date.date).format("YYYY-MM-DD")}}</span><span class="score">{{date.score}}</span></li>
+    </ol>
+    <button class="btn btn-default" ng-show="local" ng-click="local=false">See Global Highscores</button>
+    <button class="btn btn-default" ng-hide="local" ng-click="local=true">See Local Highscores</button>
+    <br/>
+    <a href="#" class="btn btn-default">Back to Main Menu</a>
+</div>
