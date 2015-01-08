@@ -8,7 +8,9 @@ angular.module("beastieApp")
         // Automatically syncs everywhere in real time.
         $scope.scoreboard = $firebase(highScoreRef).$asArray();
         //weirdness because of firebase:
-        
-        // Automatically syncs everywhere in real time.
 
+        // Automatically syncs everywhere in real time.
+        // $scope.local_highscores = JSON.parse(localStorage.highscores)
+        $scope.moment = moment;
+        $scope.local = true;
     }]);
