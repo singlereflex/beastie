@@ -66,6 +66,7 @@ angular.module("beastieApp")
         // Fired when the manifest resources have been newly redownloaded.
         $scope.appCache.addEventListener("updateready", function (e) {
             $scope.updateState = "updated (reload to see)";
+            window.location.reload();
             handleCacheEvent(e);
             $scope.appCache.swapCache();
 
