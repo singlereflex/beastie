@@ -28,6 +28,7 @@ loop.on("place", function (entity) {
         icon: entity.icon
     });
     entity.on("completeMove", function (deltaX, deltaY) {
+      //if distance to player is small
         self.postMessage({
             event: "completeMove",
             deltas: {
@@ -89,6 +90,7 @@ function addPlayer() {
     player.on("die", function () {
         self.close();
     });
+
     loop.entities.place(player);
     // center(player.el);
     return player;
