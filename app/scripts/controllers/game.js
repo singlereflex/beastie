@@ -85,14 +85,6 @@ angular.module("beastieApp")
                         BL.Viewport.x = world[e.data._id].position.x;
                         BL.Viewport.y = world[e.data._id].position.y;
                     }
-                    map[world[e.data._id].position.x+","+world[e.data._id].position.y] = world[e.data._id];
-                    // if (world[e.data._id].position.x < BL.Viewport.x + (canvas.width / 2) / 24 &&
-                    //     world[e.data._id].position.x > BL.Viewport.x - (canvas.width / 2) / 24 &&
-                    //     world[e.data._id].position.y < BL.Viewport.y + (canvas.height / 2) / 24 &&
-                    //     world[e.data._id].position.y > BL.Viewport.y - (canvas.height / 2) / 24) {
-                    //
-                    //     //renderQueue.splice(Math.floor(Math.random()*renderQueue.length), 0, world[e.data._id]);
-                    // }
                     break;
                 case "completeMove":
                     //TODO: some of this can be moved to worker
@@ -100,43 +92,8 @@ angular.module("beastieApp")
                         x: e.data.entity.position.x,
                         y: e.data.entity.position.y
                     };
-                    delete map[world[e.data._id].position.x+","+world[e.data._id].position.y]
-                    map[world[e.data._id]._position.x+","+world[e.data._id]._position.y] = world[e.data._id];
-                    // if (e.data.entity.kind === "player") {
-                    //     renderQueue = [];
-                    //     //reset renderQueue
-                    //     for (var key in world) {
-                    //         if (world[key]._position.x < BL.Viewport.x + (canvas.width / 2) / 24 &&
-                    //             world[key]._position.x > BL.Viewport.x - (canvas.width / 2) / 24 &&
-                    //             world[key]._position.y < BL.Viewport.y + (canvas.height / 2) / 24 &&
-                    //             world[key]._position.y > BL.Viewport.y - (canvas.height / 2) / 24) {
-                    //             renderQueue.push(world[key]);
-                    //         }
-                    //     }
-                    // }
-                    // else if (world[e.data._id]._position.x < BL.Viewport.x + (canvas.width / 2) / 24 &&
-                    //     world[e.data._id]._position.x > BL.Viewport.x - (canvas.width / 2) / 24 &&
-                    //     world[e.data._id]._position.y < BL.Viewport.y + (canvas.height / 2) / 24 &&
-                    //     world[e.data._id]._position.y > BL.Viewport.y - (canvas.height / 2) / 24) {
-                    //     index = renderQueue.indexOf(world[e.data._id]);
-                    //     if (index < 0) {
-                    //         renderQueue.push(world[e.data._id]);
-                    //     }
-                    // } else {
-                    //   //if currently in reder queue remove it?
-                    //     index = renderQueue.indexOf(world[e.data._id]);
-                    //     if (index > -1) {
-                    //         renderQueue.splice(index, 1);
-                    //     }
-                    // }
-                    // // world[e.data._id].kind = e.data.entity.kind
-                    // // world[e.data._id].icon = e.data.entity.icon
-                    // // world[e.data._id].move(e.data.deltas.deltaX, e.data.deltas.deltaY, e.data.entity);
-
-
                     break;
                 case "die":
-
                     if (e.data.entity.kind === "player") {
                         //let some things finish moving
                         setTimeout(function () {
@@ -145,10 +102,7 @@ angular.module("beastieApp")
                     } else {
                         $scope.score += e.data.worth;
                     }
-                    index = renderQueue.indexOf(world[e.data._id]);
-                    if (index > -1) {
-                        renderQueue.splice(index, 1);
-                    }
+
                     world[e.data._id].die();
                     delete world[e.data._id];
                     if (!$scope.$$phase) {
@@ -159,17 +113,17 @@ angular.module("beastieApp")
                     world[e.data._id].render(e.data.entity, e.data.icon);
                     break;
             }
-            var width = Math.floor((canvas.width / 2) / 24);
-            var height = Math.floor((canvas.height / 2) / 24);
-            for(var x = -width; x < width; x++){
-              for(var y = -height; y < height; y++){
-                if(map[(BL.Viewport.x+x)+","+(BL.Viewport.y+y)] !== undefined){
-                  renderQueue.push(map[(BL.Viewport.x+x)+","+(BL.Viewport.y+y)]);
-                }
-              }
-            }
 
             // console.log(arguments);
+            if(e.data.entity.kind === "player"){
+              // world = e.data.world;
+              // for(var thing in world){
+              //   renderQueue.push(world[thing]);
+              // }
+            } else {
+              if(!(renderQueue.indexOf(world[e.data._id]) > -1))
+                renderQueue.push(world[e.data._id]);
+            }
         };
 
 
@@ -188,29 +142,26 @@ angular.module("beastieApp")
                 height: canvas.width,
                 width: canvas.height
             });
-            renderQueue = [];
-            //reset renderQueue
-            for (var key in world) {
-                if (world[key]._position.x < BL.Viewport.x + (canvas.width / 2) / 24 &&
-                    world[key]._position.x > BL.Viewport.x - (canvas.width / 2) / 24 &&
-                    world[key]._position.y < BL.Viewport.y + (canvas.height / 2) / 24 &&
-                    world[key]._position.y > BL.Viewport.y - (canvas.height / 2) / 24) {
-                    renderQueue.push(world[key]);
-                }
-            }
+
         }
 
         function render() {
-          console.log(renderQueue.length);
+          // console.log(renderQueue.length);
             var currentLength = queue.length;
             var i;
             for (i = 0; i < currentLength; i++) {
                 handleMessage(queue.shift());
             }
+
+            var width = Math.floor((canvas.width / 2) / 24);
+            var height = Math.floor((canvas.height / 2) / 24);
             context.clearRect(0, 0, canvas.width, canvas.height);
-            for (i = 0; i < renderQueue.length; i++) {
-                renderQueue[i].draw(context);
+
+            for(var i = 0; i < renderQueue.length; i++){
+              renderQueue[i].draw(context);
             }
+            // renderQueue = [];
+
             frameId = window.requestAnimationFrame(render, canvas);
         }
 

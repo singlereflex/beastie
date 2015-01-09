@@ -28,6 +28,19 @@ loop.on("place", function (entity) {
         icon: entity.icon
     });
     entity.on("completeMove", function (deltaX, deltaY) {
+      var distance = Math.sqrt(
+        (BL.Viewport.x-entity.position.x)
+        *(BL.Viewport.x-entity.position.x)
+        +(BL.Viewport.y-entity.position.y)
+        *(BL.Viewport.y-entity.position.y)
+      );
+      var radius = Math.sqrt(
+        (BL.Viewport.width)
+        *(BL.Viewport.width)
+        +(BL.Viewport.height)
+        *(BL.Viewport.height)
+      )
+      if(distance < radius){
       //if distance to player is small
         self.postMessage({
             event: "completeMove",
@@ -45,6 +58,7 @@ loop.on("place", function (entity) {
             _id: entity._id,
             icon: entity.icon
         });
+      }
     });
     entity.on("die", function () {
         self.postMessage({
