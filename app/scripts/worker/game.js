@@ -41,23 +41,50 @@ loop.on("place", function (entity) {
         *(BL.Viewport.height)
       )
       if(distance < radius){
+        var message = {
+          event: "completeMove",
+          deltas: {
+            deltaX: deltaX,
+            deltaY: deltaY
+          },
+          entity: {
+            position: {
+              x: entity.position.x,
+              y: entity.position.y
+            },
+            kind: entity.kind
+          },
+          _id: entity._id,
+          icon: entity.icon
+        }
+        self.postMessage(message);
+        if(entity.kind == "player"){
+          //then render the world:
+          for(var x = -BL.Viewport.width; x < BL.Viewport.width; x++){
+            for(var y = -BL.Viewport.height; y < BL.Viewport.height; y++){
+              var visible_entities = entity.world.findEntityByPosition(Math.floor(BL.Viewport.x+x), Math.floor(BL.Viewport.y+y));
+              for(var e = 0; e < visible_entities.length; e++){
+                if(visible_entities[e].kind !== "player"){
+                  self.postMessage({
+                    event: "place",
+                    entity: {
+                      position: {
+                        x: visible_entities[e].position.x,
+                        y: visible_entities[e].position.y
+                      },
+                      kind: visible_entities[e].kind
+                    },
+                    _id: visible_entities[e]._id,
+                    icon: visible_entities[e].icon
+                  });
+                }
+              }
+            }
+          }
+
+        }
       //if distance to player is small
-        self.postMessage({
-            event: "completeMove",
-            deltas: {
-                deltaX: deltaX,
-                deltaY: deltaY
-            },
-            entity: {
-                position: {
-                    x: entity.position.x,
-                    y: entity.position.y
-                },
-                kind: entity.kind
-            },
-            _id: entity._id,
-            icon: entity.icon
-        });
+
       }
     });
     entity.on("die", function () {
@@ -121,7 +148,7 @@ self.loop.explore = function (x, y, size) {
             if (loop.entities[i + "," + e] === undefined) {
                 if (noise.simplex2(i, e/10) > 0.5 || noise.simplex2(i/10, e) > 0.5) {
                     loop.entities.place(new BL.Block(i, e, loop));
-                } else if (noise.simplex2(i/8, e/8) > 0.7) {
+                } else if (noise.simplex2(i/8, e/8) > 0.5) {
                     var egg = placeEgg(loop, i, e);
                     loop.entities.place(egg);
                 } else {

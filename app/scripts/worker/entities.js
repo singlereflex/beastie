@@ -36,7 +36,7 @@ BL.World = function () {
         // self.pause();
         // }
         if (self.running) {
-            setTimeout(self.animloop, 40);
+            setTimeout(self.animloop, 120);
         }
     };
 
@@ -75,6 +75,8 @@ BL.Player = function (x, y, world) {
     this.on("collided", function collision(entity) {
         if (entity.kind === "monster" || entity.kind === "mother") {
             self.die();
+        } else if(entity.kind === "egg"){
+            entity.die();
         } else {
             console.info("hit a block");
         }
@@ -219,7 +221,7 @@ BL.Egg = function (x, y, world) {
     this.tick = this.world.on("tick", function () {
         // console.log("tick");
         self.age++;
-        if (self.age > Math.random() * (750 - 250) + 250) {
+        if (self.age > Math.random() * (750 - 50) + 50) {
 
             if (self.world.entities[self.position.x + "," + self.position.y].length === 1 && self.world.entities[self.position.x + "," + self.position.y][0] === self) {
                 self.transition("hatch");
@@ -268,7 +270,7 @@ BL.Monster = function () {
         }
         // console.log(self.probability);
 
-        if (self.probability < 25) {
+        if (self.probability < 35) {
             var delta = (Math.floor(Math.random() * 4));
             // var move = self.moves[delta];
             for (var i = 0; i < self.moves.length; i++) {

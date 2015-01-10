@@ -79,19 +79,25 @@ angular.module("beastieApp")
           //move render queue
             switch (e.data.event) {
                 case "place":
-                    world[e.data._id] = new BL.Display(e.data.entity, e.data.icon);
-                    if (e.data.entity.kind === "player") {
-                        player.display = world[e.data._id];
-                        BL.Viewport.x = world[e.data._id].position.x;
-                        BL.Viewport.y = world[e.data._id].position.y;
+                    console.log('place');
+                    //only add it if we don't already have it
+                    if(!world[e.data._id]){
+                      world[e.data._id] = new BL.Display(e.data.entity, e.data.icon);
+                      if (e.data.entity.kind === "player") {
+                          player.display = world[e.data._id];
+                          BL.Viewport.x = world[e.data._id].position.x;
+                          BL.Viewport.y = world[e.data._id].position.y;
+                      }
                     }
                     break;
                 case "completeMove":
+                  console.log(e.data.entity.kind);
                     //TODO: some of this can be moved to worker
                     world[e.data._id]._position = {
                         x: e.data.entity.position.x,
                         y: e.data.entity.position.y
                     };
+
                     break;
                 case "die":
                     if (e.data.entity.kind === "player") {
@@ -115,15 +121,11 @@ angular.module("beastieApp")
             }
 
             // console.log(arguments);
-            if(e.data.entity.kind === "player"){
-              // world = e.data.world;
-              // for(var thing in world){
-              //   renderQueue.push(world[thing]);
-              // }
-            } else {
-              if(!(renderQueue.indexOf(world[e.data._id]) > -1))
-                renderQueue.push(world[e.data._id]);
-            }
+
+
+            // if(!(renderQueue.indexOf(world[e.data._id]) > -1))
+            //   renderQueue.push(world[e.data._id]);
+
         };
 
 
@@ -139,27 +141,55 @@ angular.module("beastieApp")
             //update worker viewport:
             game.postMessage({
                 event: "viewport",
-                height: canvas.width,
-                width: canvas.height
+                height: canvas.width/48,
+                width: canvas.height/48
             });
 
         }
 
         function render() {
-          // console.log(renderQueue.length);
+            console.log(_.size(world));
             var currentLength = queue.length;
             var i;
             for (i = 0; i < currentLength; i++) {
+              try{
                 handleMessage(queue.shift());
+              } catch(e){
+                console.error(e);
+              }
             }
 
             var width = Math.floor((canvas.width / 2) / 24);
             var height = Math.floor((canvas.height / 2) / 24);
             context.clearRect(0, 0, canvas.width, canvas.height);
 
-            for(var i = 0; i < renderQueue.length; i++){
-              renderQueue[i].draw(context);
+            var radius = Math.sqrt(
+              (width)
+              *(width)
+              +(height)
+              *(height)
+            )
+            for(var entity in world){
+              var distance = Math.sqrt(
+                (BL.Viewport.x-world[entity].position.x)
+                *(BL.Viewport.x-world[entity].position.x)
+                +(BL.Viewport.y-world[entity].position.y)
+                *(BL.Viewport.y-world[entity].position.y)
+              );
+              if(distance > radius){
+                delete world[entity];
+              } else {
+                try{
+                  world[entity].draw(context);
+                } catch (e) {
+                  console.error(e);
+                  delete world[entity];
+                }
+              }
             }
+            // for(var i = 0; i < renderQueue.length; i++){
+              // renderQueue[i].draw(context);
+            // }
             // renderQueue = [];
 
             frameId = window.requestAnimationFrame(render, canvas);
