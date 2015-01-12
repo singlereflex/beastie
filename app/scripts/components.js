@@ -105,9 +105,6 @@ BL.CanvasRenderer = function(entity) {
             context.globalAlpha = variedShade;
 
             context.drawImage(BL.Sprites[entity.icon], posX+0.5, posY+0.5, square+0.5, square+0.5);
-            var posOffX = posX - ((entity.position.x - BL.Viewport.x)/3)+0.5;
-            var posOffY = posY - ((entity.position.y - BL.Viewport.y)/12)+4;
-            //context.drawImage(BL.Sprites[entity.icon], posOffX, posOffY, square+0.5, square+0.5);
         }
 
     };
@@ -125,37 +122,6 @@ BL.CanvasRenderer = function(entity) {
  */
 BL.MoveControllerComponent = function (entity) {
     //requires the BL.MoveComponent
-    document.body.addEventListener("keydown", function keydown(event) {
-        if (!entity.dead) {
-            switch (event.which) {
-                //left
-                case 37:
-                case 65:
-                    //event.preventDefault();
-                    //// entity.move(-1, 0);
-                    //break;
-                //down
-                case 40:
-                case 83:
-                    //event.preventDefault();
-                    //// entity.move(0, 1);
-                    ////right
-                    //break;
-                case 39:
-                case 68:
-                    //event.preventDefault();
-                    //// entity.move(1, 0);
-                    //break;
-                //up
-                case 38:
-                case 87:
-                    event.preventDefault();
-                    // entity.move(0, -1);
-                    break;
-            }
-        }
-
-    }, false);
 
     document.body.addEventListener("keyup", function keyUp(event) {
         if (!entity.dead) {
