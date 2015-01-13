@@ -148,10 +148,9 @@ angular.module("beastieApp")
         }
 
         function render() {
-            console.log(_.size(world));
             var currentLength = queue.length;
-            var i;
-            for (i = 0; i < currentLength; i++) {
+            console.info(currentLength);
+            for (var i = 0; i < currentLength; i++) {
               try{
                 handleMessage(queue.shift());
               } catch(e){
@@ -187,10 +186,6 @@ angular.module("beastieApp")
                 }
               }
             }
-            // for(var i = 0; i < renderQueue.length; i++){
-              // renderQueue[i].draw(context);
-            // }
-            // renderQueue = [];
 
             frameId = window.requestAnimationFrame(render, canvas);
         }

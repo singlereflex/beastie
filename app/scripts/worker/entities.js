@@ -219,6 +219,7 @@ BL.Egg = function (x, y, world) {
     this.kind = "egg";
 
     this.tick = this.world.on("tick", function () {
+        if(self._sleep) return;
         // console.log("tick");
         self.age++;
         if (self.age > Math.random() * (750 - 50) + 50) {
@@ -307,6 +308,7 @@ BL.Monster = function () {
     this.world.remove("tick", this.tick);
 
     this.tick = this.world.on("tick", function () {
+      if(self._sleep) return;
         self.age++;
         if (self.age > Math.random() * (1500 - 750) + 750) {
             self.transition("mother");
@@ -348,6 +350,7 @@ BL.Mother = function () {
     };
 
     self.tick = this.world.on("tick", function () {
+      if(self._sleep) return;
         self.age++;
         if (self.age > self.timeOfDeath) {
             //you get less points if you let them die of old age
