@@ -54,6 +54,7 @@ angular.module("beastieApp")
     .controller("GameCtrl", ["$scope", "$log", "$state", "$rootScope", function ($scope, $log, $state, $rootScope) {
 
         var world = {};
+        var map = {};//location based store
         var queue = [];
 
         var index;
@@ -63,64 +64,42 @@ angular.module("beastieApp")
 
         $scope.score = 0;
 
+        /*
+        Math.sqrt(
+          (player.x-entity.position.x)
+          *(player.x-entity.position.x)
+          +(player.y-entity.position.y)
+          *(player.y-entity.position.y)
+        )
+        */
+
+
         var handleMessage = function (e) {
+
+          //move render queue
             switch (e.data.event) {
                 case "place":
-                    world[e.data._id] = new BL.Display(e.data.entity, e.data.icon);
-                    if (e.data.entity.kind === "player") {
-                        player.display = world[e.data._id];
-                        BL.Viewport.x = world[e.data._id].position.x;
-                        BL.Viewport.y = world[e.data._id].position.y;
-                    }
-                    if (world[e.data._id].position.x < BL.Viewport.x + (canvas.width / 2) / 24 &&
-                        world[e.data._id].position.x > BL.Viewport.x - (canvas.width / 2) / 24 &&
-                        world[e.data._id].position.y < BL.Viewport.y + (canvas.height / 2) / 24 &&
-                        world[e.data._id].position.y > BL.Viewport.y - (canvas.height / 2) / 24) {
-                        renderQueue.push(world[e.data._id]);
-                        //renderQueue.splice(Math.floor(Math.random()*renderQueue.length), 0, world[e.data._id]);
+                    console.log('place');
+                    //only add it if we don't already have it
+                    if(!world[e.data._id]){
+                      world[e.data._id] = new BL.Display(e.data.entity, e.data.icon);
+                      if (e.data.entity.kind === "player") {
+                          player.display = world[e.data._id];
+                          BL.Viewport.x = world[e.data._id].position.x;
+                          BL.Viewport.y = world[e.data._id].position.y;
+                      }
                     }
                     break;
                 case "completeMove":
+                  console.log(e.data.entity.kind);
                     //TODO: some of this can be moved to worker
                     world[e.data._id]._position = {
                         x: e.data.entity.position.x,
                         y: e.data.entity.position.y
                     };
 
-                    if (e.data.entity.kind === "player") {
-                        renderQueue = [];
-                        //reset renderQueue
-                        for (var key in world) {
-                            if (world[key]._position.x < BL.Viewport.x + (canvas.width / 2) / 24 &&
-                                world[key]._position.x > BL.Viewport.x - (canvas.width / 2) / 24 &&
-                                world[key]._position.y < BL.Viewport.y + (canvas.height / 2) / 24 &&
-                                world[key]._position.y > BL.Viewport.y - (canvas.height / 2) / 24) {
-                                renderQueue.push(world[key]);
-                            }
-                        }
-                    }
-                    else if (world[e.data._id]._position.x < BL.Viewport.x + (canvas.width / 2) / 24 &&
-                        world[e.data._id]._position.x > BL.Viewport.x - (canvas.width / 2) / 24 &&
-                        world[e.data._id]._position.y < BL.Viewport.y + (canvas.height / 2) / 24 &&
-                        world[e.data._id]._position.y > BL.Viewport.y - (canvas.height / 2) / 24) {
-                        index = renderQueue.indexOf(world[e.data._id]);
-                        if (index < 0) {
-                            renderQueue.push(world[e.data._id]);
-                        }
-                    } else {
-                        index = renderQueue.indexOf(world[e.data._id]);
-                        if (index > -1) {
-                            renderQueue.splice(index, 1);
-                        }
-                    }
-                    // world[e.data._id].kind = e.data.entity.kind
-                    // world[e.data._id].icon = e.data.entity.icon
-                    // world[e.data._id].move(e.data.deltas.deltaX, e.data.deltas.deltaY, e.data.entity);
-
-
                     break;
                 case "die":
-
                     if (e.data.entity.kind === "player") {
                         //let some things finish moving
                         setTimeout(function () {
@@ -129,10 +108,7 @@ angular.module("beastieApp")
                     } else {
                         $scope.score += e.data.worth;
                     }
-                    index = renderQueue.indexOf(world[e.data._id]);
-                    if (index > -1) {
-                        renderQueue.splice(index, 1);
-                    }
+
                     world[e.data._id].die();
                     delete world[e.data._id];
                     if (!$scope.$$phase) {
@@ -145,6 +121,11 @@ angular.module("beastieApp")
             }
 
             // console.log(arguments);
+
+
+            // if(!(renderQueue.indexOf(world[e.data._id]) > -1))
+            //   renderQueue.push(world[e.data._id]);
+
         };
 
 
@@ -160,31 +141,52 @@ angular.module("beastieApp")
             //update worker viewport:
             game.postMessage({
                 event: "viewport",
-                height: canvas.width,
-                width: canvas.height
+                height: canvas.width/48,
+                width: canvas.height/48
             });
-            renderQueue = [];
-            //reset renderQueue
-            for (var key in world) {
-                if (world[key]._position.x < BL.Viewport.x + (canvas.width / 2) / 24 &&
-                    world[key]._position.x > BL.Viewport.x - (canvas.width / 2) / 24 &&
-                    world[key]._position.y < BL.Viewport.y + (canvas.height / 2) / 24 &&
-                    world[key]._position.y > BL.Viewport.y - (canvas.height / 2) / 24) {
-                    renderQueue.push(world[key]);
-                }
-            }
+
         }
 
         function render() {
             var currentLength = queue.length;
-            var i;
-            for (i = 0; i < currentLength; i++) {
+            console.info(currentLength);
+            for (var i = 0; i < currentLength; i++) {
+              try{
                 handleMessage(queue.shift());
+              } catch(e){
+                console.error(e);
+              }
             }
+
+            var width = Math.floor((canvas.width / 2) / 24);
+            var height = Math.floor((canvas.height / 2) / 24);
             context.clearRect(0, 0, canvas.width, canvas.height);
-            for (i = 0; i < renderQueue.length; i++) {
-                renderQueue[i].draw(context);
+
+            var radius = Math.sqrt(
+              (width)
+              *(width)
+              +(height)
+              *(height)
+            )
+            for(var entity in world){
+              var distance = Math.sqrt(
+                (BL.Viewport.x-world[entity].position.x)
+                *(BL.Viewport.x-world[entity].position.x)
+                +(BL.Viewport.y-world[entity].position.y)
+                *(BL.Viewport.y-world[entity].position.y)
+              );
+              if(distance > radius){
+                delete world[entity];
+              } else {
+                try{
+                  world[entity].draw(context);
+                } catch (e) {
+                  console.error(e);
+                  delete world[entity];
+                }
+              }
             }
+
             frameId = window.requestAnimationFrame(render, canvas);
         }
 
