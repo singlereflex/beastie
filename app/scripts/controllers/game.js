@@ -78,6 +78,9 @@ angular.module("beastieApp")
 
           //move render queue
             switch (e.data.event) {
+                case "remove":
+                  delete world[e.data._id];
+                  break;
                 case "place":
                     console.log('place');
                     //only add it if we don't already have it
@@ -148,42 +151,24 @@ angular.module("beastieApp")
         }
 
         function render() {
+            // console.info("world", _.size(world));
             var currentLength = queue.length;
-            // console.info(currentLength);
+            // console.info("queue", currentLength);
             for (var i = 0; i < currentLength; i++) {
               try{
                 handleMessage(queue.shift());
               } catch(e){
-                // console.error(e);
+                console.error(e);
               }
             }
-
-            var width = Math.floor((canvas.width / 2) / 24);
-            var height = Math.floor((canvas.height / 2) / 24);
             context.clearRect(0, 0, canvas.width, canvas.height);
 
-            var radius = Math.sqrt(
-              (width)
-              *(width)
-              +(height)
-              *(height)
-            )
             for(var entity in world){
-              var distance = Math.sqrt(
-                (BL.Viewport.x-world[entity].position.x)
-                *(BL.Viewport.x-world[entity].position.x)
-                +(BL.Viewport.y-world[entity].position.y)
-                *(BL.Viewport.y-world[entity].position.y)
-              );
-              if(distance > radius){
+              try{
+                world[entity].draw(context);
+              } catch (e) {
+                console.error(e);
                 delete world[entity];
-              } else {
-                try{
-                  world[entity].draw(context);
-                } catch (e) {
-                  // console.error(e);
-                  delete world[entity];
-                }
               }
             }
 
