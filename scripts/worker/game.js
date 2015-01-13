@@ -17,9 +17,33 @@ loop.on("place", function (entity) {
     //adding this here needs to be a component
     entity.sleep = function(){
       entity._sleep = true;
+      self.postMessage({
+        event: "remove",
+        entity: {
+          position: {
+            x: entity.position.x,
+            y: entity.position.y
+          },
+          kind: entity.kind
+        },
+        _id: entity._id,
+        icon: entity.icon
+      });
     }
     entity.wake = function(){
       entity._sleep = false;
+      self.postMessage({
+        event: "place",
+        entity: {
+          position: {
+            x: entity.position.x,
+            y: entity.position.y
+          },
+          kind: entity.kind
+        },
+        _id: entity._id,
+        icon: entity.icon
+      });
     }
     // console.log(entity.icon);
     self.postMessage({
@@ -34,6 +58,22 @@ loop.on("place", function (entity) {
         _id: entity._id,
         icon: entity.icon
     });
+    var distance = Math.sqrt(
+      (BL.Viewport.x-entity.position.x)
+      *(BL.Viewport.x-entity.position.x)
+      +(BL.Viewport.y-entity.position.y)
+      *(BL.Viewport.y-entity.position.y)
+    );
+    var radius = Math.sqrt(
+      (BL.Viewport.width)
+      *(BL.Viewport.width)
+      +(BL.Viewport.height)
+      *(BL.Viewport.height)
+    )
+
+    if(distance > radius && radius > 0){
+      entity.sleep();
+    }
     entity.on("completeMove", function(deltaX, deltaY){
       //need to make this flexible enough to accomidate many players eventually
       //then it can go into it's own component
@@ -109,35 +149,59 @@ function addPlayer() {
     BL.Viewport.x = x;
     BL.Viewport.y = y;
     var player = new BL.Player(x, y, loop);
-    player.on("completeMove", function () {
+    player.on("completeMove", function (deltaX, deltaY) {
         BL.Viewport.x = player.position.x;
         BL.Viewport.y = player.position.y;
-        //this can go elsewhere eventually but here for now
-        for(var x = -BL.Viewport.width; x < BL.Viewport.width; x++){
+
+        var delta = deltaX + deltaY; //should come out to 1 or -1
+
+        //past row/column moved x
+        if(Math.abs(deltaX) > 0){
+          //delete past y
           for(var y = -BL.Viewport.height; y < BL.Viewport.height; y++){
-            var visible_entities = player.world.findEntityByPosition(Math.floor(BL.Viewport.x+x), Math.floor(BL.Viewport.y+y));
+            var visible_entities = player.world.findEntityByPosition(
+                                    Math.ceil(BL.Viewport.x-(BL.Viewport.width+1)*delta),
+                                    Math.ceil(BL.Viewport.y+y));
+
             for(var e = 0; e < visible_entities.length; e++){
-              if(visible_entities[e].kind !== "player"){
-                if(visible_entities[e]._sleep){
-                  visible_entities[e].wake();
-                }
-                var entity = visible_entities[e]
-                self.postMessage({
-                  event: "place",
-                  entity: {
-                    position: {
-                      x: entity.position.x,
-                      y: entity.position.y
-                    },
-                    kind: entity.kind
-                  },
-                  _id: entity._id,
-                  icon: entity.icon
-                });
-              }
+              visible_entities[e].sleep();
+
+            }
+          }
+          //wake new y
+          for(var y = -BL.Viewport.height; y < BL.Viewport.height; y++){
+            var visible_entities = player.world.findEntityByPosition(
+              Math.ceil(BL.Viewport.x+(BL.Viewport.width+1)*delta),
+              Math.ceil(BL.Viewport.y+y));
+            for(var e = 0; e < visible_entities.length; e++){
+              visible_entities[e].wake();
+
             }
           }
         }
+        //moved y
+        else {
+          for(var x = -BL.Viewport.width; x < BL.Viewport.width; x++){
+            var visible_entities = player.world.findEntityByPosition(
+              Math.floor(BL.Viewport.x+x),
+              Math.floor(BL.Viewport.y-(BL.Viewport.height+1)*delta));
+              for(var e = 0; e < visible_entities.length; e++){
+                visible_entities[e].sleep();
+
+              }
+            }
+            //wake new y
+            for(var x = -BL.Viewport.width; x < BL.Viewport.width; x++){
+              var visible_entities = player.world.findEntityByPosition(
+                Math.floor(BL.Viewport.x+x),
+                Math.floor(BL.Viewport.y+(BL.Viewport.height+1)*delta));
+              for(var e = 0; e < visible_entities.length; e++){
+                visible_entities[e].wake();
+
+              }
+            }
+        }
+
     });
     player.on("die", function () {
         self.close();
