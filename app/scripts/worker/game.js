@@ -120,20 +120,20 @@ function addPlayer() {
               if(visible_entities[e].kind !== "player"){
                 if(visible_entities[e]._sleep){
                   visible_entities[e].wake();
-                  var entity = visible_entities[e]
-                  self.postMessage({
-                    event: "place",
-                    entity: {
-                      position: {
-                        x: entity.position.x,
-                        y: entity.position.y
-                      },
-                      kind: entity.kind
-                    },
-                    _id: entity._id,
-                    icon: entity.icon
-                  });
                 }
+                var entity = visible_entities[e]
+                self.postMessage({
+                  event: "place",
+                  entity: {
+                    position: {
+                      x: entity.position.x,
+                      y: entity.position.y
+                    },
+                    kind: entity.kind
+                  },
+                  _id: entity._id,
+                  icon: entity.icon
+                });
               }
             }
           }

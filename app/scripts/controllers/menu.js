@@ -50,7 +50,7 @@ angular.module("beastieApp")
 
         // Fired after the first download of the manifest.
         $scope.appCache.addEventListener("noupdate", function (e) {
-            if ($scope.updateState !== "updated (reload to see)") {
+            if ($scope.updateState !== "updated (reloading)") {
                 $scope.updateState = "up to date";
             }
             handleCacheEvent(e);

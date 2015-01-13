@@ -141,20 +141,20 @@ angular.module("beastieApp")
             //update worker viewport:
             game.postMessage({
                 event: "viewport",
-                height: canvas.width/48,
-                width: canvas.height/48
+                height: canvas.height/48,
+                width: canvas.width/48
             });
 
         }
 
         function render() {
             var currentLength = queue.length;
-            console.info(currentLength);
+            // console.info(currentLength);
             for (var i = 0; i < currentLength; i++) {
               try{
                 handleMessage(queue.shift());
               } catch(e){
-                console.error(e);
+                // console.error(e);
               }
             }
 
@@ -181,7 +181,7 @@ angular.module("beastieApp")
                 try{
                   world[entity].draw(context);
                 } catch (e) {
-                  console.error(e);
+                  // console.error(e);
                   delete world[entity];
                 }
               }
