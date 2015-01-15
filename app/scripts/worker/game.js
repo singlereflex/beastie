@@ -149,6 +149,7 @@ function addPlayer() {
     BL.Viewport.x = x;
     BL.Viewport.y = y;
     var player = new BL.Player(x, y, loop);
+    loop.entities.place(player);//should spead up message to ui update
     player.on("completeMove", function (deltaX, deltaY) {
         BL.Viewport.x = player.position.x;
         BL.Viewport.y = player.position.y;
@@ -207,7 +208,7 @@ function addPlayer() {
         self.close();
     });
 
-    loop.entities.place(player);
+
     // center(player.el);
     return player;
 }
