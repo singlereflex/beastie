@@ -116,6 +116,39 @@ BL.CanvasRenderer = function(entity) {
     };
 };
 
+BL.PixiRenderer = function(entity) {
+  var square = 24;
+
+  //rendering position needs to be offset but current player position (or canvas viewport if you want to think about it that way);
+  entity.draw = function () {//figure out the animated move part later
+
+    var step = 4;
+    if (Math.abs(entity._position.x - entity.position.x) > 2 || Math.abs(entity._position.y - entity.position.y) > 2) {
+      entity.position.x = entity._position.x;
+      entity.position.y = entity._position.y;
+    } else {
+      if (!Math.abs(entity._position.x - entity.position.x) / step < 0.01) {
+        entity.position.x = (entity.position.x + (entity._position.x - entity.position.x) / step);
+        if (entity.kind === "player") {
+          BL.Viewport.x = entity.position.x;
+        }
+      }
+      if (!Math.abs(entity._position.y - entity.position.y) / step < 0.01) {
+        entity.position.y = (entity.position.y + (entity._position.y - entity.position.y) / step);
+        if (entity.kind === "player") {
+          BL.Viewport.y = entity.position.y;
+        }
+      }
+    }
+  };
+
+  entity.move = function (/*deltaX, deltaY, entity*/) {
+  };
+
+  entity.die = function () {
+  };
+};
+
 /**
  * A component to hook up user input to the entity
  * @param {entity} entity The game entity.

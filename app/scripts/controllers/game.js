@@ -149,7 +149,7 @@ angular.module("beastieApp")
             });
 
         }
-
+        //@todo should move some of this over to the renderer objects so it's more flexible
         function render() {
             // console.info("world", _.size(world));
             var currentLength = queue.length;
@@ -161,17 +161,16 @@ angular.module("beastieApp")
                 console.error(e);
               }
             }
-            context.clearRect(0, 0, canvas.width, canvas.height);
 
             for(var entity in world){
               try{
-                world[entity].draw(context);
+                world[entity].draw();
               } catch (e) {
                 console.error(e);
                 delete world[entity];
               }
             }
-
+            renderer.render(stage);
             frameId = window.requestAnimationFrame(render, canvas);
         }
 
