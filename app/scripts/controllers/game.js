@@ -76,12 +76,25 @@ angular.module("beastieApp")
         )
         */
 
+        var game = new Worker("scripts/worker/game.js");
+        var player = new BL.DummyPlayer(game);
+        var canvas = document.getElementById("entityboard");
+        // var context = canvas.getContext("2d");
+        var frameId;
 
+        var renderer = new PIXI.autoDetectRenderer(canvas.width, canvas.height, {view: canvas});
+        // var renderer = new PIXI.WebGLRenderer(canvas.width, canvas.height, {view: canvas});
+        // renderer.view.className = "rendererView";
+
+        // create an new instance of a pixi stage
+        var stage = new PIXI.Stage(0x000000);
+        console.log(stage);
         var handleMessage = function (e) {
 
           //move render queue
             switch (e.data.event) {
                 case "remove":
+                  stage.removeChild(world[e.data._id].dude);
                   delete world[e.data._id];
                   break;
                 case "place":
@@ -90,6 +103,7 @@ angular.module("beastieApp")
                     if(!world[e.data._id]){
                       world[e.data._id] = new BL.Display(e.data.entity, e.data.icon);
                       stage.addChild(world[e.data._id].dude);
+                      // console.log("position:", e.data.entity.position.x, e.data.entity.position.y);
                       if (e.data.entity.kind === "player") {
                           player.display = world[e.data._id];
                           BL.Viewport.x = world[e.data._id].position.x;
@@ -117,13 +131,16 @@ angular.module("beastieApp")
                     }
 
                     world[e.data._id].die();
+                    stage.removeChild(world[e.data._id].dude);
                     delete world[e.data._id];
                     if (!$scope.$$phase) {
                         $scope.$apply();
                     }
                     break;
                 case "transition":
+                    stage.removeChild(world[e.data._id].dude);
                     world[e.data._id].render(e.data.entity, e.data.icon);
+                    stage.addChild(world[e.data._id].dude);
                     break;
             }
 
@@ -136,29 +153,19 @@ angular.module("beastieApp")
         };
 
 
-        var game = new Worker("scripts/worker/game.js");
-        var player = new BL.DummyPlayer(game);
-        var canvas = document.getElementById("entityboard");
-        var context = canvas.getContext("2d");
-        var frameId;
 
-        var renderer = new PIXI.WebGLRenderer(canvas.width, canvas.height, {view: canvas});
-        renderer.view.className = "rendererView";
-
-        // add render view to DOM
-        document.body.appendChild(renderer.view);
-
-        // create an new instance of a pixi stage
-        var stage = new PIXI.Stage(0xFFFFFF);
 
         function resizeCanvas() {
-          renderer.width = window.innerWidth;
-          renderer.height = window.innerHeight;
+          var width = window.innerWidth;
+          var height = window.innerHeight;
+          renderer.resize ( width,  height )
             //update worker viewport:
+            BL.Viewport.width = width;
+            BL.Viewport.height = height;
             game.postMessage({
                 event: "viewport",
-                height: canvas.height/48,
-                width: canvas.width/48
+                height: height,
+                width: width
             });
 
         }
@@ -180,6 +187,7 @@ angular.module("beastieApp")
                 world[entity].draw();
               } catch (e) {
                 console.error(e);
+                stage.removeChild(world[entity].dude);
                 delete world[entity];
               }
             }

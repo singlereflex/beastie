@@ -120,7 +120,8 @@ BL.PixiRenderer = function(entity) {
   var square = 24;
 
   // create a new Sprite that uses the image name that we just generated as its source
-  var dude =  PIXI.Sprite.fromImage(entity.icon);
+  // console.debug(BL.Sprites[entity.icon]);
+  var dude =  PIXI.Sprite.fromImage(BL.Sprites[entity.icon].src);
 
   // set the anchor point so the the dude texture is centerd on the sprite
   dude.anchor.x = dude.anchor.y = 0.5;
@@ -131,7 +132,7 @@ BL.PixiRenderer = function(entity) {
 
   dude.blendMode = PIXI.blendModes.ADD
   // time to add the dude to the pond container!
-  stage.addChild(dude);
+  // stage.addChild(dude);
 
   entity.dude = dude;
 
@@ -156,10 +157,11 @@ BL.PixiRenderer = function(entity) {
         }
       }
     }
-    
 
-    entity.dude.position.x = entity.position.x;
-    entity.dude.position.y = entity.position.y;
+    var posX = (entity.position.x - (BL.Viewport.x - ((BL.Viewport.width/2) / square))) * square;
+    var posY = (entity.position.y - (BL.Viewport.y - ((BL.Viewport.height/2) / square))) * square;
+    entity.dude.position.x = posX;
+    entity.dude.position.y = posY;
   };
 
   entity.move = function (/*deltaX, deltaY, entity*/) {
