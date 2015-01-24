@@ -53,6 +53,9 @@ BL.Sprites["icon-entities-mother"].src = "svg/entities-mother.svg";
 angular.module("beastieApp")
     .controller("GameCtrl", ["$scope", "$log", "$state", "$rootScope", function ($scope, $log, $state, $rootScope) {
 
+
+
+
         var world = {};
         var map = {};//location based store
         var queue = [];
@@ -86,6 +89,7 @@ angular.module("beastieApp")
                     //only add it if we don't already have it
                     if(!world[e.data._id]){
                       world[e.data._id] = new BL.Display(e.data.entity, e.data.icon);
+                      stage.addChild(world[e.data._id].dude);
                       if (e.data.entity.kind === "player") {
                           player.display = world[e.data._id];
                           BL.Viewport.x = world[e.data._id].position.x;
@@ -138,9 +142,18 @@ angular.module("beastieApp")
         var context = canvas.getContext("2d");
         var frameId;
 
+        var renderer = new PIXI.WebGLRenderer(canvas.width, canvas.height, {view: canvas});
+        renderer.view.className = "rendererView";
+
+        // add render view to DOM
+        document.body.appendChild(renderer.view);
+
+        // create an new instance of a pixi stage
+        var stage = new PIXI.Stage(0xFFFFFF);
+
         function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+          renderer.width = window.innerWidth;
+          renderer.height = window.innerHeight;
             //update worker viewport:
             game.postMessage({
                 event: "viewport",
@@ -171,7 +184,7 @@ angular.module("beastieApp")
               }
             }
             renderer.render(stage);
-            frameId = window.requestAnimationFrame(render, canvas);
+            frameId = window.requestAnimationFrame(render);
         }
 
         game.addEventListener("message", function (e) {

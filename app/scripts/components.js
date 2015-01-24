@@ -119,6 +119,22 @@ BL.CanvasRenderer = function(entity) {
 BL.PixiRenderer = function(entity) {
   var square = 24;
 
+  // create a new Sprite that uses the image name that we just generated as its source
+  var dude =  PIXI.Sprite.fromImage(entity.icon);
+
+  // set the anchor point so the the dude texture is centerd on the sprite
+  dude.anchor.x = dude.anchor.y = 0.5;
+
+  // finally let's set the dude to be a random position..
+  dude.position.x = entity.position.x;
+  dude.position.y = entity.position.y;
+
+  dude.blendMode = PIXI.blendModes.ADD
+  // time to add the dude to the pond container!
+  stage.addChild(dude);
+
+  entity.dude = dude;
+
   //rendering position needs to be offset but current player position (or canvas viewport if you want to think about it that way);
   entity.draw = function () {//figure out the animated move part later
 
@@ -140,6 +156,10 @@ BL.PixiRenderer = function(entity) {
         }
       }
     }
+    
+
+    entity.dude.position.x = entity.position.x;
+    entity.dude.position.y = entity.position.y;
   };
 
   entity.move = function (/*deltaX, deltaY, entity*/) {

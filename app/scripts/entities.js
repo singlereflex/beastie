@@ -26,7 +26,7 @@ BL.Display = function (player, icon) {
 
         self.kind = player.kind;
         self.icon = icon;
-        BL.CanvasRenderer(self);
+        BL.PixiRenderer(self);
     };
 
     this.render(player, icon);
