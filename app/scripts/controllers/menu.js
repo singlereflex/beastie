@@ -21,7 +21,8 @@ angular.module("beastieApp")
         try {
             $scope.appCache.update();
         } catch (e) {
-            $scope.updateState = "downloading cache...";
+
+            $scope.updateState = "";
         }
 
         // Fired after the first cache of the manifest.

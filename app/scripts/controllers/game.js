@@ -44,11 +44,11 @@ BL.Sprites = {
     "icon-entities-mother": new Image()
 };
 
-BL.Sprites["icon-entities-player"].src = "../../svg/entities-player.svg";
-BL.Sprites["icon-environment-block"].src = "../../svg/environment-block.svg";
-BL.Sprites["icon-entities-egg"].src = "../../svg/entities-egg.svg";
-BL.Sprites["icon-entities-monster"].src = "../../svg/entities-monster.svg";
-BL.Sprites["icon-entities-mother"].src = "../../svg/entities-mother.svg";
+BL.Sprites["icon-entities-player"].src = "svg/entities-player.svg";
+BL.Sprites["icon-environment-block"].src = "svg/environment-block.svg";
+BL.Sprites["icon-entities-egg"].src = "svg/entities-egg.svg";
+BL.Sprites["icon-entities-monster"].src = "svg/entities-monster.svg";
+BL.Sprites["icon-entities-mother"].src = "svg/entities-mother.svg";
 
 angular.module("beastieApp")
     .controller("GameCtrl", ["$scope", "$log", "$state", "$rootScope", function ($scope, $log, $state, $rootScope) {
@@ -184,12 +184,7 @@ angular.module("beastieApp")
         $scope.endGame = function () {
             window.cancelAnimationFrame(frameId);
             player.dead = true;
-            $state.go("game.ended");
-        };
 
-        $scope.submitHighscore = function (name) {
-            var highScoreRef = new Firebase("https://highscore.firebaseio.com/beastie");
-            highScoreRef.push({name: name, score: $scope.score});
             var highscores = JSON.parse(localStorage.highscores);
             console.log(highscores);
             highscores.push({
@@ -200,9 +195,16 @@ angular.module("beastieApp")
             localStorage.highscores = JSON.stringify(highscores);
             $rootScope.highscores = JSON.parse(localStorage.highscores);
 
-            $rootScope.highscores = JSON.parse(localStorage.highscores);
             var current_game = $rootScope.highscores.length-1;
             $rootScope.highscores[current_game].current = true;
+
+            $state.go("game.ended");
+        };
+
+        $scope.submitHighscore = function (name) {
+            var highScoreRef = new Firebase("https://highscore.firebaseio.com/beastie");
+            highScoreRef.push({name: name, score: $scope.score});
+
             console.log($rootScope.highscores);
             $state.go("highscore");
         };

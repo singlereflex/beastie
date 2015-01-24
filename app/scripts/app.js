@@ -2,6 +2,10 @@
 
 angular.module("beastieApp", ["ui.router", "firebase"])
   .run(['$rootScope', function($rootScope){
+    ionic.Platform.ready(function(){
+      ionic.Platform.fullScreen(true, false);
+      AndroidFullScreen.immersiveMode(function(){console.info(arguments)}, function(){console.info(arguments)});
+    })
     if (!localStorage.highscores) localStorage.highscores = JSON.stringify([]);
     $rootScope.highscores = JSON.parse(localStorage.highscores);
   }])
