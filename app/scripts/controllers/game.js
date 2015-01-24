@@ -82,7 +82,7 @@ angular.module("beastieApp")
         // var context = canvas.getContext("2d");
         var frameId;
 
-        var renderer = new PIXI.autoDetectRenderer(canvas.width, canvas.height, {view: canvas});
+        var renderer = new PIXI.autoDetectRenderer(canvas.width, canvas.height, {view: canvas, transparent: true});
         // var renderer = new PIXI.WebGLRenderer(canvas.width, canvas.height, {view: canvas});
         // renderer.view.className = "rendererView";
 
