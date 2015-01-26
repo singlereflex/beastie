@@ -1,4 +1,5 @@
 var Game = function(board) {
+  var self = this;
   this.ongameend = function(){};
   this.score = 0;
 
@@ -39,7 +40,7 @@ var Game = function(board) {
         switch (e.data.event) {
             case "remove":
                 stage.removeChild(world[e.data._id].dude);
-                delete world[e.data._id];
+                // delete world[e.data._id];
                 break;
             case "place":
                 console.log('place');
@@ -68,7 +69,7 @@ var Game = function(board) {
                 if (e.data.entity.kind === "player") {
                     //let some things finish moving
                     setTimeout(function() {
-                        this.endGame();
+                        self.endGame();
                     }, 250);
                 } else {
                     this.score += e.data.worth;
@@ -76,7 +77,7 @@ var Game = function(board) {
 
                 world[e.data._id].die();
                 stage.removeChild(world[e.data._id].dude);
-                delete world[e.data._id];
+                // delete world[e.data._id];
                 break;
             case "transition":
                 stage.removeChild(world[e.data._id].dude);
@@ -129,7 +130,7 @@ var Game = function(board) {
             } catch (e) {
                 console.error(e);
                 stage.removeChild(world[entity].dude);
-                delete world[entity];
+                // delete world[entity];
             }
         }
         renderer.render(stage);

@@ -87,7 +87,4 @@ angular.module("beastieApp")
             location.reload();
         };
 
-        render();
-        resizeCanvas();
-
     }]);
