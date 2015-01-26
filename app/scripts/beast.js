@@ -1,4 +1,10 @@
-var Game = function(board) {
+
+/**
+ * The game of beastie
+ * @param {String} board For the moment the id of the canvas (or other dom element) used to render the game
+ * @param {JSON} level The json description of the level to be played
+ */
+var Game = function(board, level) {
   var self = this;
   this.ongameend = function(){};
   this.score = 0;
@@ -9,45 +15,31 @@ var Game = function(board) {
   //could move this to a custom type later
   var renderQueue = [];
 
-    /*
-  Math.sqrt(
-  (player.x-entity.position.x)
-  *(player.x-entity.position.x)
-  +(player.y-entity.position.y)
-  *(player.y-entity.position.y)
-)
-*/
-
     var game = new Worker("scripts/worker/game.js");
     var player = new BL.DummyPlayer(game);
-    var canvas = document.getElementById(board);
-    // var context = canvas.getContext("2d");
+
     var frameId;
 
-    var renderer = new PIXI.autoDetectRenderer(canvas.width, canvas.height, {
-        view: canvas,
-        transparent: true
-    });
+    var renderer = new CanvasRenderer(board);
+
     // var renderer = new PIXI.WebGLRenderer(canvas.width, canvas.height, {view: canvas});
     // renderer.view.className = "rendererView";
 
-    // create an new instance of a pixi stage
-    var stage = new PIXI.Stage(0x000000);
-    console.log(stage);
+
     var handleMessage = function(e) {
 
         //move render queue
         switch (e.data.event) {
             case "remove":
-                stage.removeChild(world[e.data._id].dude);
+              world[e.data._id].die();
                 // delete world[e.data._id];
                 break;
             case "place":
                 console.log('place');
                 //only add it if we don't already have it
                 if (!world[e.data._id]) {
-                    world[e.data._id] = new BL.Display(e.data.entity, e.data.icon);
-                    stage.addChild(world[e.data._id].dude);
+                  e.data.entity.id = e.data._id;
+                    world[e.data._id] = new BL.Display(e.data.entity, renderer, e.data.icon);
                     // console.log("position:", e.data.entity.position.x, e.data.entity.position.y);
                     if (e.data.entity.kind === "player") {
                         player.display = world[e.data._id];
@@ -76,21 +68,14 @@ var Game = function(board) {
                 }
 
                 world[e.data._id].die();
-                stage.removeChild(world[e.data._id].dude);
                 // delete world[e.data._id];
                 break;
             case "transition":
-                stage.removeChild(world[e.data._id].dude);
+                world[e.data._id].die();
+                e.data.entity.id = e.data._id;
                 world[e.data._id].render(e.data.entity, e.data.icon);
-                stage.addChild(world[e.data._id].dude);
                 break;
         }
-
-        // console.log(arguments);
-
-
-        // if(!(renderQueue.indexOf(world[e.data._id]) > -1))
-        //   renderQueue.push(world[e.data._id]);
 
     };
 
@@ -129,11 +114,11 @@ var Game = function(board) {
                 world[entity].draw();
             } catch (e) {
                 console.error(e);
-                stage.removeChild(world[entity].dude);
+                world[entity].die();
                 // delete world[entity];
             }
         }
-        renderer.render(stage);
+        renderer.render();
         frameId = window.requestAnimationFrame(render);
     }
 
