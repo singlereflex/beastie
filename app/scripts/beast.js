@@ -20,7 +20,7 @@ var Game = function(board, level) {
 
     var frameId;
 
-    var renderer = new CanvasRenderer(board);
+    var renderer = new PixiRenderer(board);
 
     // var renderer = new PIXI.WebGLRenderer(canvas.width, canvas.height, {view: canvas});
     // renderer.view.className = "rendererView";
