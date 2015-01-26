@@ -1,13 +1,17 @@
 "use strict";
 
+/**
+ * BeastLand World Constructor
+ * @constructor
+ */
 BL.World = function () {
-    this._events = {};
+
+    BL.EventComponent(this);
+
     var self = this;
     this.running = false;
-
     this.score = 0;
     this.entities = {};
-
     this.entities.place = function (entity, silent) {
         var loc = entity.position.x + "," + entity.position.y;
         if (!self.entities[loc]) {
@@ -52,23 +56,49 @@ BL.World = function () {
     this.stop = function () {
         this.running = false;
     };
+
 };
-BL.EventComponent(BL.World);
 
+/**
+ * A Beast.Land world entity
+ * @typedef {Object} Entity
+ */
+
+/**
+ * Player Constructor
+ * @type {Entity}
+ * @param {Number} x - X Coordinate
+ * @param {Number} y - Y Coordinate
+ * @param {BL.World} world - BeastLand World
+ * @constructor
+ */
 BL.Player = function (x, y, world) {
-    this._events = {};
 
-    //behavior
+    BL.EventComponent(this);
+    BL.PushComponent(this, world);
+    BL.PullComponent(this, world);
+    BL.CollisionComponent(this, world);
+    BL.ExploreComponent(this, world);
+    BL.MoveComponent(this);
+    BL.DeathComponent(this);
+
     var self = this;
+    this.position = {
+        x: x,
+        y: y
+    };
+    this.world = world;
+    this.kind = "player";
+    this.icon = "icon-entities-player";
 
     this.on("completeMove", function update(deltaX, deltaY, old) {
-        self.world.entities[old.x + "," + old.y] = _.without(self.world.entities[old.x + "," + old.y], self);
-        self.world.entities.place(self, true);
+        world.entities[old.x + "," + old.y] = _.without(world.entities[old.x + "," + old.y], self);
+        world.entities.place(self, true);
         // center(self.el);
     });
 
     this.on("die", function die() {
-        self.world.entities[self.position.x + "," + self.position.y] = _.without(self.world.entities[self.position.x + "," + self.position.y], self);
+        world.entities[self.position.x + "," + self.position.y] = _.without(world.entities[self.position.x + "," + self.position.y], self);
         self.dead = true;
     });
 
@@ -82,53 +112,37 @@ BL.Player = function (x, y, world) {
         }
     });
 
-    this.world = world;
+};
 
-    //setup for dom rendering
+/**
+ * Block Constructor
+ * @type {Entity}
+ * @param {Number} x - X Coordinate
+ * @param {Number} y - Y Coordinate
+ * @param {BL.World} world - BeastLand World
+ * @constructor
+ */
+BL.Block = function (x, y, world) {
+
+    BL.EventComponent(this);
+    BL.CollisionComponent(this, world);
+    BL.MoveComponent(this);
+
+    var self = this;
     this.position = {
         x: x,
         y: y
     };
-
-    this.kind = "player";
-
-    BL.PushComponent(this);
-
-    BL.PullComponent(this);
-
-    BL.CollisionComponent(this);
-
-    BL.ExploreComponent(this);
-    this.icon = "icon-entities-player";
-};
-
-//Class level component!
-BL.EventComponent(BL.Player);
-BL.MoveComponent(BL.Player);
-BL.DeathComponent(BL.Player);
-
-// Blocks!
-BL.Block = function (x, y, world) {
-    this._events = {};
-
-
-    //behavior
-    var self = this;
-    // this.on("rendered", function(){
-    //   self.el = document.getElementById("entityboard").appendChild(self.el);
-    //   self.on("completeMove", function (deltaX, deltaY) {
-    //       self.el.style.top = self.position.y + "em";
-    //       self.el.style.left = self.position.x + "em";
-    //   });
-    // });
+    this.world = world;
+    this.kind = "block";
+    this.icon = "icon-environment-block";
 
     this.on("completeMove", function (deltaX, deltaY, old) {
-        self.world.entities[old.x + "," + old.y] = _.without(self.world.entities[old.x + "," + old.y], self);
-        self.world.entities.place(self, true);
+        world.entities[old.x + "," + old.y] = _.without(world.entities[old.x + "," + old.y], self);
+        world.entities.place(self, true);
     });
 
     this.on("collided", function (entity) {
-        // console.log(entity);
         if (entity) {
             if (entity.kind === "block") {
                 throw "hit a block";
@@ -147,31 +161,41 @@ BL.Block = function (x, y, world) {
         }
     });
 
+};
+
+/**
+ * Egg Constructor
+ * @type {Entity}
+ * @param {Number} x - X Coordinate
+ * @param {Number} y - Y Coordinate
+ * @param {BL.World} world - BeastLand World
+ * @constructor
+ */
+BL.Egg = function (x, y, world) {
+
+    BL.EventComponent(this);
+    BL.CollisionComponent(this, world);
+    BL.DeathComponent(this);
+    BL.StateComponent(this, {
+        "hatch": BL.Monster,
+        "mother": BL.Mother
+    });
+
+    var self = this;
+    this.worth = 10;
+    this.age = 0;
+    this.timeOfDeath = Math.random() * (4500 - 1500) + 1500;
     this.world = world;
     this.position = {
         x: x,
         y: y
     };
-    this.kind = "block";
-    this.icon = "icon-environment-block";
+    this.kind = "egg";
+    this.icon = "icon-entities-egg";
 
-    BL.CollisionComponent(this);
-};
-
-BL.EventComponent(BL.Block);
-BL.MoveComponent(BL.Block);
-
-// Eggs!
-BL.Egg = function (x, y, world) {
-    this._events = {};
-    var self = this;
-    self.worth = 10;
     this.on("die", function die() {
-        // console.log(self.age);
-        self.world.score += self.worth;
-        // console.log(self.world.score);
-        self.world.entities[self.position.x + "," + self.position.y] = _.without(self.world.entities[self.position.x + "," + self.position.y], self);
-        // document.getElementById("entityboard").removeChild(self.el);
+        world.score += self.worth;
+        world.entities[self.position.x + "," + self.position.y] = _.without(world.entities[self.position.x + "," + self.position.y], self);
         self.dead = true;
         self._events = {};
         this.world.remove("tick", self.tick);
@@ -182,19 +206,19 @@ BL.Egg = function (x, y, world) {
             entity.die();
         } else if (entity.kind === "egg") {
             entity.worth = 0;
-            console.info("I ate an egg, I'm such a cannible. And you get " + entity.worth);
+            console.info("I ate an egg, I'm such a cannibal. And you get " + entity.worth);
             self.beastSpeed = self.beastSpeed > 45 ? self.beastSpeed - 1 : self.beastSpeed;
             self.timeOfDeath += 5;
             entity.die();
         } else if (entity.kind === "monster" && self.kind === "mother") {
             entity.worth = 0;
-            console.info("I ate an monster, I'm such a cannible. And you get "+ entity.worth);
+            console.info("I ate an monster, I'm such a cannibal. And you get "+ entity.worth);
             self.beastSpeed = self.beastSpeed > 40 ? self.beastSpeed - 1 : self.beastSpeed;
             self.timeOfDeath += 10;
             entity.die();
         } else if (entity.kind === "mother" && self.kind === "mother") {
             entity.worth = 0;
-            console.info("I ate an mother, I'm such a cannible. And you get "+ entity.worth);
+            console.info("I ate an mother, I'm such a cannibal. And you get "+ entity.worth);
             self.beastSpeed = self.beastSpeed > 30 ? self.beastSpeed - 1 : self.beastSpeed;
             self.timeOfDeath += 20;
             entity.die();
@@ -204,50 +228,33 @@ BL.Egg = function (x, y, world) {
     });
 
     this.on("completeMove", function (deltaX, deltaY, old) {
-        self.world.entities[old.x + "," + old.y] = _.without(self.world.entities[old.x + "," + old.y], self);
-        self.world.entities.place(self, true);
+        world.entities[old.x + "," + old.y] = _.without(world.entities[old.x + "," + old.y], self);
+        world.entities.place(self, true);
     });
 
-    this.age = 0;
-    this.timeOfDeath = Math.random() * (4500 - 1500) + 1500;
-
-    this.world = world;
-    this.position = {
-        x: x,
-        y: y
-    };
-    this.kind = "egg";
-
-    this.tick = this.world.on("tick", function () {
+    this.tick = world.on("tick", function () {
         if(self._sleep) return;
-        // console.log("tick");
         self.age++;
         if (self.age > Math.random() * (750 - 50) + 50) {
-
-            if (self.world.entities[self.position.x + "," + self.position.y].length === 1 && self.world.entities[self.position.x + "," + self.position.y][0] === self) {
+            if (world.entities[self.position.x + "," + self.position.y].length === 1 && world.entities[self.position.x + "," + self.position.y][0] === self) {
                 self.transition("hatch");
             }
-            // console.log("hatch");
-            // return true;
         }
-        // self.hunt(this);
-    });
-    // console.log(this.tick);
-    this.icon = "icon-entities-egg";
-    // BL.DomRenderer(this, template({classVal: "icon-entities-egg"}));
-    // this.display = new Display(this, "icon-entities-egg");
-    BL.CollisionComponent(this);
-
-    BL.StateComponent(this, {
-        "hatch": BL.Monster,
-        "mother": BL.Mother
     });
 };
-BL.EventComponent(BL.Egg);
-BL.DeathComponent(BL.Egg);
 
-// Monsters!
-BL.Monster = function () {
+/**
+ * Monster Constructor
+ * @type {Entity}
+ * @param {Number} x - X Coordinate
+ * @param {Number} y - Y Coordinate
+ * @param {BL.World} world - BeastLand World
+ * @constructor
+ */
+BL.Monster = function (x, y, world) {
+
+    BL.MoveComponent(this);
+    BL.ExploreComponent(this, world);
 
     this.moves = [
         [0, 1],
@@ -255,12 +262,14 @@ BL.Monster = function () {
         [1, 0],
         [-1, 0]
     ];
-
     var self = this;
-    self.beastSpeed = 25 * 2;//move once every 5 seconds or die
-    self.hunt = function () {
+    this.beastSpeed = 25 * 2;//move once every 5 seconds or die
+    this.worth = 20;
+    this.kind = "monster";
+    this.icon = "icon-entities-monster";
 
-        // console.log(beast);
+    this.hunt = function () {
+
         if (self.probability === undefined) {
             self.probability = self.beastSpeed;
         }
@@ -269,16 +278,14 @@ BL.Monster = function () {
             self.die();
             return;
         }
-        // console.log(self.probability);
 
         if (self.probability < 35) {
             var delta = (Math.floor(Math.random() * 4));
-            // var move = self.moves[delta];
             for (var i = 0; i < self.moves.length; i++) {
                 var move = self.moves[(delta + i) % 4];
-                if (self.world.findEntityByPosition(self.position.x + move[0], self.position.y + move[1]) === undefined ||
-                    self.world.findEntityByPosition(self.position.x + move[0], self.position.y + move[1]).length === 0 ||
-                    (self.world.findEntityByPosition(self.position.x + move[0], self.position.y + move[1])[0].kind !== "block" ||
+                if (world.findEntityByPosition(self.position.x + move[0], self.position.y + move[1]) === undefined ||
+                    world.findEntityByPosition(self.position.x + move[0], self.position.y + move[1]).length === 0 ||
+                    (world.findEntityByPosition(self.position.x + move[0], self.position.y + move[1])[0].kind !== "block" ||
                     self.kind === "mother")) {
                     try {
                         self.move(move[0], move[1]);
@@ -289,25 +296,13 @@ BL.Monster = function () {
                     }
                 }
             }
-            // var y = Math.floor(Math.random() * 2);
         }
         self.probability--;
     };
 
-    self.worth = 20;
-    if (arguments.length > 1) {
-        this.position = {
-            x: arguments[0],
-            y: arguments[1]
-        };
-    }
-    if (arguments.length > 2) {
-        this.world = arguments[2];
-    }
-    this.kind = "monster";
-    this.world.remove("tick", this.tick);
+    world.removeAll(this.tick);
 
-    this.tick = this.world.on("tick", function () {
+    this.tick = world.on("tick", function () {
       if(self._sleep) return;
         self.age++;
         if (self.age > Math.random() * (1500 - 750) + 750) {
@@ -316,40 +311,37 @@ BL.Monster = function () {
         }
         self.hunt();
     });
-    // console.log(this.tick);
-    BL.MoveComponent(this);
-    this.icon = "icon-entities-monster";
-    // this.display.render(this, "icon-entities-monster");
-    BL.ExploreComponent(this);
 };
 
-// Mothers!
-BL.Mother = function () {
+/**
+ * Mother Constructor
+ * @type {Entity}
+ * @param {Number} x - X Coordinate
+ * @param {Number} y - Y Coordinate
+ * @param {BL.World} world - BeastLand World
+ * @constructor
+ */
+BL.Mother = function (x, y, world) {
+
+    BL.PushComponent(this, world);
+    BL.CollisionComponent(this, world);
 
     var self = this;
+    this.worth = 30;
+    this.kind = "mother";
+    this.icon = "icon-entities-mother";
+    this.position = {
+        x: x,
+        y: y
+    };
+    this.world = world;
 
-    self.worth = 30;
-
-    if (arguments.length > 1) {
-        self.position = {
-            x: arguments[0],
-            y: arguments[1]
-        };
-    }
-
-    if (arguments.length > 2) {
-        self.world = arguments[2];
-    }
-
-    self.kind = "mother";
-    self.world.remove("tick", this.tick);
-
-    self.lay = function () {
-        var egg = new BL.Egg(self.position.x, self.position.y, self.world);
-        self.world.entities.place(egg);
+    this.lay = function () {
+        var egg = new BL.Egg(self.position.x, self.position.y, world);
+        world.entities.place(egg);
     };
 
-    self.tick = this.world.on("tick", function () {
+    this.tick = world.on("tick", function () {
       if(self._sleep) return;
         self.age++;
         if (self.age > self.timeOfDeath) {
@@ -362,11 +354,11 @@ BL.Mother = function () {
 
         var test = Math.floor(Math.random() * 100);
 
-        if (test === 0 && self.world.findEntityByPosition(self.position.x, self.position.y).length < 2) {
+        if (test === 0 && world.findEntityByPosition(self.position.x, self.position.y).length < 2) {
             var noOneAround = true;
             for (var i = 0; i < self.moves.length; i++) {
                 var move = self.moves[i];
-                if (self.world.findEntityByPosition(self.position.x + move[0], self.position.y + move[1]).length > 0) {
+                if (world.findEntityByPosition(self.position.x + move[0], self.position.y + move[1]).length > 0) {
                     noOneAround = false;
                     break;
                 }
@@ -378,9 +370,4 @@ BL.Mother = function () {
         }
         self.hunt(self);
     });
-    this.icon = "icon-entities-mother";
-    this.removeAll("startMove");
-    // this.display.render(this, "icon-entities-mother");
-    BL.PushComponent(this);
-    BL.CollisionComponent(this);
 };

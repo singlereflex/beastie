@@ -1,5 +1,13 @@
-BL.EventComponent = function (Entity) {
-    Entity.prototype.on = function (name, callback) {
+/**
+ * Event Component - Attach the ability to listen to events.
+ * @param {Entity} entity
+ * @constructor
+ */
+BL.EventComponent = function (entity) {
+
+    entity._events = {};
+
+    entity.on = function (name, callback) {
         if (this._events[name] === undefined) {
             this._events[name] = [];
         }
@@ -8,7 +16,7 @@ BL.EventComponent = function (Entity) {
         return this._events[name].length-1;
     };
 
-    Entity.prototype.trigger = function () {
+    entity.trigger = function () {
         //so that we can use array functions, arguments is not a true array
         var args = Array.prototype.slice.call(arguments);
         var name = args.shift();
@@ -22,14 +30,17 @@ BL.EventComponent = function (Entity) {
         }
     };
 
-    Entity.prototype.remove = function (eventName, eventId) {
+    entity.remove = function (eventName, eventId) {
+        if(this._events === undefined){
+            this._events = {};
+        }
         // console.log("removing", arguments);
         // console.log(this._events[event_name].length);
         this._events[eventName][eventId] = null;
         // console.log(this._events[event_name].length);
     };
 
-    Entity.prototype.removeAll = function(eventName){
+    entity.removeAll = function(eventName){
         if(this._events === undefined){
             this._events = {};
         }
