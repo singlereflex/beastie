@@ -126,6 +126,8 @@ BL.PixiRenderer = function(entity) {
   // set the anchor point so the the dude texture is centerd on the sprite
   dude.anchor.x = dude.anchor.y = 0.5;
 
+  // dude.scale.x = dude.scale.y = 0.8 + Math.random() * 0.3;
+
   // finally let's set the dude to be a random position..
   dude.position.x = entity.position.x;
   dude.position.y = entity.position.y;
