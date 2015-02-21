@@ -71,9 +71,7 @@ var Game = function(board, level) {
                 // delete world[e.data._id];
                 break;
             case "transition":
-                world[e.data._id].die();
-                e.data.entity.id = e.data._id;
-                world[e.data._id].render(e.data.entity, e.data.icon);
+                world[e.data._id].transition(e.data.entity, e.data.icon);
                 break;
         }
 

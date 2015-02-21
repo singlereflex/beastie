@@ -25,61 +25,69 @@ PixiRenderer.prototype.resize = function(width, height){
 PixiRenderer.prototype.entity = function(entity) {
   var self = this;
   var square = 24;
-
+  // console.info(self._stage);
   // create a new Sprite that uses the image name that we just generated as its source
   // console.debug(BL.Sprites[entity.icon]);
-  console.debug("icon", entity.icon);
-  var dude = PIXI.Sprite.fromImage(BL.Sprites[entity.icon].src);
+  console.debug("icon:", entity.icon);
+  console.debug("icon src:", BL.Sprites[entity.icon].src);
+  entity.dude = this._stage.addChild(PIXI.Sprite.fromImage(BL.Sprites[entity.icon].src));
 
-  // set the anchor point so the the dude texture is centerd on the sprite
-  dude.anchor.x = dude.anchor.y = 0.5;
-
-  // dude.scale.x = dude.scale.y = 0.8 + Math.random() * 0.3;
-
-  // finally let's set the dude to be a random position..
-  dude.position.x = entity.position.x;
-  dude.position.y = entity.position.y;
-
-  dude.blendMode = PIXI.blendModes.ADD
-  // time to add the dude to the pond container!
-  // stage.addChild(dude);
-
-  entity.dude = dude;
 
   //rendering position needs to be offset but current player position (or canvas viewport if you want to think about it that way);
   entity.draw = function () {//figure out the animated move part later
 
     var step = 4;
-    if (Math.abs(entity._position.x - entity.position.x) > 2 || Math.abs(entity._position.y - entity.position.y) > 2) {
-      entity.position.x = entity._position.x;
-      entity.position.y = entity._position.y;
+    if (Math.abs(this._position.x - this.position.x) > 2 || Math.abs(this._position.y - this.position.y) > 2) {
+      this.position.x = this._position.x;
+      this.position.y = this._position.y;
     } else {
-      if (!Math.abs(entity._position.x - entity.position.x) / step < 0.01) {
-        entity.position.x = (entity.position.x + (entity._position.x - entity.position.x) / step);
-        if (entity.kind === "player") {
-          BL.Viewport.x = entity.position.x;
+      if (!Math.abs(this._position.x - this.position.x) / step < 0.01) {
+        this.position.x = (this.position.x + (this._position.x - this.position.x) / step);
+        if (this.kind === "player") {
+          BL.Viewport.x = this.position.x;
         }
       }
-      if (!Math.abs(entity._position.y - entity.position.y) / step < 0.01) {
-        entity.position.y = (entity.position.y + (entity._position.y - entity.position.y) / step);
-        if (entity.kind === "player") {
-          BL.Viewport.y = entity.position.y;
+      if (!Math.abs(this._position.y - this.position.y) / step < 0.01) {
+        this.position.y = (this.position.y + (this._position.y - this.position.y) / step);
+        if (this.kind === "player") {
+          BL.Viewport.y = this.position.y;
         }
       }
     }
 
-    var posX = (entity.position.x - (BL.Viewport.x - ((BL.Viewport.width/2) / square))) * square;
-    var posY = (entity.position.y - (BL.Viewport.y - ((BL.Viewport.height/2) / square))) * square;
-    entity.dude.position.x = posX;
-    entity.dude.position.y = posY;
+    var posX = (this.position.x - (BL.Viewport.x - ((BL.Viewport.width/2) / square))) * square;
+    var posY = (this.position.y - (BL.Viewport.y - ((BL.Viewport.height/2) / square))) * square;
+    this.dude.position.x = posX;
+    this.dude.position.y = posY;
   };
 
   entity.move = function (/*deltaX, deltaY, entity*/) {
   };
 
   entity.die = function () {
+    console.log(entity);
     self._stage.removeChild(entity.dude);
   };
 
-  this._stage.addChild(entity.dude);
+  entity.transition = function(new_entity, new_icon){
+    this.position = {
+        x: new_entity.position.x,
+        y: new_entity.position.y
+    };
+
+    this._position = {
+        x: new_entity.position.x,
+        y: new_entity.position.y
+    };
+    this.id = new_entity.id;
+    this.kind = new_entity.kind;
+    this.icon = new_icon;
+
+    var dude = PIXI.Sprite.fromImage(BL.Sprites[entity.icon].src);
+
+    self._stage.removeChild(this.dude);
+
+    this.dude = self._stage.addChild(dude);
+  }
+
 };

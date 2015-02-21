@@ -44,11 +44,11 @@ BL.Sprites = {
     "icon-entities-mother": new Image()
 };
 
-BL.Sprites["icon-entities-player"].src = "svg/entities-player.svg";
-BL.Sprites["icon-environment-block"].src = "svg/environment-block.svg";
-BL.Sprites["icon-entities-egg"].src = "svg/entities-egg.svg";
-BL.Sprites["icon-entities-monster"].src = "svg/entities-monster.svg";
-BL.Sprites["icon-entities-mother"].src = "svg/entities-mother.svg";
+BL.Sprites["icon-entities-player"].src = "images/entities-player.png";
+BL.Sprites["icon-environment-block"].src = "images/environment-block.png";
+BL.Sprites["icon-entities-egg"].src = "images/entities-egg.png";
+BL.Sprites["icon-entities-monster"].src = "images/entities-monster.png";
+BL.Sprites["icon-entities-mother"].src = "images/entities-mother.png";
 
 angular.module("beastieApp")
     .controller("GameCtrl", ["$scope", "$log", "$state", "$rootScope", function($scope, $log, $state, $rootScope) {
