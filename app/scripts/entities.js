@@ -9,7 +9,7 @@ _.templateSettings = {
  * @param {Entity} player The entity to be displayed
  * @param {String} icon   A path to the image for the entity
  */
-BL.Display = function (player, icon) {
+BL.Display = function (player, renderer, icon) {
     this._events = {};
     var self = this;
 
@@ -23,10 +23,10 @@ BL.Display = function (player, icon) {
             x: player.position.x,
             y: player.position.y
         };
-
+        self.id = player.id;
         self.kind = player.kind;
         self.icon = icon;
-        BL.CanvasRenderer(self);
+        renderer.entity(self);
     };
 
     this.render(player, icon);

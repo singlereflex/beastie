@@ -1,8 +1,13 @@
 "use strict";
 
-BL.CollisionComponent = function (entity) {
+/**
+ * Collision Component - Trigger the collision event if entity exists in that position.
+ * @param {Entity} entity
+ * @constructor
+ */
+BL.CollisionComponent = function (entity, world) {
     entity.on("startMove", function (deltaX, deltaY) {
-        var collided = entity.world.findEntityByPosition(entity.position.x + deltaX, entity.position.y + deltaY);
+        var collided = world.findEntityByPosition(entity.position.x + deltaX, entity.position.y + deltaY);
 
         if (collided.length > 0) {
             for(var i = 0; i < collided.length; i++){
@@ -12,17 +17,26 @@ BL.CollisionComponent = function (entity) {
     });
 };
 
-BL.ExploreComponent = function (entity) {
+/**
+ * Explore Component - Trigger the world to generate on entity movement.
+ * @param {Entity} entity
+ * @constructor
+ */
+BL.ExploreComponent = function (entity, world) {
     entity.on("completeMove", function () {
-        if (entity.world[entity.position.x + "/" + entity.position.y] === undefined) {
-            entity.world.explore(entity.position.x - 8, entity.position.y - 8, 16);
+        if (world[entity.position.x + "/" + entity.position.y] === undefined) {
+            world.explore(entity.position.x - 8, entity.position.y - 8, 16);
         }
     });
 };
 
-BL.MoveComponent = function (Entity) {
-
-    var move = function (deltaX, deltaY) {
+/**
+ * Move Component - Attach the ability for this entity to move.
+ * @param {Entity} entity
+ * @constructor
+ */
+BL.MoveComponent = function (entity) {
+    entity.move = function (deltaX, deltaY) {
         this.trigger("startMove", deltaX, deltaY);
 
         //move this to an event?
@@ -40,45 +54,60 @@ BL.MoveComponent = function (Entity) {
 
         this.trigger("completeMove", deltaX, deltaY, oldPosition);
     };
-    if(Entity instanceof Function){
-      Entity.prototype.move = move;
-
-    } else {
-      Entity.move = move;
-    }
 };
 
-BL.PushComponent = function (entity) {
+/**
+ * Push Component - Attach the ability for this entity to push blocks.
+ * @param {Entity} entity
+ * @param {BL.World} world
+ * @constructor
+ */
+BL.PushComponent = function (entity, world) {
     //subscribe to move event
     entity.on("startMove", function (deltaX, deltaY) {
-        var neighbor = entity.world.findEntityByPosition(entity.position.x + deltaX, entity.position.y + deltaY)[0];
+        var neighbor = world.findEntityByPosition(entity.position.x + deltaX, entity.position.y + deltaY)[0];
         if (neighbor !== undefined && neighbor.kind === "block") {
             neighbor.move(deltaX, deltaY);
         }
     });
 };
 
-BL.PullComponent = function (entity) {
+/**
+ * Pull Component - Attach the ability for this entity to pull blocks.
+ * @param {Entity} entity
+ * @constructor
+ */
+BL.PullComponent = function (entity, world) {
     //subscribe to move event
     entity.on("completeMove", function (deltaX, deltaY) {
-        var neighbor = entity.world.findEntityByPosition(entity.position.x - (deltaX * 2), entity.position.y - (deltaY * 2));
+        var neighbor = world.findEntityByPosition(entity.position.x - (deltaX * 2), entity.position.y - (deltaY * 2));
         if (entity.pulling && neighbor[0] !== undefined) {
             neighbor[0].move(deltaX, deltaY);
         }
     });
 };
 
-BL.DeathComponent = function (Entity) {
-    Entity.prototype.die = function (){
+/**
+ * Death Component - Attach the ability for this entity to die.
+ * @param {Entity} entity
+ * @constructor
+ */
+BL.DeathComponent = function (entity) {
+    entity.die = function (){
         this.trigger("die");
     };
 };
 
+/**
+ * State Component - Attach the ability for this entity to change states.
+ * @param {Entity} entity
+ * @param {Object} states
+ * @constructor
+ */
 BL.StateComponent = function (entity, states){
     entity.states = states;
-
     entity.transition = function(stateName){
-        entity.states[stateName].apply(entity);
+        entity.states[stateName].apply(entity, [entity.position.x, entity.position.y, entity.world]);
         entity.trigger("transition");
     };
 };
