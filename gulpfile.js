@@ -87,8 +87,8 @@ gulp.task("watch", ["connect", "server"], function () {
     gulp.watch([dest + "/**", "!" + dest + "/bower_components"]).on("change", function (file) {
         server.changed(file.path);
     });
-    gulp.watch(dest + "/styles/*.scss", ["sass"]);
-    gulp.watch(dest + "/svg/**", ["sass"]);
+    // gulp.watch(dest + "/styles/*.scss", ["sass"]);
+    // gulp.watch(dest + "/svg/**", ["sass"]);
 });
 
 gulp.task("default", ["watch"]);

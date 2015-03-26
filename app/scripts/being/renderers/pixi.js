@@ -24,7 +24,7 @@ PixiRenderer.prototype.resize = function(width, height){
 
 PixiRenderer.prototype.entity = function(entity) {
   var self = this;
-  var square = 24;
+  var square = 64;
   // console.info(self._stage);
   // create a new Sprite that uses the image name that we just generated as its source
   // console.debug(BL.Sprites[entity.icon]);

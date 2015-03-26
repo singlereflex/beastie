@@ -40,7 +40,7 @@ BL.World = function () {
         // self.pause();
         // }
         if (self.running) {
-            setTimeout(self.animloop, 120);
+            setTimeout(self.animloop, 250);
         }
     };
 
