@@ -6,7 +6,7 @@
  */
 BL.World = function () {
 
-    BL.EventComponent(this);
+    EventComponent(this);
 
     var self = this;
     this.running = false;
@@ -74,13 +74,13 @@ BL.World = function () {
  */
 BL.Player = function (x, y, world) {
 
-    BL.EventComponent(this);
+    EventComponent(this);
     BL.PushComponent(this, world);
     BL.PullComponent(this, world);
-    BL.CollisionComponent(this, world);
+    CollisionComponent(this, world);
     BL.ExploreComponent(this, world);
-    BL.MoveComponent(this);
-    BL.DeathComponent(this);
+    MoveComponent(this);
+    DeathComponent(this);
 
     var self = this;
     this.position = {
@@ -124,9 +124,9 @@ BL.Player = function (x, y, world) {
  */
 BL.Block = function (x, y, world) {
 
-    BL.EventComponent(this);
-    BL.CollisionComponent(this, world);
-    BL.MoveComponent(this);
+    EventComponent(this);
+    CollisionComponent(this, world);
+    MoveComponent(this);
 
     var self = this;
     this.position = {
@@ -173,10 +173,10 @@ BL.Block = function (x, y, world) {
  */
 BL.Egg = function (x, y, world) {
 
-    BL.EventComponent(this);
-    BL.CollisionComponent(this, world);
-    BL.DeathComponent(this);
-    BL.StateComponent(this, {
+    EventComponent(this);
+    CollisionComponent(this, world);
+    DeathComponent(this);
+    StateComponent(this, {
         "hatch": BL.Monster,
         "mother": BL.Mother
     });
@@ -253,7 +253,7 @@ BL.Egg = function (x, y, world) {
  */
 BL.Monster = function (x, y, world) {
 
-    BL.MoveComponent(this);
+    MoveComponent(this);
     BL.ExploreComponent(this, world);
 
     this.moves = [
@@ -324,7 +324,7 @@ BL.Monster = function (x, y, world) {
 BL.Mother = function (x, y, world) {
 
     BL.PushComponent(this, world);
-    BL.CollisionComponent(this, world);
+    CollisionComponent(this, world);
 
     var self = this;
     this.worth = 30;

@@ -4,7 +4,7 @@
  * @param {Object} states
  * @constructor
  */
-BL.StateComponent = function (entity, states){
+var StateComponent = function (entity, states){
     entity.states = states;
     entity.transition = function(stateName){
         entity.states[stateName].apply(entity, [entity.position.x, entity.position.y, entity.world]);

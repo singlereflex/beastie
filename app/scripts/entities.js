@@ -34,7 +34,7 @@ BL.Display = function (player, renderer, icon) {
 
 //Attach events to the display, useful for a render event
 //Only used for dom renderer
-BL.EventComponent(BL.Display);
+EventComponent(BL.Display);
 
 /**
  * A main thread component to allow interaction between
@@ -57,6 +57,6 @@ BL.DummyPlayer = function (game) {
         });
     };
 
-    BL.MoveControllerComponent(this);
+    MoveControllerComponent(this);
     BL.PullControllerComponent(this);
 };

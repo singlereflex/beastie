@@ -2,7 +2,7 @@
  * A component to hook up user input to the entity
  * @param {entity} entity The game entity.
  */
-BL.MoveControllerComponent = function (entity) {
+var MoveControllerComponent = function (entity) {
     //requires the BL.MoveComponent
 
     document.body.addEventListener("keyup", function keyUp(event) {
@@ -41,5 +41,5 @@ BL.MoveControllerComponent = function (entity) {
     }, false);
 
 
-    
+
 };

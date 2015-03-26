@@ -3,7 +3,7 @@
  * @param {Entity} entity
  * @constructor
  */
-BL.EventComponent = function (entity) {
+var EventComponent = function (entity) {
 
     entity._events = {};
 

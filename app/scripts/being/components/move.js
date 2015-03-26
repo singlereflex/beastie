@@ -3,7 +3,7 @@
  * @param {Entity} entity
  * @constructor
  */
-BL.MoveComponent = function (entity) {
+var MoveComponent = function (entity) {
     entity.move = function (deltaX, deltaY) {
         this.trigger("startMove", deltaX, deltaY);
 

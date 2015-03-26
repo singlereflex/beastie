@@ -3,7 +3,7 @@
  * @param {Entity} entity
  * @constructor
  */
-BL.DeathComponent = function (entity) {
+var DeathComponent = function (entity) {
     entity.die = function (){
         this.trigger("die");
     };

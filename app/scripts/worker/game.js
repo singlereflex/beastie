@@ -5,6 +5,12 @@ self.BL = {};
 self.importScripts("../../bower_components/underscore/underscore.js");
 self.importScripts("../../bower_components/noisejs/index.js");
 self.importScripts("../shared/components.js");
+
+self.importScripts("../being/components/event.js");
+self.importScripts("../being/components/collision.js");
+self.importScripts("../being/components/move.js");
+self.importScripts("../being/components/die.js");
+self.importScripts("../being/components/state.js");
 self.importScripts("components.js");
 self.importScripts("entities.js");
 

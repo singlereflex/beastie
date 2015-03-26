@@ -3,7 +3,7 @@
  * @param {Entity} entity
  * @constructor
  */
-BL.CollisionComponent = function (entity, world) {
+var CollisionComponent = function (entity, world) {
     entity.on("startMove", function (deltaX, deltaY) {
         var collided = world.findEntityByPosition(entity.position.x + deltaX, entity.position.y + deltaY);
 

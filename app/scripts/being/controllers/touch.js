@@ -1,4 +1,4 @@
-BL.TouchMoveControllerComponent = function (entity) {
+var TouchMoveControllerComponent = function (entity) {
   document.body.addEventListener("touchend", function dblClick(event) {
       if (!entity.dead) {
           var touch = event.changedTouches[0];
