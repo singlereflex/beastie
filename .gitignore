@@ -6,3 +6,4 @@ app/bower_components
 app/styles/beastie-*.*
 beast_land
 app/lib
+npm-debug.log
