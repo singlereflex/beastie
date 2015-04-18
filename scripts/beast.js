@@ -100,21 +100,11 @@ var Game = function(board, level) {
         var currentLength = queue.length;
         // console.info("queue", currentLength);
         for (var i = 0; i < currentLength; i++) {
-            try {
-                handleMessage(queue.shift());
-            } catch (e) {
-                console.error(e);
-            }
+          handleMessage(queue.shift());
         }
-
+        // @todo this should be moved, the only point of it is animation
         for (var entity in world) {
-            try {
-                world[entity].draw();
-            } catch (e) {
-                console.error(e);
-                world[entity].die();
-                // delete world[entity];
-            }
+          world[entity].draw();
         }
         renderer.render();
         frameId = window.requestAnimationFrame(render);
