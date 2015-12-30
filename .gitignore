@@ -2,8 +2,8 @@ node_modules
 dist
 .tmp
 .sass-cache
-app/bower_components
-app/styles/beastie-*.*
+bower_components
+styles/beastie-*.*
 beast_land
 app/lib
 npm-debug.log

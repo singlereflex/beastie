@@ -4,8 +4,6 @@ _.templateSettings = {
     interpolate: /\{\{(.+?)\}\}/g
 };
 
-window.BL = {};
-
 /**
  * Center the web page on the element,
  * only used if DomRenderer is being used

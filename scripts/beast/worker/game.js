@@ -1,6 +1,5 @@
 "use strict";
-
-self.BL = {};
+//import configs
 
 self.importScripts("../../bower_components/underscore/underscore.js");
 self.importScripts("../../bower_components/noisejs/index.js");

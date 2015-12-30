@@ -1,4 +1,6 @@
-
+_.templateSettings = {
+    interpolate: /\{\{(.+?)\}\}/g
+};
 /**
 * The rendering logic for rendering an entity using the dom
 * @param {DomNode} entity    The dom node currently associated with the game entityboard, can be undefined.
