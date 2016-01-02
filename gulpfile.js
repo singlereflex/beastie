@@ -100,4 +100,4 @@ gulp.task("watch", ["connect", "server"], function () {
     // gulp.watch(dest + "/svg/**", ["sass"]);
 });
 
-gulp.task("default", ["watch"]);
+gulp.task("default", ["build", "watch"]);

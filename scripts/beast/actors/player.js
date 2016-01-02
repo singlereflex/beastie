@@ -12,7 +12,7 @@ BL.actors.Player = function (x, y, world) {
     BL.PushComponent(this, world);
     BL.PullComponent(this, world);
     CollisionComponent(this, world);
-    BL.ExploreComponent(this, world);
+    // BL.ExploreComponent(this, world);
     MoveComponent(this);
     DeathComponent(this);
 

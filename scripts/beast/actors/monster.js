@@ -9,7 +9,7 @@
 BL.actors.Monster = function (x, y, world) {
 
     MoveComponent(this);
-    BL.ExploreComponent(this, world);
+    // BL.ExploreComponent(this, world);
 
     this.moves = [
         [0, 1],

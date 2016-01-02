@@ -5,55 +5,63 @@
  * @param {String} board For the moment the id of the canvas (or other dom element) used to render the game
  * @param {JSON} level The json description of the level to be played
  */
-var Game = function(board, level) {
+var Game = function(board, level, edit) {
     var self = this;
     this.ongameend = function() {};
     this.score = 0;
 
-    var world = {};
+    var world = {
+        entities:{}
+    };
     var map = {}; //location based store
     var queue = [];
     //could move this to a custom type later
     var renderQueue = [];
 
-    var game = new Worker("scripts/worker/game.js");
-    var player = new BL.DummyPlayer(game);
+    var game = new Worker("scripts/beast/worker/game.js");
+
+    console.debug(game);
+
+    var player = new BL.entities.DummyPlayer(game);
 
     var frameId;
 
-    var renderer = new PixiRenderer(board);
+    var renderer = new PixiRenderer(board, edit);
+    //should extend game for a editable whatever
+
+    console.debug(renderer);
 
     // var renderer = new PIXI.WebGLRenderer(canvas.width, canvas.height, {view: canvas});
     // renderer.view.className = "rendererView";
 
-
+    //FIXME have to send message as well
     var handleMessage = function(e) {
 
         //move render queue
         switch (e.data.event) {
             case "remove":
-                world[e.data._id].die();
-                // delete world[e.data._id];
+                world.entities[e.data._id].die();
+                // delete world.entities[e.data._id];
                 break;
             case "place":
                 console.log('place');
                 //only add it if we don't already have it
-                if (!world[e.data._id]) {
+                if (!world.entities[e.data._id]) {
                     e.data.entity.id = e.data._id;
-                    world[e.data._id] = new BL.Display(e.data.entity, renderer, e.data.icon);
+                    world.entities[e.data._id] = new BL.entities.Display(e.data.entity, renderer, e.data.icon);
                     // console.log("position:", e.data.entity.position.x, e.data.entity.position.y);
                     if (e.data.entity.kind === "player") {
-                        player.display = world[e.data._id];
+                        player.display = world.entities[e.data._id];
                         //FIXME shouldn't be global
-                        BL.Viewport.x = world[e.data._id].position.x;
-                        BL.Viewport.y = world[e.data._id].position.y;
+                        BL.Viewport.x = world.entities[e.data._id].position.x;
+                        BL.Viewport.y = world.entities[e.data._id].position.y;
                     }
                 }
                 break;
             case "completeMove":
                 console.log(e.data.entity.kind);
                 //TODO: some of this can be moved to worker
-                world[e.data._id]._position = {
+                world.entities[e.data._id]._position = {
                     x: e.data.entity.position.x,
                     y: e.data.entity.position.y
                 };
@@ -69,14 +77,44 @@ var Game = function(board, level) {
                     this.score += e.data.worth;
                 }
 
-                world[e.data._id].die();
-                // delete world[e.data._id];
+                world.entities[e.data._id].die();
+                // delete world.entities[e.data._id];
                 break;
             case "transition":
-                world[e.data._id].transition(e.data.entity, e.data.icon);
+                world.entities[e.data._id].transition(e.data.entity, e.data.icon);
                 break;
         }
 
+    };
+
+    world.explore = function (x, y, size) {
+        var noise = new Noise(Math.random());
+
+        for (var i = x; i < x + size; i++) {
+            for (var e = y; e < y + size; e++) {
+                if (world.entities[i + "," + e] === undefined) {
+                    if (noise.simplex2(i, e / 10) > 0.5 || noise.simplex2(i / 10, e) > 0.5) {
+                        game.postMessage({
+                            event: 'place',
+                            kind: 'Block',
+                            x:i,
+                            y:e
+                        });
+                        // world.entities.place(new BL.actors.Block(i, e, world));
+                    } else if (noise.simplex2(i / 8, e / 8) > 0.5) {
+                        game.postMessage({
+                            event: 'place',
+                            kind: 'Egg',
+                            x:i,
+                            y:e
+                        });
+                        // world.entities.place(new BL.actors.Egg(i, e, world));
+                    } else {
+                        // world.entities[i + "," + e] = [];
+                    }
+                }
+            }
+        }
     };
 
 
@@ -105,8 +143,9 @@ var Game = function(board, level) {
             handleMessage(queue.shift());
         }
         // @todo this should be moved, the only point of it is animation
-        for (var entity in world) {
-            world[entity].draw();
+        for (var entity in world.entities) {
+            // console.debug(entity);
+            world.entities[entity].draw();
         }
         renderer.render();
         frameId = window.requestAnimationFrame(render);
@@ -126,4 +165,5 @@ var Game = function(board, level) {
 
     render();
     resizeCanvas();
+    world.explore(1024-8,1024-8, 16);
 }

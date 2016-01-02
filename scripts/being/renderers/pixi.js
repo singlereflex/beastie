@@ -1,4 +1,4 @@
-var PixiRenderer = function(board){
+var PixiRenderer = function(board, editable){
   this._canvas = document.getElementById(board);
   // var context = canvas.getContext("2d");
 
@@ -9,9 +9,29 @@ var PixiRenderer = function(board){
   });
 
   // create an new instance of a pixi stage
-  this._stage = new PIXI.Stage(0x000000);
+  this._stage = new PIXI.Container();
 
+  var interactive = editable || false;
 
+  if(interactive) {
+      EventComponent(this);
+
+      this._stage.interactive = true;
+
+      this._stage.hitArea = new PIXI.Rectangle(0, 0, this._renderer.width, this._renderer.height);
+
+      console.debug(this._stage.hitArea);
+
+      this._stage.on('click', function(event) {
+          this.trigger('click', event);
+      });
+
+      this._stage.on('mousedown', function(event) {
+          this.trigger('mousedown', event);
+      });
+  }
+
+  console.debug(this._stage);
 }
 
 PixiRenderer.prototype.render = function(){
@@ -20,6 +40,10 @@ PixiRenderer.prototype.render = function(){
 
 PixiRenderer.prototype.resize = function(width, height){
   this._renderer.resize(width, height);
+  if (this._stage.hitArea !== undefined) {
+      this._stage.hitArea.width = this._renderer.width
+      this._stage.hitArea.height = this._renderer.height;
+  }
 }
 
 PixiRenderer.prototype.entity = function(entity) {
@@ -28,8 +52,8 @@ PixiRenderer.prototype.entity = function(entity) {
   // console.info(self._stage);
   // create a new Sprite that uses the image name that we just generated as its source
   // console.debug(BL.Sprites[entity.icon]);
-  console.debug("icon:", entity.icon);
-  console.debug("icon src:", BL.Sprites[entity.icon].src);
+  // console.debug("icon:", entity.icon);
+  // console.debug("icon src:", BL.Sprites[entity.icon].src);
   entity.dude = this._stage.addChild(PIXI.Sprite.fromImage(BL.Sprites[entity.icon].src));
 
 

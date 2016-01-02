@@ -1,17 +1,27 @@
 "use strict";
 //import configs
+console.debug("worker");
 
-self.importScripts("../../bower_components/underscore/underscore.js");
-self.importScripts("../../bower_components/noisejs/index.js");
-self.importScripts("../shared/components.js");
+self.importScripts("../config.js");
+self.importScripts("/bower_components/underscore/underscore.js");
+self.importScripts("/bower_components/noisejs/index.js");
 
-self.importScripts("../being/components/event.js");
-self.importScripts("../being/components/collision.js");
-self.importScripts("../being/components/move.js");
-self.importScripts("../being/components/die.js");
-self.importScripts("../being/components/state.js");
+self.importScripts("../../being/components/event.js");
+self.importScripts("../../being/components/collision.js");
+self.importScripts("../../being/components/move.js");
+self.importScripts("../../being/components/die.js");
+self.importScripts("../../being/components/state.js");
+
+//FIXME update this as well
 self.importScripts("components.js");
-self.importScripts("entities.js");
+
+self.importScripts("../entities/level.js");
+self.importScripts("../actors/block.js");
+self.importScripts("../actors/egg.js");
+self.importScripts("../actors/monster.js");
+self.importScripts("../actors/mother.js");
+self.importScripts("../actors/player.js");
+
 
 var noise = new Noise(Math.random());
 
@@ -167,29 +177,13 @@ function initEntities(entity) {
 }
 
 var newWorld = function() {
-    var world = new BL.World();
-
-    world.explore = function (x, y, size) {
-        for (var i = x; i < x + size; i++) {
-            for (var e = y; e < y + size; e++) {
-                if (world.entities[i + "," + e] === undefined) {
-                    if (noise.simplex2(i, e / 10) > 0.5 || noise.simplex2(i / 10, e) > 0.5) {
-                        world.entities.place(new BL.Block(i, e, world));
-                    } else if (noise.simplex2(i / 8, e / 8) > 0.5) {
-                        world.entities.place(new BL.Egg(i, e, world));
-                    } else {
-                        world.entities[i + "," + e] = [];
-                    }
-                }
-            }
-        }
-    };
+    var world = new BL.entities.Level();
 
     return world;
 };
 
 var newPlayer = function(xPos, yPos, world){
-    var player = new BL.Player(xPos, yPos, world);
+    var player = new BL.actors.Player(xPos, yPos, world);
     player.on("completeMove", function (deltaX, deltaY) {
         BL.Viewport.x = player.position.x;
         BL.Viewport.y = player.position.y;
@@ -263,6 +257,10 @@ self.addEventListener("message", function (e) {
             case "kill":
                 self.close();
                 break;
+            case "place":
+                console.debug("place event:", e);
+                world.entities.place(new BL.actors[e.data.kind](e.data.x, e.data.y, world));
+                break;
         }
     }
 });
@@ -276,7 +274,7 @@ self.init = function() {
 
     self.world.on("place", initEntities);
     self.world.entities.place(self.player);
-    self.world.explore(xPos - 8, yPos - 8, 16);
+    // self.world.explore(xPos - 8, yPos - 8, 16);
     self.world.start();
 };
 
