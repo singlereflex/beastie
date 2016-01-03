@@ -10,3 +10,5 @@ BL.Viewport = {
     width: 0,
     height: 0
 };
+
+BL.square = 64;

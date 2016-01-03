@@ -17,11 +17,6 @@ angular.module("beastieApp")
         //
         // world.entities.place(new BL.Switch(i, e, world));
 
-
-        var place = function(type) {
-            world.actors.place(new BL.entities[type](i, e, world));
-        };
-
         /**
          * Submit a level and it's solution for review and eventual inclusion in the game
          * @param  {JSON} level    The JSON describing the current level
@@ -29,6 +24,7 @@ angular.module("beastieApp")
          * @return {Boolean}       True if it looks valid and has been submitted
          */
         var submit = function(level, solution) {
+            return;
             //can only level a game for consideration if you've beaten it
             var TestGame = new Game(level);
             for(var i = 0; i < solution.length; i++) {
@@ -41,16 +37,25 @@ angular.module("beastieApp")
             return false;
         }
 
-        /**
-         * Play the level you've created
-         *
-         * This must be done before submit becomes available
-         *
-         * @param  {Boolean} withBeasts If this is true populate beasts as well if not don't
-         */
-        var play = function(withBeasts) {
-
-        }
+        // world.explore = function (x, y, size) {
+        //     var noise = new Noise(Math.random());
+        //
+        //     for (var i = x; i < x + size; i++) {
+        //         for (var e = y; e < y + size; e++) {
+        //             if (world.entities[i + "," + e] === undefined) {
+        //                 if (noise.simplex2(i, e / 10) > 0.5 || noise.simplex2(i / 10, e) > 0.5) {
+        //                     self.place('Block', i, e);
+        //                     // world.entities.place(new BL.actors.Block(i, e, world));
+        //                 } else if (noise.simplex2(i / 8, e / 8) > 0.5) {
+        //                     self.place('Egg', i, e);
+        //                     // world.entities.place(new BL.actors.Egg(i, e, world));
+        //                 } else {
+        //                     // world.entities[i + "," + e] = [];
+        //                 }
+        //             }
+        //         }
+        //     }
+        // };
 
         //should list types and then would be
         //able to render them in a simple loop if
@@ -59,11 +64,19 @@ angular.module("beastieApp")
 
         $scope.types = Object.keys(BL.actors);
 
-        $scope.activeType;
-        $scope.place = function() {
-            place($scope.activeType);
-        };
-
+        $scope.activeType = $scope.types[0];
+        $scope.setType = function(type) {
+            $scope.activeType = type;
+        }
         //init:
         var new_level = new Game('entityboard', {}, true);
+
+        new_level.on('click', function(event) {
+            console.debug($scope.activeType);
+            new_level.place($scope.activeType, event.data.global.x, event.data.global.y);
+        });
+
+        $scope.submit = function() {
+            new_level.export();
+        }
     }]);

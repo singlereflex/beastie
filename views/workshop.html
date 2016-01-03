@@ -1,4 +1,11 @@
-<div id="top-nav" ng-include="'views/top_nav.html'"></div>
+<div id="top-nav">
+    <nav>
+        <ul>
+            <li ng-click="submit()">{{activeType}}</li>
+            <li ng-repeat="type in types" ><button class="btn btn-link" ng-click="setType(type)">{{type}}</button></li>
+        </ul>
+    </nav>
+</div>
 <div id="game-container">
     <canvas class="entityboard" id="entityboard"></canvas>
 </div>

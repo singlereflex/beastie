@@ -1,4 +1,6 @@
 var PixiRenderer = function(board, editable){
+    var self = this;
+
   this._canvas = document.getElementById(board);
   // var context = canvas.getContext("2d");
 
@@ -23,11 +25,20 @@ var PixiRenderer = function(board, editable){
       console.debug(this._stage.hitArea);
 
       this._stage.on('click', function(event) {
-          this.trigger('click', event);
+          //convert back to beastie coords here
+          var x = (event.data.global.x/BL.square) + (BL.Viewport.x - ((BL.Viewport.width/2) / BL.square));
+
+          var y = (event.data.global.y/BL.square) + (BL.Viewport.y - ((BL.Viewport.height/2) / BL.square));
+
+          event.data.global.x = Math.floor(x);
+
+          event.data.global.y = Math.floor(y);
+
+          self.trigger('click', event);
       });
 
       this._stage.on('mousedown', function(event) {
-          this.trigger('mousedown', event);
+          self.trigger('mousedown', event);
       });
   }
 

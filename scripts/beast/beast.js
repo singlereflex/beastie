@@ -1,5 +1,3 @@
-
-
 /**
  * The game of beastie
  * @param {String} board For the moment the id of the canvas (or other dom element) used to render the game
@@ -7,36 +5,65 @@
  */
 var Game = function(board, level, edit) {
     var self = this;
-    this.ongameend = function() {};
-    this.score = 0;
+
+    EventComponent(this);
 
     var world = {
         entities:{}
     };
+
     var map = {}; //location based store
+
     var queue = [];
     //could move this to a custom type later
     var renderQueue = [];
 
     var game = new Worker("scripts/beast/worker/game.js");
 
-    console.debug(game);
-
     var player = new BL.entities.DummyPlayer(game);
 
     var frameId;
 
+    //could set this in a seperate private function
     var renderer = new PixiRenderer(board, edit);
-    //should extend game for a editable whatever
 
-    console.debug(renderer);
+    renderer.on('click', function(event) {
+        self.trigger('click', event);
+    });
+
+    this.ongameend = function() {};
+
+    this.score = 0;
+
+    this.place = function(type, x, y) {
+        game.postMessage({
+            event: 'place',
+            kind: type,
+            x:x,
+            y:y
+        });
+    }
+
+    this.export = function() {
+        console.debug(world);
+        var result = [];
+        for (var entity in world.entities) {
+            result.push({
+                type: world.entities[entity].kind,
+                x: world.entities[entity].position.x,
+                y: world.entities[entity].position.y
+            });
+        }
+        console.debug(result);
+        return result;
+    }
 
     // var renderer = new PIXI.WebGLRenderer(canvas.width, canvas.height, {view: canvas});
     // renderer.view.className = "rendererView";
 
     //FIXME have to send message as well
     var handleMessage = function(e) {
-
+        console.debug(e);
         //move render queue
         switch (e.data.event) {
             case "remove":
@@ -87,35 +114,7 @@ var Game = function(board, level, edit) {
 
     };
 
-    world.explore = function (x, y, size) {
-        var noise = new Noise(Math.random());
 
-        for (var i = x; i < x + size; i++) {
-            for (var e = y; e < y + size; e++) {
-                if (world.entities[i + "," + e] === undefined) {
-                    if (noise.simplex2(i, e / 10) > 0.5 || noise.simplex2(i / 10, e) > 0.5) {
-                        game.postMessage({
-                            event: 'place',
-                            kind: 'Block',
-                            x:i,
-                            y:e
-                        });
-                        // world.entities.place(new BL.actors.Block(i, e, world));
-                    } else if (noise.simplex2(i / 8, e / 8) > 0.5) {
-                        game.postMessage({
-                            event: 'place',
-                            kind: 'Egg',
-                            x:i,
-                            y:e
-                        });
-                        // world.entities.place(new BL.actors.Egg(i, e, world));
-                    } else {
-                        // world.entities[i + "," + e] = [];
-                    }
-                }
-            }
-        }
-    };
 
 
 
@@ -165,5 +164,4 @@ var Game = function(board, level, edit) {
 
     render();
     resizeCanvas();
-    world.explore(1024-8,1024-8, 16);
 }
