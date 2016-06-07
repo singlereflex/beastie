@@ -62,7 +62,12 @@ angular.module("beastieApp")
         //the names of the renderer matched the constructor
         //..which they should
 
-        $scope.types = Object.keys(BL.actors);
+        $scope.types = [
+            'Egg',
+            'Block',
+            'Floor',
+            // 'Switch'
+        ];
 
         $scope.activeType = $scope.types[0];
         $scope.setType = function(type) {

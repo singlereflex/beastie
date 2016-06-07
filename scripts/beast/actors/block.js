@@ -12,7 +12,7 @@ BL.actors.Block = function (x, y, world) {
     CollisionComponent(this, world);
     MoveComponent(this);
     StateComponent(this, {
-        "drop": BL.Floor
+        "drop": BL.actors.Floor
     });
 
     var self = this;

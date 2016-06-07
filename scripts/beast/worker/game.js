@@ -17,6 +17,7 @@ self.importScripts("components.js");
 
 self.importScripts("../entities/level.js");
 self.importScripts("../actors/block.js");
+self.importScripts("../actors/floor.js");
 self.importScripts("../actors/egg.js");
 self.importScripts("../actors/monster.js");
 self.importScripts("../actors/mother.js");
@@ -259,7 +260,9 @@ self.addEventListener("message", function (e) {
                 break;
             case "place":
                 console.debug("place event:", e);
-                world.entities.place(new BL.actors[e.data.kind](e.data.x, e.data.y, world));
+                var new_piece = new BL.actors[e.data.kind](e.data.x, e.data.y, world);
+                console.debug(new_piece);
+                world.entities.place(new_piece);
                 break;
         }
     }
