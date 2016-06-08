@@ -1,7 +1,16 @@
 "use strict";
 
 angular.module("beastieApp")
+    .config(['$compileProvider',
+    function( $compileProvider )
+    {
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|data):/);
+        // Angular before v1.2 uses $compileProvider.urlSanitizationWhitelist(...)
+    }])
     .controller("WorkshopCtrl", ["$scope", "$log", "$state", "$rootScope", function($scope, $log, $state, $rootScope) {
+        //init:
+        var new_level = new Game('entityboard', {}, true);
+
 
         // world.entities.place(new BL.Block(i, e, world));
         //
@@ -73,8 +82,19 @@ angular.module("beastieApp")
         $scope.setType = function(type) {
             $scope.activeType = type;
         }
-        //init:
-        var new_level = new Game('entityboard', {}, true);
+
+        var save = function (level) {
+            console.log("hello world")
+            var board = level.export();
+            var data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(board));
+            console.log(data)
+            return "data:'"+data+"'";
+        }
+
+        new_level.on('place', function () {
+            $scope.game_data = save(new_level)
+            $scope.$digest()
+        })
 
         new_level.on('click', function(event) {
             console.debug($scope.activeType);

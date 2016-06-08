@@ -112,6 +112,8 @@ var Game = function(board, level, edit) {
                 break;
         }
 
+        self.trigger(e.data.event, e.data)
+
     };
 
 
