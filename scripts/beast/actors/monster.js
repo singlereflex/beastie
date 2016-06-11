@@ -6,7 +6,7 @@
  * @param {BL.World} world - BeastLand World
  * @constructor
  */
-BL.actors.Monster = function (x, y, world) {
+var Monster = function (x, y, world) {
 
     MoveComponent(this);
     // BL.ExploreComponent(this, world);
@@ -67,3 +67,11 @@ BL.actors.Monster = function (x, y, world) {
         self.hunt();
     });
 };
+
+/**
+ * Class property, this links related classes
+ * @type {String}
+ */
+Monster.prototype.kind = "monster";
+
+BL.actors[Monster.prototype.kind] = Monster;

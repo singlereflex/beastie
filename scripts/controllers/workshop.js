@@ -72,9 +72,9 @@ angular.module("beastieApp")
         //..which they should
 
         $scope.types = [
-            'Egg',
-            'Block',
-            'Floor',
+            'egg',
+            'block',
+            'floor',
             // 'Switch'
         ];
 
@@ -103,5 +103,10 @@ angular.module("beastieApp")
 
         $scope.submit = function() {
             new_level.export();
+        }
+
+        $scope.load = function () {
+            new_level = new Game('entityboard', {}, true);
+            new_level.import([{"type":"player","x":1024,"y":1024},{"type":"floor","x":1021,"y":1020},{"type":"floor","x":1024,"y":1021},{"type":"floor","x":1026,"y":1021}])
         }
     }]);

@@ -6,7 +6,7 @@
  * @param {BL.World} world - BeastLand World
  * @constructor
  */
-BL.actors.Player = function (x, y, world) {
+var Player = function (x, y, world) {
 
     EventComponent(this);
     BL.PushComponent(this, world);
@@ -22,7 +22,7 @@ BL.actors.Player = function (x, y, world) {
         y: y
     };
     this.world = world;
-    this.kind = "player";
+
     this.icon = "icon-entities-player";
 
     this.on("completeMove", function update(deltaX, deltaY, old) {
@@ -47,3 +47,11 @@ BL.actors.Player = function (x, y, world) {
     });
 
 };
+
+/**
+ * Class property, this links related classes
+ * @type {String}
+ */
+Player.prototype.kind = "player";
+
+BL.actors[Player.prototype.kind] = Player;

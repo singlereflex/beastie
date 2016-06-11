@@ -7,14 +7,14 @@
  * @param {BL.World} world - BeastLand World
  * @constructor
  */
-BL.actors.Egg = function (x, y, world) {
+var Egg = function (x, y, world) {
 
     EventComponent(this);
     CollisionComponent(this, world);
     DeathComponent(this);
     StateComponent(this, {
-        "hatch": BL.Monster,
-        "mother": BL.Mother
+        "hatch": Monster,
+        "mother": Mother
     });
 
     var self = this;
@@ -26,7 +26,7 @@ BL.actors.Egg = function (x, y, world) {
         x: x,
         y: y
     };
-    this.kind = "egg";
+
     this.icon = "icon-entities-egg";
 
     this.on("die", function die() {
@@ -78,3 +78,11 @@ BL.actors.Egg = function (x, y, world) {
         }
     });
 };
+
+/**
+ * Class property, this links related classes
+ * @type {String}
+ */
+Egg.prototype.kind = "egg";
+
+BL.actors[Egg.prototype.kind] = Egg;

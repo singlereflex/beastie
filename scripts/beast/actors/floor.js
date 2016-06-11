@@ -7,7 +7,7 @@
  * @constructor
  */
 console.log("Loaded floor")
-BL.actors.Floor = function (x, y, world) {
+Floor = function (x, y, world) {
     EventComponent(this);
 
     var self = this;
@@ -16,7 +16,14 @@ BL.actors.Floor = function (x, y, world) {
         y: y
     };
     this.world = world;
-    this.kind = "floor";
     this.icon = "icon-environment-floor";
 
 };
+
+/**
+ * Class property, this links related classes
+ * @type {String}
+ */
+Floor.prototype.kind = "floor";
+
+BL.actors[Floor.prototype.kind] = Floor;

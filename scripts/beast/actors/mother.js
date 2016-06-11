@@ -6,7 +6,7 @@
  * @param {BL.World} world - BeastLand World
  * @constructor
  */
-BL.actors.Mother = function (x, y, world) {
+var Mother = function (x, y, world) {
 
     BL.PushComponent(this, world);
     CollisionComponent(this, world);
@@ -56,3 +56,5 @@ BL.actors.Mother = function (x, y, world) {
         self.hunt(self);
     });
 };
+
+BL.actors[Mother.prototype.kind] = Mother;

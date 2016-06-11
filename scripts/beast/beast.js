@@ -20,7 +20,7 @@ var Game = function(board, level, edit) {
 
     var game = new Worker("scripts/beast/worker/game.js");
 
-    var player = new BL.entities.DummyPlayer(game);
+    // var player = new BL.entities.DummyPlayer(game);
 
     var frameId;
 
@@ -42,6 +42,17 @@ var Game = function(board, level, edit) {
             x:x,
             y:y
         });
+    }
+
+    this.import = function(level) {
+        for (var i = 0; i < level.length; i++) {
+            console.debug(level[i])
+            this.place(
+                level[i].type,
+                level[i].x,
+                level[i].y
+            )
+        }
     }
 
     this.export = function() {
@@ -78,7 +89,10 @@ var Game = function(board, level, edit) {
                     world.entities[e.data._id] = new BL.entities.Display(e.data.entity, renderer, e.data.icon);
                     // console.log("position:", e.data.entity.position.x, e.data.entity.position.y);
                     if (e.data.entity.kind === "player") {
-                        player.display = world.entities[e.data._id];
+                        if (!self.player) {
+                            self.player = new BL.entities.DummyPlayer(game);
+                        }
+                        self.player.display = world.entities[e.data._id];
                         //FIXME shouldn't be global
                         BL.Viewport.x = world.entities[e.data._id].position.x;
                         BL.Viewport.y = world.entities[e.data._id].position.y;
@@ -160,7 +174,7 @@ var Game = function(board, level, edit) {
 
     this.endGame = function() {
         window.cancelAnimationFrame(frameId);
-        player.dead = true;
+        self.player.dead = true;
         this.ongameend();
     };
 

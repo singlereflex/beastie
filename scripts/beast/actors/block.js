@@ -6,13 +6,13 @@
  * @param {BL.World} world - BeastLand World
  * @constructor
  */
-BL.actors.Block = function (x, y, world) {
+var Block = function (x, y, world) {
 
     EventComponent(this);
     CollisionComponent(this, world);
     MoveComponent(this);
     StateComponent(this, {
-        "drop": BL.actors.Floor
+        "drop": Floor
     });
 
     var self = this;
@@ -21,7 +21,7 @@ BL.actors.Block = function (x, y, world) {
         y: y
     };
     this.world = world;
-    this.kind = "block";
+
     this.icon = "icon-environment-block";
 
     this.on("completeMove", function (deltaX, deltaY, old) {
@@ -49,3 +49,12 @@ BL.actors.Block = function (x, y, world) {
     });
 
 };
+
+/**
+ * Class property, this links related classes
+ * @type {String}
+ */
+Block.prototype.kind = "block";
+
+//be nice to have a load actor type component
+BL.actors[Block.prototype.kind] = Block;

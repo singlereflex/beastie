@@ -183,8 +183,12 @@ var newWorld = function() {
     return world;
 };
 
-var newPlayer = function(xPos, yPos, world){
-    var player = new BL.actors.Player(xPos, yPos, world);
+BL.actors.player = function(xPos, yPos, world){
+
+    this.__proto__ = new Player(xPos, yPos, world);
+
+    var player = this;
+
     player.on("completeMove", function (deltaX, deltaY) {
         BL.Viewport.x = player.position.x;
         BL.Viewport.y = player.position.y;
@@ -239,8 +243,10 @@ var newPlayer = function(xPos, yPos, world){
     player.on("die", function () {
         self.close();
     });
-    return player;
+    self.player = player;
 };
+
+BL.actors.player.prototype = Player
 
 self.addEventListener("message", function (e) {
     if (e.data) {
@@ -273,10 +279,10 @@ self.init = function() {
     var yPos = BL.Viewport.y = 1024;
 
     self.world = newWorld(xPos, yPos);
-    self.player = newPlayer(xPos, yPos, self.world);
+    // self.player = newPlayer(xPos, yPos, self.world);
 
     self.world.on("place", initEntities);
-    self.world.entities.place(self.player);
+    // self.world.entities.place(self.player);
     // self.world.explore(xPos - 8, yPos - 8, 16);
     self.world.start();
 };
