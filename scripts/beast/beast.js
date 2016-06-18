@@ -44,6 +44,30 @@ var Game = function(board, level, edit) {
         });
     }
 
+    this.validate = function() {
+        game.postMessage({
+            event: 'validate'
+        });
+    }
+
+    this.start = function() {
+        game.postMessage({
+            event: 'start'
+        })
+    }
+
+    this.stop = function() {
+        game.postMessage({
+            event: 'stop'
+        })
+    }
+
+    this.pause = function() {
+        game.postMessage({
+            event: 'pause'
+        })
+    }
+
     this.import = function(level) {
         for (var i = 0; i < level.length; i++) {
             console.debug(level[i])

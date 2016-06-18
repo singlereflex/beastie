@@ -251,6 +251,9 @@ BL.actors.player.prototype = Player
 self.addEventListener("message", function (e) {
     if (e.data) {
         switch (e.data.event) {
+
+            //should move these to functions and call with reflection
+
             case "move":
                 self.player.move(e.data.deltaX, e.data.deltaY);
                 break;
@@ -267,7 +270,6 @@ self.addEventListener("message", function (e) {
             case "place":
                 console.debug("place event:", e);
                 var new_piece = new BL.actors[e.data.kind](e.data.x, e.data.y, world);
-                console.debug(new_piece);
                 world.entities.place(new_piece);
                 break;
             case "start":
@@ -279,18 +281,25 @@ self.addEventListener("message", function (e) {
             case "pause":
                 self.world.pause();
                 break;
+            case "validate":
+                self.world.validate();
+                break;
         }
     }
 });
 
 self.init = function() {
-    var xPos = BL.Viewport.x = 1024;
-    var yPos = BL.Viewport.y = 1024;
+    self.world = newWorld(BL.Viewport.x, BL.Viewport.y);
 
-    self.world = newWorld(xPos, yPos);
+    self.world.on('place', function(entity) {
+        if (entity instanceof Player) {
+            self.player = entity;
+        }
+    });
+
     self.world.on("place", initEntity);
-    self.world.start()
-    self.world.stop()
+    self.world.start();
+	self.world.stop()
 };
 
 self.init();

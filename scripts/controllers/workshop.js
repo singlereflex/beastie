@@ -75,6 +75,7 @@ angular.module("workshop", [])
             'egg',
             'block',
             'floor',
+            'player',
             // 'Switch'
         ];
 
@@ -87,7 +88,6 @@ angular.module("workshop", [])
             console.log("hello world")
             var board = level.export();
             var data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(board));
-            console.log(data)
             return "data:'" + data + "'";
         }
 
@@ -97,7 +97,6 @@ angular.module("workshop", [])
         })
 
         new_level.on('click', function(event) {
-
             new_level.place($scope.activeType, event.data.global.x, event.data.global.y);
         });
 
