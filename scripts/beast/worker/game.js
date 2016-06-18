@@ -30,7 +30,7 @@ var noise = new Noise(Math.random());
  * Attach events to new entities
  * @param entity
  */
-function initEntities(entity) {
+function initEntity(entity) {
 
     /**
      * Entity Functions
@@ -270,6 +270,15 @@ self.addEventListener("message", function (e) {
                 console.debug(new_piece);
                 world.entities.place(new_piece);
                 break;
+            case "start":
+                self.world.start();
+                break;
+            case "stop":
+                self.world.stop();
+                break;
+            case "pause":
+                self.world.pause();
+                break;
         }
     }
 });
@@ -279,12 +288,9 @@ self.init = function() {
     var yPos = BL.Viewport.y = 1024;
 
     self.world = newWorld(xPos, yPos);
-    // self.player = newPlayer(xPos, yPos, self.world);
-
-    self.world.on("place", initEntities);
-    // self.world.entities.place(self.player);
-    // self.world.explore(xPos - 8, yPos - 8, 16);
-    self.world.start();
+    self.world.on("place", initEntity);
+    self.world.start()
+    self.world.stop()
 };
 
 self.init();
