@@ -1,13 +1,13 @@
 "use strict";
 
-angular.module("beastieApp")
+angular.module("workshop", [])
     .config(['$compileProvider',
-    function( $compileProvider )
-    {
-        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|data):/);
-        // Angular before v1.2 uses $compileProvider.urlSanitizationWhitelist(...)
-    }])
-    .controller("WorkshopCtrl", ["$scope", "$log", "$state", "$rootScope", function($scope, $log, $state, $rootScope) {
+        function($compileProvider) {
+            $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|data):/);
+            // Angular before v1.2 uses $compileProvider.urlSanitizationWhitelist(...)
+        }
+    ])
+    .controller("WorkshopCtrl", ["$scope", function($scope) {
         //init:
         var new_level = new Game('entityboard', {}, true);
 
@@ -36,7 +36,7 @@ angular.module("beastieApp")
             return;
             //can only level a game for consideration if you've beaten it
             var TestGame = new Game(level);
-            for(var i = 0; i < solution.length; i++) {
+            for (var i = 0; i < solution.length; i++) {
                 //call whatever solution[i] says
             }
             if (Game.won) {
@@ -83,21 +83,21 @@ angular.module("beastieApp")
             $scope.activeType = type;
         }
 
-        var save = function (level) {
+        var save = function(level) {
             console.log("hello world")
             var board = level.export();
             var data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(board));
             console.log(data)
-            return "data:'"+data+"'";
+            return "data:'" + data + "'";
         }
 
-        new_level.on('place', function () {
+        new_level.on('place', function() {
             $scope.game_data = save(new_level)
             $scope.$digest()
         })
 
         new_level.on('click', function(event) {
-            console.debug($scope.activeType);
+
             new_level.place($scope.activeType, event.data.global.x, event.data.global.y);
         });
 
@@ -105,8 +105,53 @@ angular.module("beastieApp")
             new_level.export();
         }
 
-        $scope.load = function () {
+        $scope.load = function(level_json) {
+
             new_level = new Game('entityboard', {}, true);
-            new_level.import([{"type":"player","x":1024,"y":1024},{"type":"floor","x":1021,"y":1020},{"type":"floor","x":1024,"y":1021},{"type":"floor","x":1026,"y":1021}])
+            new_level.import(level_json)
         }
-    }]);
+    }])
+
+
+.directive('loader', function() {
+    return {
+        restrict: 'A',
+        scope: {
+            onLoad: '&'
+        },
+        link: function(scope, element, attrs) {
+            //get the real dom element
+            element = element[0];
+
+            function load_file(event) {
+                stopEvent(event);
+
+                var dt = event.dataTransfer;
+                var files = dt.files;
+
+                var count = files.length;
+
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var json = JSON.parse(e.target.result);
+
+                    scope.onLoad({level_json: json});
+                };
+
+
+                for (var i = 0; i < files.length; i++) {
+                    reader.readAsText(files[i]);
+                }
+            }
+
+            function stopEvent(event) {
+                event.stopPropagation();
+                event.preventDefault();
+            }
+            console.log(element)
+            element.addEventListener('dragenter', stopEvent)
+            element.addEventListener('dragover', stopEvent)
+            element.addEventListener('drop', load_file)
+        }
+    };
+});

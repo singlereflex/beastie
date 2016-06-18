@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module("beastieApp", ["ui.router"])
+angular.module("beastieApp", ["ui.router", "workshop"])
     .run(['$rootScope', function($rootScope) {
         if (!localStorage.highscores) localStorage.highscores = JSON.stringify([]);
         $rootScope.highscores = JSON.parse(localStorage.highscores);

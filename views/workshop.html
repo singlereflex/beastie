@@ -8,6 +8,6 @@
 </div>
 <a ng-href="{{game_data}}" download="level.json">Save</a>
 <a ng-click="load()">load</a>
-<div id="game-container">
+<div id="game-container" loader on-load="load(level_json)">
     <canvas class="entityboard" id="entityboard"></canvas>
 </div>
