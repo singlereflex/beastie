@@ -12,6 +12,7 @@ var Egg = function (x, y, world) {
     EventComponent(this);
     CollisionComponent(this, world);
     DeathComponent(this);
+    FallComponent(this, world);
     StateComponent(this, {
         "hatch": Monster,
         "mother": Mother
@@ -42,19 +43,19 @@ var Egg = function (x, y, world) {
             entity.die();
         } else if (entity.kind === "egg") {
             entity.worth = 0;
-            console.info("I ate an egg, I'm such a cannibal. And you get " + entity.worth);
+
             self.beastSpeed = self.beastSpeed > 45 ? self.beastSpeed - 1 : self.beastSpeed;
             self.timeOfDeath += 5;
             entity.die();
         } else if (entity.kind === "monster" && self.kind === "mother") {
             entity.worth = 0;
-            console.info("I ate an monster, I'm such a cannibal. And you get "+ entity.worth);
+
             self.beastSpeed = self.beastSpeed > 40 ? self.beastSpeed - 1 : self.beastSpeed;
             self.timeOfDeath += 10;
             entity.die();
         } else if (entity.kind === "mother" && self.kind === "mother") {
             entity.worth = 0;
-            console.info("I ate an mother, I'm such a cannibal. And you get "+ entity.worth);
+
             self.beastSpeed = self.beastSpeed > 30 ? self.beastSpeed - 1 : self.beastSpeed;
             self.timeOfDeath += 20;
             entity.die();
@@ -69,6 +70,7 @@ var Egg = function (x, y, world) {
     });
 
     this.tick = world.on("tick", function () {
+        self.transition("hatch");
         if(self._sleep) return;
         self.age++;
         if (self.age > Math.random() * (750 - 50) + 50) {

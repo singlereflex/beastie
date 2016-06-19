@@ -15,6 +15,7 @@ var Player = function (x, y, world) {
     // BL.ExploreComponent(this, world);
     MoveComponent(this);
     DeathComponent(this);
+    FallComponent(this, world);
 
     var self = this;
     this.position = {
@@ -37,12 +38,13 @@ var Player = function (x, y, world) {
     });
 
     this.on("collided", function collision(entity) {
+        //should handle this differently
         if (entity.kind === "monster" || entity.kind === "mother") {
             self.die();
         } else if(entity.kind === "egg"){
             entity.die();
-        } else {
-            console.info("hit a block");
+        } else if(entity instanceof Block){
+
         }
     });
 

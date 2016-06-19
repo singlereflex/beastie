@@ -1,6 +1,6 @@
 "use strict";
 //import configs
-console.debug("worker");
+
 
 self.importScripts("../config.js");
 self.importScripts("/bower_components/underscore/underscore.js");
@@ -119,7 +119,7 @@ function initEntity(entity) {
             * (BL.Viewport.height)
         );
         if (distance > radius) {
-            console.debug("going to sleep");
+
             entity.sleep();
         }
     });
@@ -159,18 +159,32 @@ function initEntity(entity) {
         });
     });
 
-    entity.on("transition", function () {
+    entity.on("transition", function (from, to) {
         self.postMessage({
             event: "transition",
-            entity: {
-                position: {
-                    x: entity.position.x,
-                    y: entity.position.y
+            // need like a tojson
+            from: {
+                entity: {
+                    position: {
+                        x: from.position.x,
+                        y: from.position.y
+                    },
+                    kind: from.kind
                 },
-                kind: entity.kind
+                _id: from._id,
+                icon: from.icon
             },
-            _id: entity._id,
-            icon: entity.icon
+            to: {
+                entity: {
+                    position: {
+                        x: to.position.x,
+                        y: to.position.y
+                    },
+                    kind: to.kind
+                },
+                _id: to._id,
+                icon: to.icon
+            }
         });
     });
 
@@ -268,7 +282,7 @@ self.addEventListener("message", function (e) {
                 self.close();
                 break;
             case "place":
-                console.debug("place event:", e);
+
                 var new_piece = new BL.actors[e.data.kind](e.data.x, e.data.y, world);
                 world.entities.place(new_piece);
                 break;
@@ -299,7 +313,7 @@ self.init = function() {
 
     self.world.on("place", initEntity);
     self.world.start();
-	self.world.stop()
+	// self.world.stop()
 };
 
 self.init();

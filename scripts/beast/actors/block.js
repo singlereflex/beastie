@@ -11,9 +11,11 @@ var Block = function (x, y, world) {
     EventComponent(this);
     CollisionComponent(this, world);
     MoveComponent(this);
+    FallComponent(this, world);
     StateComponent(this, {
         "drop": Floor
     });
+
 
     var self = this;
     this.position = {
@@ -24,7 +26,9 @@ var Block = function (x, y, world) {
 
     this.icon = "icon-environment-block";
 
+    //is this duplicated everywhere?
     this.on("completeMove", function (deltaX, deltaY, old) {
+
         world.entities[old.x + "," + old.y] = _.without(world.entities[old.x + "," + old.y], self);
         world.entities.place(self, true);
     });
@@ -47,6 +51,11 @@ var Block = function (x, y, world) {
             }
         }
     });
+
+    this.on("fall", function() {
+
+        self.transition("drop");
+    })
 
 };
 

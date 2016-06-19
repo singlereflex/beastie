@@ -146,7 +146,8 @@ var Game = function(board, level, edit) {
                 // delete world.entities[e.data._id];
                 break;
             case "transition":
-                world.entities[e.data._id].transition(e.data.entity, e.data.icon);
+                world.entities[e.data.from._id].die();
+                world.entities[e.data.to._id] = new BL.entities.Display(e.data.to.entity, renderer, e.data.to.icon);
                 break;
         }
 

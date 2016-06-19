@@ -25,9 +25,11 @@ BL.entities.Level = function () {
         if (entity._id === undefined) {
             entity._id = _.uniqueId("mob_");
         }
+
         if (!silent) {
             self.trigger("place", entity);
         }
+        entity.trigger("place");
     };
 
     this.findEntityByPosition = function (x, y) {

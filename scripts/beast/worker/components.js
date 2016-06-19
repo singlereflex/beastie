@@ -24,12 +24,29 @@ BL.ExploreComponent = function (entity, world) {
 BL.PushComponent = function (entity, world) {
     //subscribe to move event
     entity.on("startMove", function (deltaX, deltaY) {
-        var neighbor = world.findEntityByPosition(entity.position.x + deltaX, entity.position.y + deltaY)[0];
-        if (neighbor !== undefined && neighbor.kind === "block") {
-            neighbor.move(deltaX, deltaY);
+        var tile = world.findEntityByPosition(entity.position.x + deltaX, entity.position.y + deltaY);
+        for (var item in tile) {
+            if (tile.hasOwnProperty(item)) {
+                var neighbor = tile[item];
+                if (neighbor !== undefined && neighbor instanceof Block) {
+                    neighbor.move(deltaX, deltaY);
+                }
+            }
         }
+
     });
 };
+
+var FallComponent = function (entity, world) {
+    //subscribe to move event
+    entity.on("place", function () {
+        var tile = world.findEntityByPosition(entity.position.x, entity.position.y);
+
+        if (!(tile[0] instanceof Floor)) {
+            entity.trigger("fall");
+        }
+    });
+}
 
 /**
  * Pull Component - Attach the ability for this entity to pull blocks.
