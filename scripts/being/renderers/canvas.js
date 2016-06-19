@@ -10,7 +10,7 @@ CanvasRenderer.prototype.render = function(){
   this._context.clearRect(0, 0, this._canvas.width, this._canvas.height);
   var context = this._context;
   context.globalAlpha = 1;
-  // console.log(this._context);
+
   for(var key in this._world){
     var entity = this._world[key];
     var posX = (entity.position.x - (BL.Viewport.x - ((context.canvas.width / 2) / square))) * square;

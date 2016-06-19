@@ -32,7 +32,7 @@ var Mother = function (x, y, world) {
         if (self.age > self.timeOfDeath) {
             //you get less points if you let them die of old age
             self.worth = 1;
-            console.debug("died of old age so I'm worth "+ self.worth );
+
             self.die();
             return;
         }

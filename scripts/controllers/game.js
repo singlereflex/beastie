@@ -8,12 +8,12 @@ angular.module("beastieApp")
         $scope.score = game_o_beast.score;
         game_o_beast.ongameend = function() {
             var highscores = JSON.parse(localStorage.highscores);
-            console.log(highscores);
+
             highscores.push({
                 date: moment().valueOf(),
                 score: game_o_beast.score
             });
-            console.log(highscores)
+
             localStorage.highscores = JSON.stringify(highscores);
             $rootScope.highscores = JSON.parse(localStorage.highscores);
 
@@ -24,7 +24,7 @@ angular.module("beastieApp")
         };
 
         $scope.submitHighscore = function(name) {
-            console.log($rootScope.highscores);
+
             $state.go("highscore");
         };
 

@@ -14,7 +14,7 @@ angular.module("beastieApp")
             if (!$scope.$$phase) {
                 $scope.$apply();
             }
-            console.debug(e);
+
         }
 
         $scope.appCache = window.applicationCache;
@@ -96,7 +96,7 @@ angular.module("beastieApp")
         };
 
         $scope.keyPressed = function (e) {
-            console.log(e);
+
         };
 
         $scope.fullscreen = function () {

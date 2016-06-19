@@ -23,7 +23,7 @@ self.addEventListener("message", function (e) {
     if (e.data) {
         switch (e.data.event) {
             case "train":
-                console.log("numOfTrainings: "+e.data.trainings.length);
+
                 var status = trainer.train(e.data.trainings, {
                     errorThresh: 0.25,
                     log: false

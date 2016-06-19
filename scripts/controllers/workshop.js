@@ -85,7 +85,7 @@ angular.module("workshop", [])
         }
 
         var save = function(level) {
-            console.log("hello world")
+
             var board = level.export();
             var data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(board));
             return "data:'" + data + "'";
@@ -147,7 +147,7 @@ angular.module("workshop", [])
                 event.stopPropagation();
                 event.preventDefault();
             }
-            console.log(element)
+
             element.addEventListener('dragenter', stopEvent)
             element.addEventListener('dragover', stopEvent)
             element.addEventListener('drop', load_file)

@@ -34,10 +34,10 @@ var EventComponent = function (entity) {
         if(this._events === undefined){
             this._events = {};
         }
-        // console.log("removing", arguments);
-        // console.log(this._events[event_name].length);
+
+
         this._events[eventName][eventId] = null;
-        // console.log(this._events[event_name].length);
+
     };
 
     entity.removeAll = function(eventName){

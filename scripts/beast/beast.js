@@ -70,7 +70,7 @@ var Game = function(board, level, edit) {
 
     this.import = function(level) {
         for (var i = 0; i < level.length; i++) {
-            console.debug(level[i])
+
             this.place(
                 level[i].type,
                 level[i].x,
@@ -80,7 +80,7 @@ var Game = function(board, level, edit) {
     }
 
     this.export = function() {
-        console.debug(world);
+
         var result = [];
         for (var entity in world.entities) {
             result.push({
@@ -89,7 +89,7 @@ var Game = function(board, level, edit) {
                 y: world.entities[entity].position.y
             });
         }
-        console.debug(result);
+
         return result;
     }
 
@@ -98,7 +98,7 @@ var Game = function(board, level, edit) {
 
     //FIXME have to send message as well
     var handleMessage = function(e) {
-        console.debug(e);
+
         //move render queue
         switch (e.data.event) {
             case "remove":
@@ -106,12 +106,12 @@ var Game = function(board, level, edit) {
                 // delete world.entities[e.data._id];
                 break;
             case "place":
-                console.log('place');
+
                 //only add it if we don't already have it
                 if (!world.entities[e.data._id]) {
                     e.data.entity.id = e.data._id;
                     world.entities[e.data._id] = new BL.entities.Display(e.data.entity, renderer, e.data.icon);
-                    // console.log("position:", e.data.entity.position.x, e.data.entity.position.y);
+
                     if (e.data.entity.kind === "player") {
                         if (!self.player) {
                             self.player = new BL.entities.DummyPlayer(game);
@@ -124,7 +124,7 @@ var Game = function(board, level, edit) {
                 }
                 break;
             case "completeMove":
-                console.log(e.data.entity.kind);
+
                 //TODO: some of this can be moved to worker
                 world.entities[e.data._id]._position = {
                     x: e.data.entity.position.x,
@@ -176,15 +176,15 @@ var Game = function(board, level, edit) {
     }
     //@todo should move some of this over to the renderer objects so it's more flexible
     function render() {
-        // console.info("world", _.size(world));
+
         var currentLength = queue.length;
-        // console.info("queue", currentLength);
+
         for (var i = 0; i < currentLength; i++) {
             handleMessage(queue.shift());
         }
         // @todo this should be moved, the only point of it is animation
         for (var entity in world.entities) {
-            // console.debug(entity);
+
             world.entities[entity].draw();
         }
         renderer.render();

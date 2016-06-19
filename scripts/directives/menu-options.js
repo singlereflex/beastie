@@ -27,7 +27,7 @@ angular.module("beastieApp")
                 });
                 
                 document.onkeydown = function() {
-                    console.log(window.event.keyCode);
+
                     switch (window.event.keyCode) {
                     case 87:
                     case 38:
@@ -35,7 +35,7 @@ angular.module("beastieApp")
                         $scope.$apply(function(){
                             $scope.activeIndex = ($scope.activeIndex + $scope.length-1) % $scope.length;
                         });
-                        console.log($scope.activeIndex);
+
                         break;
                     case 83:
                     case 40:
@@ -43,7 +43,7 @@ angular.module("beastieApp")
                         $scope.$apply(function(){
                             $scope.activeIndex = ($scope.activeIndex + 1) % $scope.length;
                         });
-                        console.log($scope.activeIndex);
+
                         break;
                     case 13:
                         $scope.menuItems[$scope.activeIndex].firstChild.click();

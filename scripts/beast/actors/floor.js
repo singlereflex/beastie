@@ -6,7 +6,7 @@
  * @param {BL.World} world - BeastLand World
  * @constructor
  */
-console.log("Loaded floor")
+
 Floor = function (x, y, world) {
     EventComponent(this);
 

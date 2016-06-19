@@ -22,7 +22,7 @@ var PixiRenderer = function(board, editable){
 
       this._stage.hitArea = new PIXI.Rectangle(0, 0, this._renderer.width, this._renderer.height);
 
-      console.debug(this._stage.hitArea);
+
 
       this._stage.on('click', function(event) {
           //convert back to beastie coords here
@@ -42,7 +42,7 @@ var PixiRenderer = function(board, editable){
       });
   }
 
-  console.debug(this._stage);
+
 }
 
 PixiRenderer.prototype.render = function(){
@@ -60,11 +60,11 @@ PixiRenderer.prototype.resize = function(width, height){
 PixiRenderer.prototype.entity = function(entity) {
   var self = this;
   var square = 64;
-  // console.info(self._stage);
+
   // create a new Sprite that uses the image name that we just generated as its source
-  // console.debug(BL.Sprites[entity.icon]);
-  // console.debug("icon:", entity.icon);
-  // console.debug("icon src:", BL.Sprites[entity.icon].src);
+
+
+
   entity.dude = this._stage.addChild(PIXI.Sprite.fromImage(BL.Sprites[entity.icon].src));
 
 
@@ -100,7 +100,7 @@ PixiRenderer.prototype.entity = function(entity) {
   };
 
   entity.die = function () {
-    console.log(entity);
+
     self._stage.removeChild(entity.dude);
   };
 

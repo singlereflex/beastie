@@ -47,7 +47,7 @@ var Monster = function (x, y, world) {
                         self.probability = self.beastSpeed;
                         return;
                     } catch (e) {
-                        console.debug("trying something: " + e);
+
                     }
                 }
             }

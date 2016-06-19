@@ -109,7 +109,7 @@ angular.module("beastieApp")
                                         switch (other[0].kind) {
                                             case "player":
                                                 $scope.training.score += 30;
-                                                console.log($scope.training.name.join("") + " found a player, their score is now " + $scope.training.score);
+
                                                 other[0].dead = true;
                                                 break;
                                             case "block":
