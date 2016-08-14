@@ -304,6 +304,30 @@ self.addEventListener("message", function (e) {
     }
 });
 
+function is_game_over(wolrd) {
+    var red_switches = 0
+    var green_switches = 0
+
+    for (var loc in world.entities) {
+
+        // should separate this
+        if (loc !== 'place') {
+            if (world.entities.hasOwnProperty(loc)) {
+                var tile = world.entities[loc]
+                for (var i = 0; i < tile.length; i++) {
+                    if(tile[i].kind === "green-switch"){
+                        green_switches++;
+                    } else if (tile[i].kind === "red-switch"){
+                        red_switches++;
+                    }
+                }
+            }
+        }
+    }
+
+    return green_switches > 0 && red_switches == 0
+}
+
 self.init = function() {
     self.world = newWorld(BL.Viewport.x, BL.Viewport.y);
 
@@ -315,6 +339,20 @@ self.init = function() {
 
     self.world.on("place", initEntity);
     self.world.start();
+
+    // @TODO limit how much this runs
+    self.world.on(
+        "tick",
+        function () {
+            if (is_game_over(self.world)) {
+                self.postMessage({
+                    event: "victory"
+                })
+                self.close();
+            }
+        }
+    )
+
 	// self.world.stop()
 };
 

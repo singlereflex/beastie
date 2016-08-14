@@ -101,6 +101,9 @@ var Game = function(board, level, edit) {
 
         //move render queue
         switch (e.data.event) {
+            case "victory":
+                self.endGame();
+                break;
             case "remove":
                 world.entities[e.data._id].die();
                 // delete world.entities[e.data._id];
