@@ -114,8 +114,7 @@ var Game = function(board, level, edit) {
                     world.entities[e.data._id] = new BL.entities.Display(
                         e.data.entity,
                         renderer,
-                        e.data.icon,
-                        e.data.entity.kind === "floor" ? "background" : "middleground"
+                        e.data.icon
                     );
 
                     if (e.data.entity.kind === "player") {
@@ -157,8 +156,7 @@ var Game = function(board, level, edit) {
                 world.entities[e.data.to._id] = new BL.entities.Display(
                     e.data.to.entity,
                     renderer,
-                    e.data.to.icon,
-                    e.data.to.entity.kind === "floor" ? "background" : "middleground"
+                    e.data.to.icon
                 );
                 break;
         }

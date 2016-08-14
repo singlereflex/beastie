@@ -43,6 +43,8 @@ var Player = function (x, y, world) {
             self.die();
         } else if(entity.kind === "egg"){
             entity.die();
+        } else if (entity.kind === "red-switch") {
+            entity.transition("flip");
         } else if(entity instanceof Block){
 
         }

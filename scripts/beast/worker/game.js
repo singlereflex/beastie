@@ -18,6 +18,8 @@ self.importScripts("components.js");
 self.importScripts("../entities/level.js");
 self.importScripts("../actors/block.js");
 self.importScripts("../actors/floor.js");
+self.importScripts("../actors/green-switch.js");
+self.importScripts("../actors/red-switch.js");
 self.importScripts("../actors/egg.js");
 self.importScripts("../actors/monster.js");
 self.importScripts("../actors/mother.js");

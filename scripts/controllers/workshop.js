@@ -76,7 +76,8 @@ angular.module("workshop", [])
             'block',
             'floor',
             'player',
-            // 'Switch'
+            'red-switch',
+            'green-switch'
         ];
 
         $scope.activeType = $scope.types[0];

@@ -3,6 +3,15 @@
  * @param {Entity} player The entity to be displayed
  * @param {String} icon   A path to the image for the entity
  */
+
+// @TODO handle this through inheritance
+var layers = {
+    "floor": "background",
+    "red-switch": "background",
+    "green-switch": "background",
+    "player": "foreground"
+}
+
 BL.entities.Display = function (
     player,
     renderer,
@@ -28,7 +37,7 @@ BL.entities.Display = function (
         self.id = player.id;
         self.kind = player.kind;
         self.icon = icon;
-        self.dimension = (dimension ? dimension : "middleground")
+        self.dimension = (dimension ? dimension : (layers[self.kind]?layers[self.kind]:"middleground"))
         renderer.entity(self);
     };
 
