@@ -13,6 +13,16 @@ var PixiRenderer = function(board, editable){
   // create an new instance of a pixi stage
   this._stage = new PIXI.Container();
 
+  this._layers = {
+      "background":new PIXI.DisplayObjectContainer(),
+      "middleground":new PIXI.DisplayObjectContainer(),
+      "foreground":new PIXI.DisplayObjectContainer()
+  }
+
+  this._stage.addChild(this._layers['background'])
+  this._stage.addChild(this._layers['middleground'])
+  this._stage.addChild(this._layers['foreground'])
+
   var interactive = editable || false;
 
   if(interactive) {
@@ -64,8 +74,7 @@ PixiRenderer.prototype.entity = function(entity) {
   // create a new Sprite that uses the image name that we just generated as its source
 
 
-
-  entity.dude = this._stage.addChild(PIXI.Sprite.fromImage(BL.Sprites[entity.icon].src));
+  entity.dude = this._layers[entity.dimension].addChild(PIXI.Sprite.fromImage(BL.Sprites[entity.icon].src));
 
 
   //rendering position needs to be offset but current player position (or canvas viewport if you want to think about it that way);
@@ -101,7 +110,7 @@ PixiRenderer.prototype.entity = function(entity) {
 
   entity.die = function () {
 
-    self._stage.removeChild(entity.dude);
+    self._layers[entity.dimension].removeChild(entity.dude);
   };
 
   entity.transition = function(new_entity, new_icon){
@@ -120,9 +129,9 @@ PixiRenderer.prototype.entity = function(entity) {
 
     var dude = PIXI.Sprite.fromImage(BL.Sprites[entity.icon].src);
 
-    self._stage.removeChild(this.dude);
+    self._layers[entity.dimension].removeChild(this.dude);
 
-    this.dude = self._stage.addChild(dude);
+    this.dude = self._layers[entity.dimension].addChild(dude);
   }
 
 };

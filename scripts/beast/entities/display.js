@@ -3,7 +3,12 @@
  * @param {Entity} player The entity to be displayed
  * @param {String} icon   A path to the image for the entity
  */
-BL.entities.Display = function (player, renderer, icon) {
+BL.entities.Display = function (
+    player,
+    renderer,
+    icon,
+    dimension
+) {
     this._events = {};
 
     EventComponent(this);
@@ -23,6 +28,7 @@ BL.entities.Display = function (player, renderer, icon) {
         self.id = player.id;
         self.kind = player.kind;
         self.icon = icon;
+        self.dimension = (dimension ? dimension : "middleground")
         renderer.entity(self);
     };
 

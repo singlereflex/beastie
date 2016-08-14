@@ -43,17 +43,14 @@ var Block = function (x, y, world) {
                 var deltaX = entity.position.x - this.position.x;
                 var deltaY = entity.position.y - this.position.y;
                 var neighbor = this.world.findEntityByPosition(entity.position.x + deltaX, entity.position.y + deltaY)[0];
-                if (neighbor !== undefined/* && neighbor.kind === "block"*/) {
-                    entity.die();
-                } else {
-                    throw "couldn't kill monster";
+                if (neighbor !== undefined && neighbor.kind === "block") {
+                    entity.trigger('die');
                 }
             }
         }
     });
 
     this.on("fall", function() {
-
         self.transition("drop");
     })
 

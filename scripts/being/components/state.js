@@ -9,6 +9,7 @@ var StateComponent = function (entity, states){
     entity.transition = function(stateName){
         var new_state = new entity.states[stateName](entity.position.x, entity.position.y, entity.world);
 
+        new_state._id = entity._id
         // should go in a special function in the entity
         entity.world.entities[entity.position.x + "," + entity.position.y] = _.without(entity.world.entities[entity.position.x + "," + entity.position.y], entity);
 

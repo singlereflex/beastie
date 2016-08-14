@@ -110,7 +110,13 @@ var Game = function(board, level, edit) {
                 //only add it if we don't already have it
                 if (!world.entities[e.data._id]) {
                     e.data.entity.id = e.data._id;
-                    world.entities[e.data._id] = new BL.entities.Display(e.data.entity, renderer, e.data.icon);
+                    // @TODO should be done through inheritance type checking
+                    world.entities[e.data._id] = new BL.entities.Display(
+                        e.data.entity,
+                        renderer,
+                        e.data.icon,
+                        e.data.entity.kind === "floor" ? "background" : "middleground"
+                    );
 
                     if (e.data.entity.kind === "player") {
                         if (!self.player) {
@@ -121,6 +127,7 @@ var Game = function(board, level, edit) {
                         BL.Viewport.x = world.entities[e.data._id].position.x;
                         BL.Viewport.y = world.entities[e.data._id].position.y;
                     }
+
                 }
                 break;
             case "completeMove":
@@ -147,7 +154,12 @@ var Game = function(board, level, edit) {
                 break;
             case "transition":
                 world.entities[e.data.from._id].die();
-                world.entities[e.data.to._id] = new BL.entities.Display(e.data.to.entity, renderer, e.data.to.icon);
+                world.entities[e.data.to._id] = new BL.entities.Display(
+                    e.data.to.entity,
+                    renderer,
+                    e.data.to.icon,
+                    e.data.to.entity.kind === "floor" ? "background" : "middleground"
+                );
                 break;
         }
 
