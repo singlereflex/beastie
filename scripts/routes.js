@@ -52,13 +52,13 @@ angular.module("beastieApp")
                 url: "/:puzzle/:level?",
                 controller: "GameCtrl",
                 resolve: {
-                    puzzle: function($stateParams) {
+                    puzzle: function($http, $stateParams) {
                         //read file
-                        return [];
+                        return $http.get("/levels/"+$stateParams.puzzle+".json");
                     },
                     level: function(puzzle, $stateParams) {
                         var level_index = $stateParams.level || 0;
-                        return puzzle[level_index];
+                        return puzzle.data[level_index];
                     }
                 }
             })
