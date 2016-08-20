@@ -21,14 +21,46 @@ angular.module("beastieApp")
                 controller: "HighscoreCtrl"
             })
             .state("workshop", {
-                url: "/workshop",
+                url: "/workshop?level",
                 templateUrl: "views/workshop.html",
-                controller: "WorkshopCtrl"
+                controller: "WorkshopCtrl",
+                resolve: {
+                    level: function($stateParams) {
+                        console.debug("gets here");
+                        if ($stateParams.level) {
+                            return JSON.parse($stateParams.level);
+                        }
+                        return {}
+                    }
+                }
             })
             .state("game", {
                 url: "/game",
                 templateUrl: "views/game.html",
-                controller: "GameCtrl"
+                abstract: true
+            })
+            .state("game.level", {
+                url: "?level",
+                controller: "GameCtrl",
+                resolve: {
+                    level: function($stateParams) {
+                        return JSON.parse($stateParams.level);
+                    }
+                }
+            })
+            .state("game.puzzle", {
+                url: "/:puzzle/:level?",
+                controller: "GameCtrl",
+                resolve: {
+                    puzzle: function($stateParams) {
+                        //read file
+                        return [];
+                    },
+                    level: function(puzzle, $stateParams) {
+                        var level_index = $stateParams.level || 0;
+                        return puzzle[level_index];
+                    }
+                }
             })
             .state("game.paused", {
                 templateUrl: "views/game_paused.html"

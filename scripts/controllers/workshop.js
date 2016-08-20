@@ -7,10 +7,10 @@ angular.module("workshop", [])
             // Angular before v1.2 uses $compileProvider.urlSanitizationWhitelist(...)
         }
     ])
-    .controller("WorkshopCtrl", ["$scope", function($scope) {
+    .controller("WorkshopCtrl", ["$scope", "level", function($scope, level) {
         //init:
-        var new_level = new Game('entityboard', {}, true);
-
+        var new_level = new Game('entityboard', level, true);
+        $scope.level = new_level;
 
         // world.entities.place(new BL.Block(i, e, world));
         //
@@ -88,7 +88,7 @@ angular.module("workshop", [])
 
             var board = level.export();
             var data = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(board));
-            return "data:'" + data + "'";
+            return "data:'" + data;
         }
 
         new_level.on('place', function() {
@@ -108,6 +108,7 @@ angular.module("workshop", [])
 
             new_level = new Game('entityboard', {}, true);
             new_level.import(level_json)
+            $scope.level = new_level;
         }
     }])
 

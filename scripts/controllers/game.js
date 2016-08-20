@@ -2,9 +2,10 @@
 
 
 angular.module("beastieApp")
-    .controller("GameCtrl", ["$scope", "$log", "$state", "$rootScope", function($scope, $log, $state, $rootScope) {
-
-        var game_o_beast = new Game('entityboard');
+    .controller("GameCtrl", ["$scope", "$log", "$state", "$rootScope", "level", function($scope, $log, $state, $rootScope, level) {
+        console.debug("lets start the game");
+        console.debug(level);
+        var game_o_beast = new Game('entityboard', level, false);
         $scope.score = game_o_beast.score;
         game_o_beast.ongameend = function() {
             var highscores = JSON.parse(localStorage.highscores);
@@ -31,5 +32,5 @@ angular.module("beastieApp")
         $scope.restartGame = function() {
             location.reload();
         };
-
+        // how do we progress to the next level?
     }]);

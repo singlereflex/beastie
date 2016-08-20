@@ -26,10 +26,11 @@ var Game = function(board, level, edit) {
 
     //could set this in a seperate private function
     var renderer = new PixiRenderer(board, edit);
-
-    renderer.on('click', function(event) {
-        self.trigger('click', event);
-    });
+    if (edit) {
+        renderer.on('click', function(event) {
+            self.trigger('click', event);
+        });
+    }
 
     this.ongameend = function() {};
 
@@ -79,7 +80,7 @@ var Game = function(board, level, edit) {
         }
     }
 
-    this.export = function() {
+    this.export = function(as_string) {
 
         var result = [];
         for (var entity in world.entities) {
@@ -89,7 +90,9 @@ var Game = function(board, level, edit) {
                 y: world.entities[entity].position.y
             });
         }
-
+        if (as_string) {
+            return JSON.stringify(result);
+        }
         return result;
     }
 
@@ -215,7 +218,7 @@ var Game = function(board, level, edit) {
         self.player.dead = true;
         this.ongameend();
     };
-
+    this.import(level);
     render();
     resizeCanvas();
 }
