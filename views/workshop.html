@@ -1,0 +1,13 @@
+<div id="top-nav">
+    <nav>
+        <ul>
+            <li ng-click="submit()">{{activeType}}</li>
+            <li ng-repeat="type in types" ><button class="btn btn-link" ng-click="setType(type)">{{type}}</button></li>
+        </ul>
+    </nav>
+</div>
+<a ng-href="{{game_data}}" download="level.json">Save</a>
+<a ui-sref="game.level({level: level.export(true)})" target="_blank">play</a>
+<div id="game-container" loader on-load="load(level_json)">
+    <canvas class="entityboard" id="entityboard"></canvas>
+</div>
