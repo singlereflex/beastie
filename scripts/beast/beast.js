@@ -28,6 +28,11 @@ var Game = function(board, level, edit) {
     var renderer = new PixiRenderer(board, edit);
     if (edit) {
         renderer.on('click', function(event) {
+	    if (map[event.data.global.x]) {
+                event.entity = map[event.data.global.x][event.data.global.y]
+	    } else {
+		event.entity = undefined
+	    }
             self.trigger('click', event);
         });
     }
@@ -40,6 +45,14 @@ var Game = function(board, level, edit) {
         game.postMessage({
             event: 'place',
             kind: type,
+            x:x,
+            y:y
+        });
+    }
+
+    this.clear = function(x, y) {
+        game.postMessage({
+            event: 'clear',
             x:x,
             y:y
         });
@@ -109,7 +122,8 @@ var Game = function(board, level, edit) {
                 break;
             case "remove":
                 world.entities[e.data._id].die();
-                // delete world.entities[e.data._id];
+                delete world.entities[e.data._id];
+		map[e.data.entity.position.x][e.data.entity.position.y].pop()
                 break;
             case "place":
 
@@ -122,6 +136,15 @@ var Game = function(board, level, edit) {
                         renderer,
                         e.data.icon
                     );
+		    if (map[e.data.entity.position.x] === undefined) {
+                        map[e.data.entity.position.x] = {}
+		        map[e.data.entity.position.x][e.data.entity.position.y] = []
+		    }
+		    if (map[e.data.entity.position.x][e.data.entity.position.y] === undefined) {
+		        map[e.data.entity.position.x][e.data.entity.position.y] = []
+		    }
+		    map[e.data.entity.position.x][e.data.entity.position.y].push(e.data._id)
+		    console.debug(map)
 
                     if (e.data.entity.kind === "player") {
                         if (!self.player) {
@@ -170,11 +193,6 @@ var Game = function(board, level, edit) {
         self.trigger(e.data.event, e.data)
 
     };
-
-
-
-
-
 
     function resizeCanvas() {
         var width = window.innerWidth;

@@ -31,13 +31,11 @@ var EventComponent = function (entity) {
     };
 
     entity.remove = function (eventName, eventId) {
-        if(this._events === undefined){
-            this._events = {};
-        }
-
-
-        this._events[eventName][eventId] = null;
-
+	try {
+            this._events[eventName][eventId] = null;
+	} catch(err) {
+	    console.debug("tried to remove event: ", eventName, eventId)
+	}
     };
 
     entity.removeAll = function(eventName){

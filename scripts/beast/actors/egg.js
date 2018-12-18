@@ -70,8 +70,8 @@ var Egg = function (x, y, world) {
     });
 
     this.tick = world.on("tick", function () {
+	return
         self.transition("hatch");
-        if(self._sleep) return;
         self.age++;
         if (self.age > Math.random() * (750 - 50) + 50) {
             if (world.entities[self.position.x + "," + self.position.y].length === 1 && world.entities[self.position.x + "," + self.position.y][0] === self) {
