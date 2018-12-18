@@ -12,6 +12,9 @@ angular.module("workshop", [])
         var new_level = new Game('entityboard', level, true);
         $scope.level = new_level;
 
+	new_level.place('floor', 1025, 1025);
+	new_level.place('player', 1025, 1025);
+
         // world.entities.place(new BL.Block(i, e, world));
         //
         // world.entities.place(new BL.Egg(i, e, world));
@@ -72,10 +75,9 @@ angular.module("workshop", [])
         //..which they should
 
         $scope.types = [
+            'floor',
             'egg',
             'block',
-            'floor',
-            'player',
             'red-switch'
         ];
 
@@ -97,6 +99,8 @@ angular.module("workshop", [])
         })
 
         new_level.on('click', function(event) {
+            console.debug(event.entity)
+            console.debug(event.data.global.x, event.data.global.y)
             new_level.place($scope.activeType, event.data.global.x, event.data.global.y);
         });
 

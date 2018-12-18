@@ -16,13 +16,17 @@ BL.entities.Level = function () {
             self.entities[loc] = [];
         }
 
+        if (self.entities[loc].length > 1) {
+	    self.entities[loc][self.entities[loc].length-1].remove()
+	}
+
         //trial run
         var newTile = self.entities[loc].slice()
         newTile.push(entity)
 
         self.entities[loc].push(entity);
         if (entity._id === undefined) {
-            entity._id = _.uniqueId("mob_");
+            entity._id = entity.kind+":"+entity.position.x+","+entity.position.y
         }
 
         if (!silent) {

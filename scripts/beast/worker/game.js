@@ -3,8 +3,8 @@
 
 
 self.importScripts("../config.js");
-self.importScripts("/bower_components/underscore/underscore.js");
-self.importScripts("/bower_components/noisejs/index.js");
+self.importScripts("../../../bower_components/underscore/underscore.js");
+self.importScripts("../../../bower_components/noisejs/index.js");
 
 self.importScripts("../../being/components/event.js");
 self.importScripts("../../being/components/collision.js");
@@ -33,7 +33,23 @@ var noise = new Noise(Math.random());
  * @param entity
  */
 function initEntity(entity) {
+    entity.remove = function () {
+        self.postMessage({
+            event: "remove",
+            entity: {
+                position: {
+                    x: entity.position.x,
+                    y: entity.position.y
+                },
+                kind: entity.kind
+            },
+            _id: entity._id,
+            icon: entity.icon
+        });
+        entity.world.entities[entity.position.x + "," + entity.position.y] = _.without(entity.world.entities[entity.position.x + "," + entity.position.y], entity);
+    }
 
+    entity._sleep = true;
     /**
      * Entity Functions
      */
@@ -288,6 +304,12 @@ self.addEventListener("message", function (e) {
                 var new_piece = new BL.actors[e.data.kind](e.data.x, e.data.y, world);
                 world.entities.place(new_piece);
                 break;
+	    case "clear":
+		console.debug(world.entities[e.data.x+","+e.data.y])
+	        for (var entity; entity = world.entities[e.data.x+","+e.data.y].pop();) {
+		    entity.remove()
+		}
+		break;
             case "start":
                 self.world.start();
                 break;
