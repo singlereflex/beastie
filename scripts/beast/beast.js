@@ -118,7 +118,7 @@ var Game = function(board, level, edit) {
         //move render queue
         switch (e.data.event) {
             case "victory":
-                self.endGame();
+                self.endGame(true);
                 break;
             case "remove":
                 world.entities[e.data._id].die();
@@ -171,7 +171,7 @@ var Game = function(board, level, edit) {
                 if (e.data.entity.kind === "player") {
                     //let some things finish moving
                     setTimeout(function() {
-                        self.endGame();
+                        self.endGame(false);
                     }, 250);
                 } else {
                     this.score += e.data.worth;
@@ -231,10 +231,10 @@ var Game = function(board, level, edit) {
 
     window.addEventListener("resize", resizeCanvas, false);
 
-    this.endGame = function() {
+    this.endGame = function(victory) {
         window.cancelAnimationFrame(frameId);
         self.player.dead = true;
-        this.ongameend();
+        this.ongameend(victory);
     };
     this.import(level);
     render();

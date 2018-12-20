@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta content="IE=edge" http-equiv="X-UA-Compatible">
+        <title>Beast Land</title>
+        <meta content="" name="description">
+        <meta content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width" name="viewport">
+        <meta content="yes" name="mobile-web-app-capable">
+        <meta content="yes" name="apple-mobile-web-app-capable">
+        <link href="monster.png" rel="icon" sizes="192x192">
+        <link href="monster-128.png" rel="icon" sizes="128x128">
+        <link href="monster-128.png" rel="apple-touch-icon" sizes="128x128">
+        <link href="monster-128.png" rel="apple-touch-icon-precomposed" sizes="128x128">
+
+        <!-- build:css(.tmp) styles/main.css -->
+        <link href="styles/main.css" rel="stylesheet">
+        <!-- endbuild -->
+        <link href="bower_components/fontawesome/css/font-awesome.css" rel="stylesheet">
+
+        <!-- components:js -->
+        <script src="bower_components/json3/lib/json3.min.js"></script>
+        <script src="bower_components/jquery/jquery.js"></script>
+        <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
+        <script src="bower_components/es5-shim/es5-shim.js"></script>
+        <script src="bower_components/underscore/underscore.js"></script>
+        <script src="bower_components/noisejs/index.js"></script>
+        <script src="bower_components/moment/moment.js"></script>
+        <script src="bower_components/pixi/bin/pixi.js"></script>
+        <!-- end -->
+
+        <!-- being:js -->
+        <script src="scripts/being/components/collision.js"></script>
+        <script src="scripts/being/components/die.js"></script>
+        <script src="scripts/being/components/event.js"></script>
+        <script src="scripts/being/components/move.js"></script>
+        <script src="scripts/being/components/state.js"></script>
+        <script src="scripts/being/renderers/canvas.js"></script>
+        <script src="scripts/being/renderers/dom.js"></script>
+        <script src="scripts/being/renderers/pixi.js"></script>
+        <script src="scripts/being/components/controllers/keyboard.js"></script>
+        <script src="scripts/being/components/controllers/touch.js"></script>
+        <!-- end -->
+
+        <!-- config:js -->
+        <script src="scripts/beast/config.js"></script>
+        <!-- end -->
+
+        <!-- beast:js -->
+        <script src="scripts/beast/beast.js"></script>
+        <script src="scripts/beast/components.js"></script>
+        <script src="scripts/beast/render_config.js"></script>
+        <script src="scripts/beast/actors/block.js"></script>
+        <script src="scripts/beast/actors/egg.js"></script>
+        <script src="scripts/beast/actors/floor.js"></script>
+        <script src="scripts/beast/actors/green-switch.js"></script>
+        <script src="scripts/beast/actors/monster.js"></script>
+        <script src="scripts/beast/actors/mother.js"></script>
+        <script src="scripts/beast/actors/player.js"></script>
+        <script src="scripts/beast/actors/red-switch.js"></script>
+        <script src="scripts/beast/shared/components.js"></script>
+        <script src="scripts/beast/entities/display.js"></script>
+        <script src="scripts/beast/entities/dummy-player.js"></script>
+        <script src="scripts/beast/entities/level.js"></script>
+        <!-- end -->
+    </head>
+    <body>
+
+        <!--[if lt IE 7]> <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience. </p> <![endif]-->
+
+        <!--[if lt IE 9]> <script src="bower_components/es5-shim/es5-shim.js"></script> <script src="bower_components/json3/lib/json3.min.js"></script> <![endif]-->
+
+        <!-- Add your site or application content here -->
+        <div class="ui-container">
+			<div id="game-container" loader on-load="load(level_json)">
+				<canvas class="entityboard" id="entityboard"></canvas>
+			</div>
+		</div>
+
+        <script>
+
+		function play(level_json) {
+		    var level = new Game('entityboard', level_json, true);
+			return level
+		}
+
+
+		function next_level(story, level) {
+			let next_level = story[level]
+			return next_level
+		}
+
+		function goto_level(level) {
+			let nextURL = new URL(window.location.href);
+		    nextURL.hash = level
+		    location.replace(nextURL.href);
+			location.reload(true);
+		}
+		
+		function restart() {
+			location.reload(true);
+		}
+
+		function end_game_function(story, level_file) {
+			return function(victory) {
+				if (!victory) {
+					restart();
+					return;
+				}
+				goto_level(next_level(story, level_file))
+			}
+		}
+
+		let story = {
+			'level(1).json': 'level(2).json',
+		}
+
+		let parsedURL = new URL(window.location.href);
+
+		let level_file = parsedURL.hash.slice(1)
+
+		fetch(level_file)
+		  .then(function(response) {
+	 	    console.debug(response)
+		    return response.json();
+		  })
+		  .then(function(level_json) {
+		    console.debug(JSON.stringify(level_json));
+		    let game = play(level_json);
+			console.debug(game)
+			game.ongameend = end_game_function(story, level_file)
+		  });
+		</script>
+    </body>
+</html>
