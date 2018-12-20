@@ -215,71 +215,6 @@ var newWorld = function() {
     return world;
 };
 
-BL.actors.player = function(xPos, yPos, world){
-
-    this.__proto__ = new Player(xPos, yPos, world);
-
-    var player = this;
-
-    player.on("completeMove", function (deltaX, deltaY) {
-        BL.Viewport.x = player.position.x;
-        BL.Viewport.y = player.position.y;
-
-        var delta = deltaX + deltaY; //should come out to 1 or -1
-        var visible_entities, x, y, e;
-
-        //past row/column moved x
-        if (Math.abs(deltaX) > 0) {
-            //delete past y
-            for (y = -BL.Viewport.height; y < BL.Viewport.height; y++) {
-                visible_entities = player.world.findEntityByPosition(
-                    Math.ceil(BL.Viewport.x - (BL.Viewport.width + 1) * delta),
-                    Math.ceil(BL.Viewport.y + y));
-
-                for (e = 0; e < visible_entities.length; e++) {
-                    visible_entities[e].sleep();
-                }
-            }
-            //wake new y
-            for (y = -BL.Viewport.height; y < BL.Viewport.height; y++) {
-                visible_entities = player.world.findEntityByPosition(
-                    Math.ceil(BL.Viewport.x + (BL.Viewport.width + 1) * delta),
-                    Math.ceil(BL.Viewport.y + y));
-                for (e = 0; e < visible_entities.length; e++) {
-                    visible_entities[e].wake();
-
-                }
-            }
-        }
-        //moved y
-        else {
-            for (x = -BL.Viewport.width; x < BL.Viewport.width; x++) {
-                visible_entities = player.world.findEntityByPosition(
-                    Math.floor(BL.Viewport.x + x),
-                    Math.floor(BL.Viewport.y - (BL.Viewport.height + 1) * delta));
-                for (e = 0; e < visible_entities.length; e++) {
-                    visible_entities[e].sleep();
-                }
-            }
-            //wake new y
-            for (x = -BL.Viewport.width; x < BL.Viewport.width; x++) {
-                visible_entities = player.world.findEntityByPosition(
-                    Math.floor(BL.Viewport.x + x),
-                    Math.floor(BL.Viewport.y + (BL.Viewport.height + 1) * delta));
-                for (e = 0; e < visible_entities.length; e++) {
-                    visible_entities[e].wake();
-                }
-            }
-        }
-    });
-    player.on("die", function () {
-        self.close();
-    });
-    self.player = player;
-};
-
-BL.actors.player.prototype = Player
-
 self.addEventListener("message", function (e) {
     if (e.data) {
         switch (e.data.event) {
@@ -290,6 +225,7 @@ self.addEventListener("message", function (e) {
                 self.player.move(e.data.deltaX, e.data.deltaY);
                 break;
             case "pulling":
+		console.debug("setting pulling", e.data.isPulling)
                 self.player.pulling = e.data.isPulling;
                 break;
             case "viewport":
@@ -300,7 +236,6 @@ self.addEventListener("message", function (e) {
                 self.close();
                 break;
             case "place":
-
                 var new_piece = new BL.actors[e.data.kind](e.data.x, e.data.y, world);
                 world.entities.place(new_piece);
                 break;

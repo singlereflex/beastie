@@ -54,11 +54,24 @@ var FallComponent = function (entity, world) {
  * @constructor
  */
 BL.PullComponent = function (entity, world) {
+    console.debug("adding the ability to pull to", entity)
     //subscribe to move event
     entity.on("completeMove", function (deltaX, deltaY) {
-        var neighbor = world.findEntityByPosition(entity.position.x - (deltaX * 2), entity.position.y - (deltaY * 2));
-        if (entity.pulling && neighbor[0] !== undefined) {
-            neighbor[0].move(deltaX, deltaY);
-        }
+	console.debug("checking to see if", entity, "should pull", deltaX, deltaY)
+	if (entity.pulling) {
+            var neighbors = world.findEntityByPosition(entity.position.x - (deltaX * 2), entity.position.y - (deltaY * 2));
+	    console.debug(entity, "is looking for neighbors to pull", neighbors)
+	    for (let neighbor of neighbors) {
+	        try {
+		    if (neighbor._id != entity._id && neighbor.move) {
+			console.debug("PULLING")
+	            	console.debug(entity, "is pulling", neighbor)
+			neighbor.move(deltaX, deltaY);
+		    }
+		} catch {
+		    console.error(entity, "failed to pull", neighbor)
+		}
+	    }
+	}
     });
 };

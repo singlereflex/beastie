@@ -23,10 +23,12 @@ BL.Center = function (el) {
  * @param {entity} entity The game entity.
  */
 BL.PullControllerComponent = function (entity) {
+    console.debug("pull ability is being added to", entity)
     //move all this to the controller components
     entity.pulling(false);
     document.body.addEventListener("keydown", function keydown(event) {
         if (event.which === 16 && !entity.dead) {
+            console.debug(entity, "is pulling")
             event.preventDefault();
             entity.pulling(true);
         }

@@ -25,8 +25,10 @@ BL.entities.Level = function () {
         newTile.push(entity)
 
         self.entities[loc].push(entity);
+	console.debug("placing", entity.kind)
         if (entity._id === undefined) {
             entity._id = entity.kind+":"+entity.position.x+","+entity.position.y
+            console.debug("setting", entity.kind, "id to", entity._id)
         }
 
         if (!silent) {

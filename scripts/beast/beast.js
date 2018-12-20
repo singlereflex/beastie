@@ -114,7 +114,7 @@ var Game = function(board, level, edit) {
 
     //FIXME have to send message as well
     var handleMessage = function(e) {
-
+	console.debug("event from worker", e.data)
         //move render queue
         switch (e.data.event) {
             case "victory":
@@ -160,11 +160,15 @@ var Game = function(board, level, edit) {
                 break;
             case "completeMove":
 
-                //TODO: some of this can be moved to worker
-                world.entities[e.data._id]._position = {
-                    x: e.data.entity.position.x,
-                    y: e.data.entity.position.y
-                };
+		try {
+		    //TODO: some of this can be moved to worker
+                    world.entities[e.data._id]._position = {
+		        x: e.data.entity.position.x,
+			y: e.data.entity.position.y
+	            };
+		} catch {
+		    console.error("could not complete move", e.data)
+		}
 
                 break;
             case "die":
