@@ -275,7 +275,7 @@ function is_game_over(wolrd) {
         if (loc !== 'place') {
             if (world.entities.hasOwnProperty(loc)) {
                 var tile = world.entities[loc]
-                for (var i = 0; i < tile.length; i++) {
+                for (var i in tile) {
                     if(tile[i].kind === "green-switch"){
                         green_switches++;
                     } else if (tile[i].kind === "red-switch"){
@@ -299,13 +299,13 @@ self.init = function() {
     });
 
     self.world.on("place", initEntity);
-    self.world.start();
 
     // @TODO limit how much this runs
     self.world.on(
         "tick",
         function () {
             if (is_game_over(self.world)) {
+		console.debug("victory")
                 self.postMessage({
                     event: "victory"
                 })
@@ -314,7 +314,6 @@ self.init = function() {
         }
     )
 
-	// self.world.stop()
 };
 
 self.init();

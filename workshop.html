@@ -103,10 +103,26 @@
 				}
 			}
 
-			var new_level = new Game('entityboard', {}, true);
+			var new_level = new Game('entityboard', {}, true, "workshop");
 
-			new_level.place('floor', 1025, 1025);
-			new_level.place('player', 1025, 1025);
+		    let parsedURL = new URL(window.location.href);
+
+			let level_file = parsedURL.hash.slice(1)
+
+			if (level_file) {
+		      fetch(level_file)
+		        .then(function(response) {
+	 	          console.debug(response)
+		          return response.json();
+		        })
+		        .then(function(level_json) {
+		          console.debug(JSON.stringify(level_json));
+				  new_level.import(level_json)
+		        });
+			} else {
+			  new_level.place('floor', 1025, 1025);
+			  new_level.place('player', 1025, 1025);
+			}
 
 			new_level.on('click', function(event) {
 				cycle_piece(event.entity, event.data.global.x, event.data.global.y)

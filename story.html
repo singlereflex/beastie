@@ -105,12 +105,17 @@
 		}
 
 		let story = {
-			'level(1).json': 'level(2).json',
+			'levels/in_the_beginning.json': 'levels/we_found_a_block.json',
+			'levels/we_found_a_block.json': 'levels/fin.json',
+			'levels/fin.json': 'levels/in_the_beginning.json',
 		}
 
 		let parsedURL = new URL(window.location.href);
 
 		let level_file = parsedURL.hash.slice(1)
+        if (!level_file) {
+			level_file = 'levels/in_the_beginning.json'
+		}
 
 		fetch(level_file)
 		  .then(function(response) {
@@ -122,6 +127,7 @@
 		    let game = play(level_json);
 			console.debug(game)
 			game.ongameend = end_game_function(story, level_file)
+			game.start()
 		  });
 		</script>
     </body>
