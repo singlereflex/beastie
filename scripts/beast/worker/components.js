@@ -6,11 +6,13 @@
  * @constructor
  */
 BL.ExploreComponent = function (entity, world) {
-    entity.on("completeMove", function () {
+   function explore () {
         if (world[entity.position.x + "/" + entity.position.y] === undefined) {
             world.explore(entity.position.x - 8, entity.position.y - 8, 16);
         }
-    });
+    }
+    entity.on("completeMove", explore);
+    entity.on("place", explore);
 };
 
 
@@ -21,31 +23,35 @@ BL.ExploreComponent = function (entity, world) {
  * @param {BL.World} world
  * @constructor
  */
-BL.PushComponent = function (entity, world) {
-    //subscribe to move event
-    entity.on("startMove", function (deltaX, deltaY) {
-        var tile = world.findEntityByPosition(entity.position.x + deltaX, entity.position.y + deltaY);
-        for (var item in tile) {
-            if (tile.hasOwnProperty(item)) {
-                var neighbor = tile[item];
-                if (neighbor !== undefined && neighbor instanceof Block) {
-                    neighbor.move(deltaX, deltaY);
-                }
-            }
-        }
+//BL.PushComponent = function (entity, world) {
+//    //subscribe to move event
+//    entity.on("startMove", function (deltaX, deltaY) {
+//        var tile = world.findEntityByPosition(entity.position.x + deltaX, entity.position.y + deltaY);
+//        for (var item in tile) {
+//            if (tile.hasOwnProperty(item)) {
+//                var neighbor = tile[item];
+//                if (neighbor !== undefined && neighbor instanceof Block) {
+//                    neighbor.move(deltaX, deltaY);
+//                }
+//            }
+//        }
 
-    });
-};
+//    });
+//};
 
 var FallComponent = function (entity, world) {
     //subscribe to move event
-    entity.on("place", function () {
-        var tile = world.findEntityByPosition(entity.position.x, entity.position.y);
-
-        if (!(tile[0] instanceof Floor)) {
-            entity.trigger("fall");
-        }
-    });
+    function fall () {
+        var tile = world.findEntityByPosition(this.position.x, this.position.y);
+	for (var occupant in tile) {
+	    if (tile[occupant].kind == "floor") {
+		return;
+	    }
+	}
+        this.trigger("fall");
+    }
+    entity.on("place", fall)
+    entity.on("completeMove", fall)
 }
 
 /**
@@ -61,7 +67,8 @@ BL.PullComponent = function (entity, world) {
 	if (entity.pulling) {
             var neighbors = world.findEntityByPosition(entity.position.x - (deltaX * 2), entity.position.y - (deltaY * 2));
 	    console.debug(entity, "is looking for neighbors to pull", neighbors)
-	    for (let neighbor of neighbors) {
+	    for (let n in neighbors) {
+		let neighbor = neighbors[n]
 	        try {
 		    if (neighbor._id != entity._id && neighbor.move) {
 			console.debug("PULLING")

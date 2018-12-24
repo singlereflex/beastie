@@ -8,8 +8,15 @@
  */
 var Monster = function (x, y, world) {
 
+    EventComponent(this);
+    CollisionComponent(this, world);
     MoveComponent(this);
-    // BL.ExploreComponent(this, world);
+    //BL.ExploreComponent(this, world);
+    DeathComponent(this);
+    FallComponent(this, world);
+    //StateComponent(this, {
+    //    "mother": Mother
+    //});
 
     this.moves = [
         [0, 1],
@@ -23,8 +30,15 @@ var Monster = function (x, y, world) {
     this.kind = "monster";
     this.icon = "icon-entities-monster";
 
-    this.hunt = function () {
+    this.age = 0;
+    this.world = world;
+    this.position = {
+        x: x,
+        y: y
+    };
 
+    this.hunt = function () {
+	console.debug("hunting")
         if (self.probability === undefined) {
             self.probability = self.beastSpeed;
         }
@@ -38,34 +52,36 @@ var Monster = function (x, y, world) {
             var delta = (Math.floor(Math.random() * 4));
             for (var i = 0; i < self.moves.length; i++) {
                 var move = self.moves[(delta + i) % 4];
-                if (world.findEntityByPosition(self.position.x + move[0], self.position.y + move[1]) === undefined ||
-                    world.findEntityByPosition(self.position.x + move[0], self.position.y + move[1]).length === 0 ||
-                    (world.findEntityByPosition(self.position.x + move[0], self.position.y + move[1])[0].kind !== "block" ||
-                    self.kind === "mother")) {
-                    try {
-                        self.move(move[0], move[1]);
-                        self.probability = self.beastSpeed;
-                        return;
-                    } catch (e) {
-
-                    }
-                }
+	        try {
+		    self.move(move[0], move[1]);
+		    self.probability = self.beastSpeed;
+		    return;
+	        } catch (e) {
+		    console.error(e)
+	        }
             }
         }
         self.probability--;
     };
 
-    world.removeAll(this.tick);
-
-    this.tick = world.on("tick", function () {
-      if(self._sleep) return;
-        self.age++;
-        if (self.age > Math.random() * (1500 - 750) + 750) {
-            self.transition("mother");
-            return true;
+    this.on("collided", function (entity) {
+        if (entity) {
+            if (entity.kind === "block") {
+                self.trigger('die');
+		return;
+            }
         }
-        self.hunt();
+        throw "hit a monster"
     });
+
+    this.tick =  function () {
+        self.age++;
+        //if (self.age > Math.random() * (1500 - 750) + 750) {
+        //    self.transition("mother");
+        //    return true;
+        //}
+        self.hunt();
+    }
 };
 
 /**

@@ -9,9 +9,7 @@
 var Player = function (x, y, world) {
 
     EventComponent(this);
-    BL.PushComponent(this, world);
     CollisionComponent(this, world);
-    // BL.ExploreComponent(this, world);
     MoveComponent(this);
     DeathComponent(this);
     FallComponent(this, world);
@@ -37,7 +35,7 @@ var Player = function (x, y, world) {
         world.entities[self.position.x + "," + self.position.y] = _.without(world.entities[self.position.x + "," + self.position.y], self);
         self.dead = true;
     });
-
+/*
     this.on("collided", function collision(entity) {
         //should handle this differently
         if (entity.kind === "monster" || entity.kind === "mother") {
@@ -50,7 +48,7 @@ var Player = function (x, y, world) {
 
         }
     });
-
+*/
     var player = this;
 
     player.on("completeMove", function (deltaX, deltaY) {
@@ -104,10 +102,6 @@ var Player = function (x, y, world) {
             }
         }
     });
-    player.on("die", function () {
-        self.close();
-    });
-
 };
 
 /**

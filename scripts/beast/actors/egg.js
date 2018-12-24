@@ -15,7 +15,6 @@ var Egg = function (x, y, world) {
     FallComponent(this, world);
     StateComponent(this, {
         "hatch": Monster,
-        "mother": Mother
     });
 
     var self = this;
@@ -40,45 +39,18 @@ var Egg = function (x, y, world) {
 
     this.on("collided", function (entity) {
         if (entity.kind === "player") {
-            entity.die();
-        } else if (entity.kind === "egg") {
-            entity.worth = 0;
-
-            self.beastSpeed = self.beastSpeed > 45 ? self.beastSpeed - 1 : self.beastSpeed;
-            self.timeOfDeath += 5;
-            entity.die();
-        } else if (entity.kind === "monster" && self.kind === "mother") {
-            entity.worth = 0;
-
-            self.beastSpeed = self.beastSpeed > 40 ? self.beastSpeed - 1 : self.beastSpeed;
-            self.timeOfDeath += 10;
-            entity.die();
-        } else if (entity.kind === "mother" && self.kind === "mother") {
-            entity.worth = 0;
-
-            self.beastSpeed = self.beastSpeed > 30 ? self.beastSpeed - 1 : self.beastSpeed;
-            self.timeOfDeath += 20;
-            entity.die();
-        } else {
-            throw "hit a block";
-        }
+            self.die();
+            return;
+        } 
+	throw "hit an egg"
     });
 
-    this.on("completeMove", function (deltaX, deltaY, old) {
-        world.entities[old.x + "," + old.y] = _.without(world.entities[old.x + "," + old.y], self);
-        world.entities.place(self, true);
-    });
-
-    this.tick = world.on("tick", function () {
-	return
-        self.transition("hatch");
+    this.tick = function () {
         self.age++;
         if (self.age > Math.random() * (750 - 50) + 50) {
-            if (world.entities[self.position.x + "," + self.position.y].length === 1 && world.entities[self.position.x + "," + self.position.y][0] === self) {
-                self.transition("hatch");
-            }
+	    self.transition("hatch");
         }
-    });
+    }
 };
 
 /**

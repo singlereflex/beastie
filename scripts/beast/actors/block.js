@@ -26,28 +26,12 @@ var Block = function (x, y, world) {
 
     this.icon = "icon-environment-block";
 
-    //is this duplicated everywhere?
-    this.on("completeMove", function (deltaX, deltaY, old) {
-
-        world.entities[old.x + "," + old.y] = _.without(world.entities[old.x + "," + old.y], self);
-        world.entities.place(self, true);
-    });
-
-    this.on("collided", function (entity) {
-        if (entity) {
-            if (entity.kind === "block") {
-                throw "hit a block";
-            }
-            if (entity.kind !== "block") {
-                //check if we"re squishing something :)
-                var deltaX = entity.position.x - this.position.x;
-                var deltaY = entity.position.y - this.position.y;
-                var neighbor = this.world.findEntityByPosition(entity.position.x + deltaX, entity.position.y + deltaY)[0];
-                if (neighbor !== undefined && neighbor.kind === "block") {
-                    entity.trigger('die');
-                }
-            }
-        }
+    this.on("collided", function (entity, deltaX, deltaY) {
+	if (entity.kind == 'player') {
+	    this.move(deltaX, deltaY)
+            return
+	}
+        throw "hit a block";
     });
 
     this.on("fall", function() {

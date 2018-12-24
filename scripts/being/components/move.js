@@ -14,6 +14,12 @@ var _move = function (deltaX, deltaY) {
 
     this.position.x += deltaX;
     this.position.y += deltaY;
+	
+    if (this.world.entities[this.position.x + "," + this.position.y] === undefined){
+	this.world.entities[this.position.x + "," + this.position.y] = {}
+    }
+    this.world.entities[this.position.x + "," + this.position.y][this._id] = this;
+    delete this.world.entities[oldPosition.x + "," + oldPosition.y][this._id];
 
     this.trigger("completeMove", deltaX, deltaY, oldPosition);
 };

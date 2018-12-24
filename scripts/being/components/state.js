@@ -11,7 +11,8 @@ var StateComponent = function (entity, states){
 
         new_state._id = entity._id
         // should go in a special function in the entity
-        entity.world.entities[entity.position.x + "," + entity.position.y] = _.without(entity.world.entities[entity.position.x + "," + entity.position.y], entity);
+	position = entity.position.x + "," + entity.position.y
+        delete entity.world.entities[position][entity._id]
 
         entity.world.entities.place(new_state, true)
 

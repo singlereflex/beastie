@@ -3,7 +3,7 @@
  * @param {String} board For the moment the id of the canvas (or other dom element) used to render the game
  * @param {JSON} level The json description of the level to be played
  */
-var Game = function(board, level, edit) {
+var Game = function(board, level, edit, mode="game") {
     var self = this;
 
     EventComponent(this);
@@ -18,7 +18,7 @@ var Game = function(board, level, edit) {
     //could move this to a custom type later
     var renderQueue = [];
 
-    var game = new Worker("scripts/beast/worker/game.js");
+    var game = new Worker(`scripts/beast/worker/${mode}.js`);
 
     // var player = new BL.entities.DummyPlayer(game);
 

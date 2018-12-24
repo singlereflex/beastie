@@ -7,10 +7,8 @@ var CollisionComponent = function (entity, world) {
     entity.on("startMove", function (deltaX, deltaY) {
         var collided = world.findEntityByPosition(entity.position.x + deltaX, entity.position.y + deltaY);
 
-        if (collided.length > 0) {
-            for(var i = 0; i < collided.length; i++){
-                entity.trigger("collided", collided[i]);
-            }
-        }
+    	for(i in collided){
+	    collided[i].trigger("collided", entity, deltaX, deltaY);
+    	}
     });
 };

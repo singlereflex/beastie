@@ -26,6 +26,7 @@ self.importScripts("../actors/mother.js");
 self.importScripts("../actors/player.js");
 
 
+
 var noise = new Noise(Math.random());
 
 /**
@@ -214,7 +215,6 @@ function initEntity(entity) {
 
 var newWorld = function() {
     var world = new BL.entities.Level();
-
     return world;
 };
 
@@ -266,27 +266,7 @@ self.addEventListener("message", function (e) {
 });
 
 function is_game_over(wolrd) {
-    var red_switches = 0
-    var green_switches = 0
-
-    for (var loc in world.entities) {
-
-        // should separate this
-        if (loc !== 'place') {
-            if (world.entities.hasOwnProperty(loc)) {
-                var tile = world.entities[loc]
-                for (var i = 0; i < tile.length; i++) {
-                    if(tile[i].kind === "green-switch"){
-                        green_switches++;
-                    } else if (tile[i].kind === "red-switch"){
-                        red_switches++;
-                    }
-                }
-            }
-        }
-    }
-
-    return green_switches > 0 && red_switches == 0
+    return false
 }
 
 self.init = function() {
@@ -294,6 +274,7 @@ self.init = function() {
 
     self.world.on('place', function(entity) {
         if (entity instanceof Player) {
+    	    BL.ExploreComponent(entity, world)
             self.player = entity;
         }
     });
@@ -313,6 +294,30 @@ self.init = function() {
             }
         }
     )
+    self.world.explore = function (x, y, size) {
+	console.debug(this)
+        var noise = new Noise(Math.random());
+
+     	for (var i = x; i < x + size; i++) {
+            for (var e = y; e < y + size; e++) {
+	        if (this.entities[i + "," + e] === undefined) {
+		    let new_piece = new BL.actors['floor'](i, e, this);
+		    this.entities.place(new_piece);
+		    if (noise.simplex2(i, e / 10) > 0.5 || noise.simplex2(i / 10, e) > 0.5) {
+			let new_piece = new BL.actors['block'](i, e, this);
+			this.entities.place(new_piece);
+			// world.entities.place(new BL.actors.Block(i, e, world));
+		     } else if (noise.simplex2(i / 8, e / 8) > 0.5) {
+			let new_piece = new BL.actors['egg'](i, e, this);
+			this.entities.place(new_piece);
+			// world.entities.place(new BL.actors.Egg(i, e, world));
+		     } else {
+		     // world.entities[i + "," + e] = [];
+		     }
+	        }
+	    }
+        }
+ };
 
 	// self.world.stop()
 };
