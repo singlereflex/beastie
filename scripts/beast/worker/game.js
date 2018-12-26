@@ -1,10 +1,11 @@
 "use strict";
 //import configs
 
+var window = {};
 
 self.importScripts("../config.js");
-self.importScripts("../../../bower_components/underscore/underscore.js");
-self.importScripts("../../../bower_components/noisejs/index.js");
+self.importScripts("https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js");
+self.importScripts("https://cdnjs.cloudflare.com/ajax/libs/simplex-noise/2.4.0/simplex-noise.min.js");
 
 self.importScripts("../../being/components/event.js");
 self.importScripts("../../being/components/collision.js");
@@ -25,8 +26,7 @@ self.importScripts("../actors/monster.js");
 self.importScripts("../actors/mother.js");
 self.importScripts("../actors/player.js");
 
-
-var noise = new Noise(Math.random());
+var noise = new window.SimplexNoise();
 
 /**
  * Attach events to new entities

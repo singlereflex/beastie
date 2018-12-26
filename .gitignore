@@ -2,7 +2,7 @@ node_modules
 dist
 .tmp
 .sass-cache
-bower_components
+.vscode
 styles/beastie-*.*
 beast_land
 app/lib

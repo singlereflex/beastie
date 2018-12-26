@@ -63,18 +63,10 @@ gulp.task("connect", function () {
 });
 
 var inject = require('gulp-inject');
-var bowerFiles = require('main-bower-files');
 var rename = require("gulp-rename");
 gulp.task("build", function() {
 
     gulp.src('./_index.html')
-      .pipe(inject(gulp.src(bowerFiles({
-            paths: {
-                bowerDirectory: './bower_components',
-                bowerrc: './.bowerrc',
-                bowerJson: './bower.json'
-            }
-        }), {read: false}), {name: 'components'}))
       .pipe(inject(gulp.src('./scripts/being/**/*.js', {read: false}), {name: 'being'}))
       .pipe(inject(gulp.src('./scripts/beast/config.js', {read: false}), {name: 'config'}))
       .pipe(inject(gulp.src(['./scripts/beast/**/*.js', '!./scripts/beast/config.js', '!./scripts/beast/worker/**/*'], {read: false}), {name: 'beast'}))
@@ -93,7 +85,7 @@ gulp.task("server", ["connect"], function () {
 gulp.task("watch", ["connect", "server"], function () {
     var server = livereload();
 
-    gulp.watch([dest, "!" + dest + "/bower_components/**", "!" + dest + "/node_modules/**"]).on("change", function (file) {
+    gulp.watch([dest, "!" + dest + "/node_modules/**"]).on("change", function (file) {
         server.changed(file.path);
     });
     // gulp.watch(dest + "/styles/*.scss", ["sass"]);

@@ -14,7 +14,6 @@
     "gulp-rename": "^1.2.2",
     "gulp-sass": "*",
     "lodash": "^3.0.0",
-    "main-bower-files": "^2.11.0",
     "node-sass": "*",
     "opn": "^0.1.2",
     "serve-index": "^1.1.5",
@@ -26,5 +25,8 @@
   },
   "scripts": {
     "test": "echo 'no tests yet'"
+  },
+  "dependencies": {
+    "bootstrap-sass": "^3.4.0"
   }
 }

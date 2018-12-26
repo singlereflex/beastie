@@ -1,9 +1,9 @@
 $iconSpritePath: "../images/glyphicons-halflings.png";
 $iconWhiteSpritePath: "../images/glyphicons-halflings-white.png";
 
-@import "../bower_components/bootstrap-sass/lib/bootstrap";
+@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 @import "silkscreen";
-@import "beastie";
+@import "icons";
 
 /* Put your CSS here */
 html, body {

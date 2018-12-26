@@ -1,11 +1,31 @@
 @font-face {
   font-family: "beastie";
-  src: url('../fonts/beastie/beastie.eot');
-  src: url('../fonts/beastie/beastie.eot?#iefix') format('eot'), url('../fonts/beastie/beastie.woff') format('woff'), url('../fonts/beastie/beastie.ttf') format('truetype'), url('../fonts/beastie/beastie.svg#beastie') format('svg');
+  src: url("../fonts/beastie/beastie.eot");
+  src: url("../fonts/beastie/beastie.eot?#iefix") format("eot"), url("../fonts/beastie/beastie.woff") format("woff"), url("../fonts/beastie/beastie.ttf") format("truetype"), url("../fonts/beastie/beastie.svg#beastie") format("svg");
   font-weight: normal;
   font-style: normal; }
 
-.icon-entities-egg:before, .icon-entities-monster:before, .icon-entities-mother:before, .icon-entities-player:before, .icon-environment-block:before, .icon-environment-empty:before, .icon-environment-wall-e:before, .icon-environment-wall-n:before, .icon-environment-wall-n-e:before, .icon-environment-wall-n-s:before, .icon-environment-wall-n-s-e:before, .icon-environment-wall-n-s-w:before, .icon-environment-wall-n-s-w-e:before, .icon-environment-wall-n-w:before, .icon-environment-wall-n-w-e:before, .icon-environment-wall-s:before, .icon-environment-wall-s-e:before, .icon-environment-wall-s-w:before, .icon-environment-wall-s-w-e:before, .icon-environment-wall-w:before, .icon-environment-wall-w-e:before {
+.icon-entities-egg:before,
+.icon-entities-monster:before,
+.icon-entities-mother:before,
+.icon-entities-player:before,
+.icon-environment-block:before,
+.icon-environment-empty:before,
+.icon-environment-wall-e:before,
+.icon-environment-wall-n:before,
+.icon-environment-wall-n-e:before,
+.icon-environment-wall-n-s:before,
+.icon-environment-wall-n-s-e:before,
+.icon-environment-wall-n-s-w:before,
+.icon-environment-wall-n-s-w-e:before,
+.icon-environment-wall-n-w:before,
+.icon-environment-wall-n-w-e:before,
+.icon-environment-wall-s:before,
+.icon-environment-wall-s-e:before,
+.icon-environment-wall-s-w:before,
+.icon-environment-wall-s-w-e:before,
+.icon-environment-wall-w:before,
+.icon-environment-wall-w-e:before {
   font-family: "beastie";
   font-style: normal;
   font-weight: normal;

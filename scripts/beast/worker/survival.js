@@ -1,10 +1,11 @@
 "use strict";
 //import configs
 
+var window = {};
 
 self.importScripts("../config.js");
-self.importScripts("../../../bower_components/underscore/underscore.js");
-self.importScripts("../../../bower_components/noisejs/index.js");
+self.importScripts("https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js");
+self.importScripts("https://cdnjs.cloudflare.com/ajax/libs/simplex-noise/2.4.0/simplex-noise.min.js");
 
 self.importScripts("../../being/components/event.js");
 self.importScripts("../../being/components/collision.js");
@@ -25,9 +26,7 @@ self.importScripts("../actors/monster.js");
 self.importScripts("../actors/mother.js");
 self.importScripts("../actors/player.js");
 
-
-
-var noise = new Noise(Math.random());
+var noise = new window.SimplexNoise();
 
 /**
  * Attach events to new entities
@@ -296,18 +295,18 @@ self.init = function() {
     )
     self.world.explore = function (x, y, size) {
 	console.debug(this)
-        var noise = new Noise(Math.random());
+        var noise = new window.SimplexNoise();
 
      	for (var i = x; i < x + size; i++) {
             for (var e = y; e < y + size; e++) {
 	        if (this.entities[i + "," + e] === undefined) {
 		    let new_piece = new BL.actors['floor'](i, e, this);
 		    this.entities.place(new_piece);
-		    if (noise.simplex2(i, e / 10) > 0.5 || noise.simplex2(i / 10, e) > 0.5) {
+		    if (noise.noise2D(i, e / 10) > 0.5 || noise.noise2D(i / 10, e) > 0.5) {
 			let new_piece = new BL.actors['block'](i, e, this);
 			this.entities.place(new_piece);
 			// world.entities.place(new BL.actors.Block(i, e, world));
-		     } else if (noise.simplex2(i / 8, e / 8) > 0.5) {
+		     } else if (noise.noise2D(i / 8, e / 8) > 0.5) {
 			let new_piece = new BL.actors['egg'](i, e, this);
 			this.entities.place(new_piece);
 			// world.entities.place(new BL.actors.Egg(i, e, world));

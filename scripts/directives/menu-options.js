@@ -26,9 +26,9 @@ angular.module("beastieApp")
                     });
                 });
                 
-                document.onkeydown = function() {
+                document.onkeydown = function(e) {
 
-                    switch (window.event.keyCode) {
+                    switch (e.keyCode) {
                     case 87:
                     case 38:
                         //alert("up");
