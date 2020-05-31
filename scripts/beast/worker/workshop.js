@@ -3,7 +3,7 @@
 
 
 self.importScripts("../config.js");
-self.importScripts("../../../bower_components/underscore/underscore.js");
+self.importScripts("https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js");
 
 self.importScripts("../../being/components/event.js");
 self.importScripts("../../being/components/collision.js");

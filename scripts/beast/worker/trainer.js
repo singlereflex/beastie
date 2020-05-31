@@ -1,6 +1,6 @@
 "use strict";
 
-self.importScripts("../../bower_components/brain/brain-0.6.3.min.js");
+self.importScripts("//unpkg.com/brain.js");
 
 var trainer = new brain.NeuralNetwork();
 
