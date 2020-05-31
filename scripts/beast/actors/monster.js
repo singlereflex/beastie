@@ -68,8 +68,12 @@ var Monster = function (x, y, world) {
         if (entity) {
             if (entity.kind === "block") {
                 self.trigger('die');
-		return;
+                return;
             }
+            if (entity.kind === "player") {
+                entity.die();
+                return;
+            } 
         }
         throw "hit a monster"
     });
