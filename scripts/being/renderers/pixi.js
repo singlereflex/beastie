@@ -1,4 +1,4 @@
-var PixiRenderer = function(board, editable){
+var PixiRenderer = function(board){
     var self = this;
 
   this._canvas = document.getElementById(board);
@@ -22,36 +22,6 @@ var PixiRenderer = function(board, editable){
   this._stage.addChild(this._layers['background'])
   this._stage.addChild(this._layers['middleground'])
   this._stage.addChild(this._layers['foreground'])
-
-  var interactive = editable || false;
-
-  if(interactive) {
-      EventComponent(this);
-
-      this._stage.interactive = true;
-
-      this._stage.hitArea = new PIXI.Rectangle(0, 0, this._renderer.width, this._renderer.height);
-
-
-
-      this._stage.on('click', function(event) {
-          //convert back to beastie coords here
-          var x = (event.data.global.x/BL.square) + (BL.Viewport.x - ((BL.Viewport.width/2) / BL.square));
-
-          var y = (event.data.global.y/BL.square) + (BL.Viewport.y - ((BL.Viewport.height/2) / BL.square));
-
-          event.data.global.x = Math.floor(x);
-
-          event.data.global.y = Math.floor(y);
-
-          self.trigger('click', event);
-      });
-
-      this._stage.on('mousedown', function(event) {
-          self.trigger('mousedown', event);
-      });
-  }
-
 
 }
 
@@ -79,7 +49,6 @@ PixiRenderer.prototype.entity = function(entity) {
 
   //rendering position needs to be offset but current player position (or canvas viewport if you want to think about it that way);
   entity.draw = function () {//figure out the animated move part later
-
     var step = 4;
     if (Math.abs(this._position.x - this.position.x) > 2 || Math.abs(this._position.y - this.position.y) > 2) {
       this.position.x = this._position.x;

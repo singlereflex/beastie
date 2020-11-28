@@ -3,7 +3,7 @@
  * @param {String} board For the moment the id of the canvas (or other dom element) used to render the game
  * @param {JSON} level The json description of the level to be played
  */
-var Game = function(board, level, edit, mode="game") {
+var Game = function(board, level, mode="game") {
   var self = this;
 
   EventComponent(this);
@@ -11,8 +11,6 @@ var Game = function(board, level, edit, mode="game") {
   var world = {
     entities:{}
   };
-
-  var map = {}; //location based store
 
   var queue = [];
   //could move this to a custom type later
@@ -25,17 +23,7 @@ var Game = function(board, level, edit, mode="game") {
   var frameId;
 
   //could set this in a seperate private function
-  var renderer = new PixiRenderer(board, edit);
-  if (edit) {
-    renderer.on('click', function(event) {
-      if (map[event.data.global.x]) {
-        event.entity = map[event.data.global.x][event.data.global.y]
-      } else {
-        event.entity = undefined
-      }
-      self.trigger('click', event);
-    });
-  }
+  var renderer = new PixiRenderer(board);
 
   this.ongameend = function() {};
 
@@ -123,7 +111,6 @@ var Game = function(board, level, edit, mode="game") {
       case "remove":
         world.entities[e.data._id].die();
         delete world.entities[e.data._id];
-        map[e.data.entity.position.x][e.data.entity.position.y].pop()
         break;
       case "place":
 
@@ -136,15 +123,6 @@ var Game = function(board, level, edit, mode="game") {
             renderer,
             e.data.icon
           );
-          if (map[e.data.entity.position.x] === undefined) {
-            map[e.data.entity.position.x] = {}
-            map[e.data.entity.position.x][e.data.entity.position.y] = []
-          }
-          if (map[e.data.entity.position.x][e.data.entity.position.y] === undefined) {
-            map[e.data.entity.position.x][e.data.entity.position.y] = []
-          }
-          map[e.data.entity.position.x][e.data.entity.position.y].push(e.data._id)
-          //console.debug(map)
 
           if (e.data.entity.kind === "player") {
             if (!self.player) {
