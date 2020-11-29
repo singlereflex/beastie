@@ -13,7 +13,6 @@ var Monster = function (x, y, world) {
     MoveComponent(this);
     //BL.ExploreComponent(this, world);
     DeathComponent(this);
-    FallComponent(this, world);
     //StateComponent(this, {
     //    "mother": Mother
     //});
@@ -38,7 +37,6 @@ var Monster = function (x, y, world) {
     };
 
     this.hunt = function () {
-	console.debug("hunting")
         if (self.probability === undefined) {
             self.probability = self.beastSpeed;
         }
@@ -57,7 +55,7 @@ var Monster = function (x, y, world) {
 		    self.probability = self.beastSpeed;
 		    return;
 	        } catch (e) {
-		    console.error(e)
+		      console.error(e)
 	        }
             }
         }

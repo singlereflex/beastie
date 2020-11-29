@@ -12,7 +12,6 @@ var Egg = function (x, y, world) {
     EventComponent(this);
     CollisionComponent(this, world);
     DeathComponent(this);
-    FallComponent(this, world);
     StateComponent(this, {
         "hatch": Monster,
     });

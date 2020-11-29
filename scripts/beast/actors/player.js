@@ -12,7 +12,6 @@ var Player = function (x, y, world) {
     CollisionComponent(this, world);
     MoveComponent(this);
     DeathComponent(this);
-    FallComponent(this, world);
 
     var self = this;
     this.position = {

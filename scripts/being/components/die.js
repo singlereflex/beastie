@@ -7,8 +7,4 @@ var DeathComponent = function (entity) {
     entity.die = function (){
         this.trigger("die");
     };
-
-    entity.on('fall', function(){
-        this.trigger('die');
-    })
 };

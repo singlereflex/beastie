@@ -39,21 +39,6 @@ BL.ExploreComponent = function (entity, world) {
 //    });
 //};
 
-var FallComponent = function (entity, world) {
-    //subscribe to move event
-    function fall () {
-        var tile = world.findEntityByPosition(this.position.x, this.position.y);
-	for (var occupant in tile) {
-	    if (tile[occupant].kind == "floor") {
-		return;
-	    }
-	}
-        this.trigger("fall");
-    }
-    entity.on("place", fall)
-    entity.on("completeMove", fall)
-}
-
 /**
  * Pull Component - Attach the ability for this entity to pull blocks.
  * @param {Entity} entity

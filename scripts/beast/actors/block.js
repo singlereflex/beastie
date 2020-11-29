@@ -11,7 +11,6 @@ var Block = function (x, y, world) {
     EventComponent(this);
     CollisionComponent(this, world);
     MoveComponent(this);
-    FallComponent(this, world);
     StateComponent(this, {
         "drop": Floor
     });
@@ -33,11 +32,6 @@ var Block = function (x, y, world) {
 	}
         throw "hit a block";
     });
-
-    this.on("fall", function() {
-        self.transition("drop");
-    })
-
 };
 
 /**
