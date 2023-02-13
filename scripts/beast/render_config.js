@@ -1,19 +1,18 @@
 BL.Sprites = {
-    "icon-entities-player": new Image(),
-    "icon-environment-block": new Image(),
-    "icon-entities-egg": new Image(),
-    "icon-entities-monster": new Image(),
-    "icon-entities-mother": new Image(),
-    "icon-environment-floor": new Image(),
-    "icon-environment-switch-red": new Image(),
-    "icon-environment-switch-green": new Image()
+    "player": new Image(),
+    "block": new Image(),
+    "egg": new Image(),
+    "beast": new Image(),
+    "mother": new Image(),
 };
 
-BL.Sprites["icon-entities-player"].src = "images/entities-player.png";
-BL.Sprites["icon-environment-block"].src = "images/environment-block.png";
-BL.Sprites["icon-entities-egg"].src = "images/entities-egg.png";
-BL.Sprites["icon-entities-monster"].src = "images/entities-monster.png";
-BL.Sprites["icon-entities-mother"].src = "images/entities-mother.png";
-BL.Sprites["icon-environment-floor"].src = "design_files/env/environment-floor.svg";
-BL.Sprites["icon-environment-switch-red"].src = "design_files/env/environment-switch-red.svg";
-BL.Sprites["icon-environment-switch-green"].src = "design_files/env/environment-switch-green.svg";
+BL.Sprites["player"].src = "images/entities-player.png";
+BL.Sprites["block"].src = "images/environment-block.png";
+BL.Sprites["egg"].src = "images/entities-egg.png";
+BL.Sprites["beast"].src = "images/entities-monster.png";
+BL.Sprites["mother"].src = "images/entities-mother.png";
+
+function getSprite(type) {
+  const icon = BL.Sprites[type];
+  return icon;
+}

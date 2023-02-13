@@ -28,152 +28,85 @@ var Game = function(board, level, mode="game") {
   this.ongameend = function() {};
 
   this.score = 0;
-
-  this.place = function(type, x, y) {
-    game.postMessage({
-      event: 'place',
-      kind: type,
-      x:x,
-      y:y
-    });
-  }
-
-  this.clear = function(x, y) {
-    game.postMessage({
-      event: 'clear',
-      x:x,
-      y:y
-    });
-  }
-
-  this.validate = function() {
-    game.postMessage({
-      event: 'validate'
-    });
-  }
+  document.body.addEventListener("keyup", function keyUp(event) {
+    switch (event.which) {
+        //left
+      case 37:
+      case 65:
+        event.preventDefault();
+        game.postMessage({
+          "event": "move",
+          x: -1,
+          y: 0,
+        });
+        break;
+        //down
+      case 40:
+      case 83:
+        event.preventDefault();
+        game.postMessage({
+          "event": "move",
+          x: 0,
+          y: 1,
+        });
+        //right
+        break;
+      case 39:
+      case 68:
+        event.preventDefault();
+        game.postMessage({
+          "event": "move",
+          x: 1,
+          y: 0,
+        });
+        break;
+        //up
+      case 38:
+      case 87:
+        event.preventDefault();
+        game.postMessage({
+          "event": "move",
+          x: 0,
+          y: -1,
+        });
+        break;
+    }
+  }, false);
 
   this.start = function() {
     game.postMessage({
-      event: 'start'
-    })
+      event: "start",
+    });
   }
 
-  this.stop = function() {
-    game.postMessage({
-      event: 'stop'
-    })
-  }
 
-  this.pause = function() {
-    game.postMessage({
-      event: 'pause'
-    })
-  }
 
-  this.import = function(level) {
-    for (var i = 0; i < level.length; i++) {
+  const map = {};
 
-      this.place(
-        level[i].type,
-        level[i].x,
-        level[i].y
-      )
+  this.place = function({ x, y, type }) {
+    if (!map[x]) {
+      map[x] = {};
     }
+    const piece = renderer.addChild(type, x, y);
+    map[x][y] = piece;
   }
 
-  this.export = function(as_string) {
-
-    var result = [];
-    for (var entity in world.entities) {
-      result.push({
-        type: world.entities[entity].kind,
-        x: world.entities[entity].position.x,
-        y: world.entities[entity].position.y
-      });
+  this.move = function({ x, y, delta_x, delta_y }) {
+    const piece = map[x][y];
+    piece._x += parseInt(delta_x);
+    piece._y += parseInt(delta_y);
+    // could be in an event?
+    if (!map[piece._x]) {
+      map[piece._x] = {};
     }
-    if (as_string) {
-      return JSON.stringify(result);
-    }
-    return result;
+    map[piece._x][piece._y] = piece;
+    map[x][y] = null;
   }
 
-  // var renderer = new PIXI.WebGLRenderer(canvas.width, canvas.height, {view: canvas});
-  // renderer.view.className = "rendererView";
-
-  //FIXME have to send message as well
-  var handleMessage = function(e) {
-    //console.debug("event from worker", e.data)
+  this.handleMessage = function(e) {
     //move render queue
-    switch (e.data.event) {
-      case "victory":
-        self.endGame(true);
-        break;
-      case "remove":
-        world.entities[e.data._id].die();
-        delete world.entities[e.data._id];
-        break;
-      case "place":
-
-        //only add it if we don't already have it
-        if (!world.entities[e.data._id]) {
-          e.data.entity.id = e.data._id;
-          // @TODO should be done through inheritance type checking
-          world.entities[e.data._id] = new BL.entities.Display(
-            e.data.entity,
-            renderer,
-            e.data.icon
-          );
-
-          if (e.data.entity.kind === "player") {
-            if (!self.player) {
-              self.player = new BL.entities.DummyPlayer(game);
-            }
-            self.player.display = world.entities[e.data._id];
-            //FIXME shouldn't be global
-            BL.Viewport.x = world.entities[e.data._id].position.x;
-            BL.Viewport.y = world.entities[e.data._id].position.y;
-          }
-
-        }
-        break;
-      case "completeMove":
-
-        try {
-          //TODO: some of this can be moved to worker
-          world.entities[e.data._id]._position = {
-            x: e.data.entity.position.x,
-            y: e.data.entity.position.y
-          };
-        } catch {
-          console.error("could not complete move", e.data)
-        }
-
-        break;
-      case "die":
-        if (e.data.entity.kind === "player") {
-          //let some things finish moving
-          setTimeout(function() {
-            self.endGame(false);
-          }, 250);
-        } else {
-          this.score += e.data.worth;
-        }
-
-        world.entities[e.data._id].die();
-        // delete world.entities[e.data._id];
-        break;
-      case "transition":
-        world.entities[e.data.from._id].die();
-        world.entities[e.data.to._id] = new BL.entities.Display(
-          e.data.to.entity,
-          renderer,
-          e.data.to.icon
-        );
-        break;
-    }
-
-    self.trigger(e.data.event, e.data)
-
+    const func = this[e.data.event]
+    func(e.data);
   };
 
   function resizeCanvas() {
@@ -191,20 +124,15 @@ var Game = function(board, level, mode="game") {
 
   }
   //@todo should move some of this over to the renderer objects so it's more flexible
-  function render() {
+  this.render = function() {
 
     var currentLength = queue.length;
 
     for (var i = 0; i < currentLength; i++) {
-      handleMessage(queue.shift());
-    }
-    // @todo this should be moved, the only point of it is animation
-    for (var entity in world.entities) {
-
-      world.entities[entity].draw();
+      this.handleMessage(queue.shift());
     }
     renderer.render();
-    frameId = window.requestAnimationFrame(render);
+    frameId = window.requestAnimationFrame(this.render.bind(this));
   }
 
   game.addEventListener("message", function(e) {
@@ -218,7 +146,6 @@ var Game = function(board, level, mode="game") {
     self.player.dead = true;
     this.ongameend(victory);
   };
-  this.import(level);
-  render();
+  this.render();
   resizeCanvas();
 }
