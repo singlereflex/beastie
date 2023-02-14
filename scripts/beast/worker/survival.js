@@ -4,24 +4,11 @@
 var window = {};
 
 self.importScripts("../config.js");
-self.importScripts("https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js");
+//self.importScripts("https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js");
 self.importScripts("https://cdnjs.cloudflare.com/ajax/libs/simplex-noise/2.4.0/simplex-noise.min.js");
 
-self.importScripts("../../being/components/event.js");
-self.importScripts("../../being/components/collision.js");
-self.importScripts("../../being/components/move.js");
-self.importScripts("../../being/components/die.js");
-self.importScripts("../../being/components/state.js");
 
 self.importScripts("../entities/level.js");
-self.importScripts("../actors/block.js");
-self.importScripts("../actors/floor.js");
-self.importScripts("../actors/green-switch.js");
-self.importScripts("../actors/red-switch.js");
-self.importScripts("../actors/egg.js");
-self.importScripts("../actors/monster.js");
-self.importScripts("../actors/mother.js");
-self.importScripts("../actors/player.js");
 
 var noise = new window.SimplexNoise();
 

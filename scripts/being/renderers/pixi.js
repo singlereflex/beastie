@@ -74,10 +74,10 @@ PixiRenderer.prototype.addChild = function(type, x, y) {
 function centerOn(renderer, next) {
   return function() {
     const piece = this;
-    const view_height = renderer._renderer.height/64
-    const view_width = renderer._renderer.width/64
+    const view_height = renderer._renderer.height/sprite_size;
+    const view_width = renderer._renderer.width/sprite_size;
     renderer._stage.pivot.x = piece.position.x - view_width/2;
-    renderer._stage.pivot.y = piece.position.y - view_height/2
+    renderer._stage.pivot.y = piece.position.y - view_height/2;
     next.bind(this)();
     //console.info(renderer._stage.mask)
   }

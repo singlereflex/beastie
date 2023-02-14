@@ -6,7 +6,7 @@
 var Game = function(board, level, mode="game") {
   var self = this;
 
-  EventComponent(this);
+  //EventComponent(this);
 
   var world = {
     entities:{}

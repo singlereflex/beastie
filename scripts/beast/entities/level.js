@@ -180,8 +180,6 @@ function place(map, x, y, type) {
  */
 BL.entities.Level = function () {
 
-  EventComponent(this);
-
   this.running = false;
   this.score = 0;
   this.entities = {};
