@@ -29,13 +29,15 @@ var Game = function(board, level, mode="game") {
 
   this.score = 0;
   document.body.addEventListener("keyup", function keyUp(event) {
-    switch (event.which) {
+    console.info(event);
+    switch (event.keyCode) {
         //left
       case 37:
       case 65:
         event.preventDefault();
         game.postMessage({
           "event": "move",
+          "pull": event.shiftKey,
           x: -1,
           y: 0,
         });
@@ -46,6 +48,7 @@ var Game = function(board, level, mode="game") {
         event.preventDefault();
         game.postMessage({
           "event": "move",
+          "pull": event.shiftKey,
           x: 0,
           y: 1,
         });
@@ -56,6 +59,7 @@ var Game = function(board, level, mode="game") {
         event.preventDefault();
         game.postMessage({
           "event": "move",
+          "pull": event.shiftKey,
           x: 1,
           y: 0,
         });
@@ -66,6 +70,7 @@ var Game = function(board, level, mode="game") {
         event.preventDefault();
         game.postMessage({
           "event": "move",
+          "pull": event.shiftKey,
           x: 0,
           y: -1,
         });
@@ -93,6 +98,10 @@ var Game = function(board, level, mode="game") {
 
   this.move = function({ x, y, delta_x, delta_y }) {
     const piece = map[x][y];
+    if (!piece) {
+      console.error("piece not found", arguments);
+      return;
+    }
     piece._x += parseInt(delta_x);
     piece._y += parseInt(delta_y);
     // could be in an event?
@@ -103,9 +112,19 @@ var Game = function(board, level, mode="game") {
     map[x][y] = null;
   }
 
+  this.die = function({ x, y }) {
+    const piece = map[x][y];
+    renderer._stage.removeChild(piece);
+    delete map[x][y];
+  }
+
   this.handleMessage = function(e) {
     //move render queue
     const func = this[e.data.event]
+    if (!func) {
+      console.error("unhandled message", e);
+      return;
+    }
     func(e.data);
   };
 

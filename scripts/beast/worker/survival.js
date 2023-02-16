@@ -10,8 +10,6 @@ self.importScripts("https://cdnjs.cloudflare.com/ajax/libs/simplex-noise/2.4.0/s
 
 self.importScripts("../entities/level.js");
 
-var noise = new window.SimplexNoise();
-
 var newWorld = function() {
   var world = new BL.entities.Level();
   return world;
@@ -31,14 +29,14 @@ function findPlayer(map) {
 
 self.addEventListener("message", function (e) {
   if (e.data) {
-    console.debug(e.data);
     switch (e.data.event) {
 
         //should move these to functions and call with reflection
 
       case "move":
+        console.log(e.data);
         const { x, y } = findPlayer(self.world.entities);
-        move(self.world.entities, parseInt(x), parseInt(y), parseInt(e.data.x), parseInt(e.data.y));
+        move(self.world.entities, parseInt(x), parseInt(y), parseInt(e.data.x), parseInt(e.data.y), e.data.pull);
         break;
       case "pulling":
         console.debug("setting pulling", e.data.isPulling)
@@ -74,7 +72,7 @@ function is_game_over(wolrd) {
 self.init = function() {
   self.world = newWorld();
 
-  explore(self.world.entities, 0, 0, 25);
+  explore(self.world.entities, 10, 10, 10);
   place(self.world.entities, 10, 10, "player");
 
 };
