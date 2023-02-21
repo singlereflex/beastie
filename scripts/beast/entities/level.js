@@ -106,7 +106,7 @@ function move(map, x, y, delta_x, delta_y, pulling) {
     }
   }
 
-  explore(map, xx, xx, 10);
+  explore(map, xx, yy, 10);
 }
 
 function kill(map, x, y, delta_x, delta_y) {
@@ -176,6 +176,34 @@ collisions = {
 }
 
 const noise = new window.SimplexNoise();
+
+function placeRandomPiece(map, x, y) {
+  if (map[x] === undefined) {
+    map[x] = {};
+  }
+  if (map[x][y] === undefined) {
+    if (noise.noise2D(x, y / 10) > 0.5 || noise.noise2D(x / 10, y) > 0.5) {
+      let new_piece = "block";
+      place(map, x, y, new_piece);
+    } else if (noise.noise2D(x / 8, y / 8) > 0.7) {
+      let new_piece = "egg";
+      place(map, x, y, new_piece);
+    }
+  }
+}
+
+function generateColumn(map, x, y, size) {
+  for (var i = 0; i < size; i++) {
+    placeRandomPiece(map, x, y+i);
+  }
+}
+
+function generateRow(map, x, y, size) {
+  for (var i = 0; i < size; i++) {
+    placeRandomPiece(map, x+i, y);
+  }
+}
+
 const global_bounds = {
   x_min: 10,
   x_max: 10,
@@ -189,87 +217,21 @@ function explore(map, x, y, size) {
     y_min: y-size,
     y_max: y+size,
   }
-  //explore from the global x_min to local x_min.. accross the local y_min to y_max
-  //explore from the global x_max to the local x_max.. accross the local y_min to y_max
-  if (global_bounds.x_min > bounds.x_min) {
-    for (var x = global_bounds.x_min; x > bounds.x_min; x--) {
-      for (var y = bounds.y_min; y < bounds.y_max; y++) {
-        if (map[x] === undefined) {
-          map[x] = {};
-        }
-        if (map[x][y] === undefined) {
-          if (noise.noise2D(x, y / 10) > 0.5 || noise.noise2D(x / 10, y) > 0.5) {
-            let new_piece = "block";
-            place(map, x, y, new_piece);
-          } else if (noise.noise2D(x / 8, y / 8) > 0.7) {
-            let new_piece = "egg";
-            place(map, x, y, new_piece);
-          }
-        }
-      }
-    }
-    global_bounds.x_min = bounds.x_min;
+
+  while (global_bounds.x_min > bounds.x_min) {
+    generateColumn(map, --global_bounds.x_min, bounds.y_min, bounds.y_max-bounds.y_min);
   }
 
-  if (global_bounds.x_max < bounds.x_max) {
-    for (var x = global_bounds.x_max; x < bounds.x_max; x++) {
-      for (var y = bounds.y_min; y < bounds.y_max; y++) {
-        if (map[x] === undefined) {
-          map[x] = {};
-        }
-        if (map[x][y] === undefined) {
-          if (noise.noise2D(x, y / 10) > 0.5 || noise.noise2D(x / 10, y) > 0.5) {
-            let new_piece = "block";
-            place(map, x, y, new_piece);
-          } else if (noise.noise2D(x / 8, y / 8) > 0.7) {
-            let new_piece = "egg";
-            place(map, x, y, new_piece);
-          }
-        }
-      }
-    }
-    global_bounds.x_max = bounds.x_max;
-  }
-  // same for y
-
-  if (global_bounds.y_min > bounds.y_min) {
-    for (var y = global_bounds.y_min; y > bounds.y_min; y--) {
-      for (var x = bounds.x_min; x < bounds.x_max; x++) {
-        if (map[x] === undefined) {
-          map[x] = {};
-        }
-        if (map[x][y] === undefined) {
-          if (noise.noise2D(x, y / 10) > 0.5 || noise.noise2D(x / 10, y) > 0.5) {
-            let new_piece = "block";
-            place(map, x, y, new_piece);
-          } else if (noise.noise2D(x / 8, y / 8) > 0.7) {
-            let new_piece = "egg";
-            place(map, x, y, new_piece);
-          }
-        }
-      }
-    }
-    global_bounds.y_min = bounds.y_min;
+  while (global_bounds.x_max < bounds.x_max) {
+    generateColumn(map, ++global_bounds.x_max, bounds.y_min, bounds.y_max-bounds.y_min);
   }
 
-  if (global_bounds.y_max < bounds.y_max) {
-    for (var y = global_bounds.y_max; y < bounds.y_max; y++) {
-      for (var x = bounds.x_min; x < bounds.x_max; x++) {
-        if (map[x] === undefined) {
-          map[x] = {};
-        }
-        if (map[x][y] === undefined) {
-          if (noise.noise2D(x, y / 10) > 0.5 || noise.noise2D(x / 10, y) > 0.5) {
-            let new_piece = "block";
-            place(map, x, y, new_piece);
-          } else if (noise.noise2D(x / 8, y / 8) > 0.7) {
-            let new_piece = "egg";
-            place(map, x, y, new_piece);
-          }
-        }
-      }
-    }
-    global_bounds.y_max = bounds.y_max;
+  while (global_bounds.y_min > bounds.y_min) {
+    generateRow(map, bounds.x_min, --global_bounds.y_min, bounds.x_max-bounds.x_min);
+  }
+
+  while (global_bounds.y_max < bounds.y_max) {
+    generateRow(map, bounds.x_min, ++global_bounds.y_max, bounds.x_max-bounds.x_min);
   }
 }
 
