@@ -106,10 +106,6 @@ body {
     // height: 2048em;
     // width: 2048em;
     margin-top: 24px;
-    div {
-        height: 16px;
-        white-space: nowrap;
-    }
     &.main-menu {
         height: 100%;
         width: 100%;
@@ -351,7 +347,6 @@ kbd[title], .key[title] {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    height: 100%;
     .media {
         width: 460px;
         @media (max-width: 42em) {

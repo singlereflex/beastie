@@ -5992,9 +5992,6 @@ body {
 
 #game-container {
   margin-top: 24px; }
-  #game-container div {
-    height: 16px;
-    white-space: nowrap; }
   #game-container.main-menu {
     height: 100%;
     width: 100%;
@@ -6205,8 +6202,7 @@ kbd[title], .key[title] {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  height: 100%; }
+  flex-direction: column; }
   .help-container .media {
     width: 460px;
     margin: 30px auto; }
