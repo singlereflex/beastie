@@ -25,6 +25,9 @@ var PixiRenderer = function(board){
     0,
     0,
   );
+
+
+  this._stage.filters = [new PIXI.BlurFilter(.75)];
 }
 
 const sprite_size = 64;
@@ -40,6 +43,10 @@ PixiRenderer.prototype.render = function(){
 
 PixiRenderer.prototype.resize = function(width, height){
   this._renderer.resize(width, height);
+  this._stage.mask = new PIXI.Graphics()
+    .beginFill(0xffffff)
+    .drawCircle(this._renderer.width/2, this._renderer.height/2, Math.min(this._renderer.width, this._renderer.height) / 2)
+    .endFill();
 }
 
 PixiRenderer.prototype.addChild = function(type, x, y) {

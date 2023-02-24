@@ -132,15 +132,6 @@ var Game = function(board, level, mode="game") {
     var width = window.innerWidth;
     var height = window.innerHeight;
     renderer.resize(width, height)
-    //update worker viewport:
-    BL.Viewport.width = width;
-    BL.Viewport.height = height;
-    game.postMessage({
-      event: "viewport",
-      height: height,
-      width: width
-    });
-
   }
   //@todo should move some of this over to the renderer objects so it's more flexible
   this.render = function() {
