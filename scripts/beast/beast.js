@@ -78,6 +78,43 @@ var Game = function(board, level, mode="game") {
     }
   }, false);
 
+
+  function moveWithMouse(event, pull = false) {
+    var x = event.clientX;
+    var y = event.clientY;
+    var playerX = renderer._renderer.width / 2;
+    var playerY = renderer._renderer.height / 2;
+    var deltaX = x - playerX;
+    var deltaY = y - playerY;
+    var absDeltaX = Math.abs(deltaX);
+    var absDeltaY = Math.abs(deltaY);
+    var directionX = 0;
+    var directionY = 0;
+    if (absDeltaX > absDeltaY) {
+      directionX = deltaX / absDeltaX;
+    } else {
+      directionY = deltaY / absDeltaY;
+    }
+    game.postMessage({
+      "event": "move",
+      "pull": pull,
+      x: directionX,
+      y: directionY,
+    });
+  }
+
+  let pulling = false;
+  document.body.addEventListener("touchmove", function click(event) {
+    pulling = true;
+  }, false);
+
+  // On click move the player in the direction of the click
+  document.body.addEventListener("touchend", function click(event) {
+    console.debug(event);
+    moveWithMouse(event.changedTouches[0], pulling);
+    pulling = false;
+  }, false);
+
   this.start = function() {
     game.postMessage({
       event: "start",
